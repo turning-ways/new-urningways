@@ -1,0 +1,136 @@
+export type Member = {
+  id: string;
+  fullName?: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  photo: string;
+  dateOfBirth: Date | string | null | undefined;
+  gender: "MALE" | "FEMALE" | "OTHER";
+};
+
+export const members: Member[] = [
+  {
+    id: "1",
+    fullName: "John Bakelery",
+    firstName: "John",
+    lastName: "Bakelery",
+    dateOfBirth: "12/12/1990",
+    email: "johnDoe@gmail.com",
+    phone: "08012345678",
+    photo:
+      "data:image/jpeg;base64,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",
+    gender: "MALE",
+  },
+  {
+    id: "2",
+    fullName: "Jane Smith",
+    firstName: "Jane",
+    lastName: "Smith",
+    dateOfBirth: "01/15/1985",
+    email: "janeSmith@gmail.com",
+    phone: "08023456789",
+    photo: "",
+    gender: "FEMALE",
+  },
+  {
+    id: "3",
+    fullName: "Michael Johnson",
+    firstName: "Michael",
+    lastName: "Johnson",
+    dateOfBirth: "03/22/1978",
+    email: "michaelJohnson@gmail.com",
+    phone: "08034567890",
+    photo: "",
+    gender: "MALE",
+  },
+  {
+    id: "4",
+    fullName: "Emily Davis",
+    firstName: "Emily",
+    lastName: "Davis",
+    dateOfBirth: "06/30/1992",
+    email: "emilyDavis@gmail.com",
+    phone: "08045678901",
+    photo: "",
+    gender: "FEMALE",
+  },
+  {
+    id: "5",
+    fullName: "James Wilson",
+    firstName: "James",
+    lastName: "Wilson",
+    dateOfBirth: "09/14/1983",
+    email: "jamesWilson@gmail.com",
+    phone: "08056789012",
+    photo: "",
+    gender: "MALE",
+  },
+  {
+    id: "3",
+    fullName: "Michael Johnson",
+    firstName: "Michael",
+    lastName: "Johnson",
+    dateOfBirth: "03/22/1978",
+    email: "michaelJohnson@gmail.com",
+    phone: "08034567890",
+    photo: "",
+    gender: "MALE",
+  },
+  {
+    id: "4",
+    fullName: "Emily Davis",
+    firstName: "Emily",
+    lastName: "Davis",
+    dateOfBirth: "06/30/1992",
+    email: "emilyDavis@gmail.com",
+    phone: "08045678901",
+    photo: "",
+    gender: "FEMALE",
+  },
+  {
+    id: "5",
+    fullName: "James Wilson",
+    firstName: "James",
+    lastName: "Wilson",
+    dateOfBirth: "09/14/1983",
+    email: "jamesWilson@gmail.com",
+    phone: "08056789012",
+    photo: "",
+    gender: "MALE",
+  },
+  {
+    id: "3",
+    fullName: "Michael Johnson",
+    firstName: "Michael",
+    lastName: "Johnson",
+    dateOfBirth: "03/22/1978",
+    email: "michaelJohnson@gmail.com",
+    phone: "08034567890",
+    photo: "",
+    gender: "MALE",
+  },
+  {
+    id: "4",
+    fullName: "Emily Davis",
+    firstName: "Emily",
+    lastName: "Davis",
+    dateOfBirth: "06/30/1992",
+    email: "emilyDavis@gmail.com",
+    phone: "08045678901",
+    photo: "",
+    gender: "FEMALE",
+  },
+  {
+    id: "5",
+    fullName: "James Wilson",
+    firstName: "James",
+    lastName: "Wilson",
+    dateOfBirth: "09/14/1983",
+    email: "jamesWilson@gmail.com",
+    phone: "08056789012",
+    photo: "",
+    gender: "MALE",
+  },
+];
