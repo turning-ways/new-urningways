@@ -1,12 +1,12 @@
-import { withAuth } from "next-auth/middleware";
-import { getToken } from "next-auth/jwt";
-import { NextResponse } from "next/server";
+import { withAuth } from 'next-auth/middleware';
+import { getToken } from 'next-auth/jwt';
+import { NextResponse } from 'next/server';
 
 export default withAuth(
   async function middleware(req) {
-    const { pathname } = req.nextUrl;
-    // console.debug(pathname);
-    if (pathname === "/") {
+    const { pathname, origin } = req.nextUrl;
+
+    if (pathname === '/') {
       return NextResponse.next();
     }
 
@@ -15,33 +15,33 @@ export default withAuth(
       secret: process.env.NEXTAUTH_SECRET,
     });
 
-    if (token && Date.now() >= token.data.validity.refresh_until * 1000) {
-      // if the access token is expired, redirect to the login page
-      const response = NextResponse.redirect(new URL("/login", req.url));
-      // Clear the session cookies
-      response.cookies.set("next-auth.session-token", "", { maxAge: 0 });
-      response.cookies.set("next-auth.csrf-token", "", { maxAge: 0 });
+    if (
+      token &&
+      Date.now() >= (token.data?.validity?.refresh_until || 0) * 1000
+    ) {
+      // Redirect to login page and clear session cookies
+      const response = NextResponse.redirect(new URL('/login', origin));
+      response.cookies.set('next-auth.session-token', '', { maxAge: 0 });
+      response.cookies.set('next-auth.csrf-token', '', { maxAge: 0 });
       return response;
     }
-    // If the user is authenticated, return the next response
+
+    // If the user is authenticated, proceed
     return NextResponse.next();
   },
   {
     callbacks: {
-      authorized: ({ token }) => {
-        return !!token;
-      },
+      authorized: ({ token }) => !!token,
     },
     pages: {
-      signIn: "/login",
-      error: "/login",
+      signIn: '/login',
+      error: '/login',
     },
-  }
+  },
 );
 
-// Authenticate all routes except for /api, /_next/static, /_next/image, .png files and / (root) paths
 export const config = {
   matcher: [
-    "/((?!$|api|register$|register/otp$|forgot-password|reset-password|invite|_next|proxy|assets|static|vercel).*)",
+    '/((?!$|api|register$|register/otp$|forgot-password|reset-password|invite|_next|proxy|assets|static|vercel).*)',
   ],
 };

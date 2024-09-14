@@ -34,6 +34,13 @@ export default function AdminAuthWrapper({ children }: AdminAuthProps) {
 
     const { role, mainChurchId } = user;
 
+    // if the role is a User, redirect to the home page
+    if (role === 'USER') {
+      toast.error('You are not authorized to view this page');
+      router.replace('/');
+      return;
+    }
+
     // Check if the user is an admin and either has a churchId or fallbackChurchId
     if (role === 'ADMIN') {
       const effectiveChurchId = mainChurchId || fallbackChurchId;
