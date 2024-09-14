@@ -4,17 +4,17 @@ import NextAuth, {
   BackendJWT,
   NextAuthOptions,
   User,
-} from "next-auth";
-import GoogleProvider from "next-auth/providers/google";
-import CredentialsProvider from "next-auth/providers/credentials";
-import axios from "axios";
-import { JWT } from "next-auth/jwt";
-import { jwtDecode } from "jwt-decode";
-import { redirect } from "next/navigation";
-import { signOut } from "next-auth/react";
-import { getCookie } from "cookies-next";
-import { cookies } from "next/headers";
-import api from "@/lib/axios";
+} from 'next-auth';
+import GoogleProvider from 'next-auth/providers/google';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import axios from 'axios';
+import { JWT } from 'next-auth/jwt';
+import { jwtDecode } from 'jwt-decode';
+import { redirect } from 'next/navigation';
+import { signOut } from 'next-auth/react';
+import { getCookie } from 'cookies-next';
+import { cookies } from 'next/headers';
+import api from '@/lib/axios';
 
 async function refreshAccessToken(nextAuthJWTCookie: JWT): Promise<JWT> {
   try {
@@ -26,9 +26,9 @@ async function refreshAccessToken(nextAuthJWTCookie: JWT): Promise<JWT> {
       },
       {
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
-      }
+      },
     );
     const accessToken = axiosResponse?.data.data.accessToken;
 
@@ -37,14 +37,14 @@ async function refreshAccessToken(nextAuthJWTCookie: JWT): Promise<JWT> {
     nextAuthJWTCookie.data.user.accessToken = accessToken;
     return nextAuthJWTCookie;
   } catch (error: any) {
-    return { ...nextAuthJWTCookie, error: "RefreshAccessTokenError" };
+    return { ...nextAuthJWTCookie, error: 'RefreshAccessTokenError' };
   }
 }
 
 const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
-      name: "Credentials",
+      name: 'Credentials',
       credentials: {
         email: {},
         password: {},
@@ -60,9 +60,9 @@ const authOptions: NextAuthOptions = {
             },
             {
               headers: {
-                "Content-Type": "application/json",
+                'Content-Type': 'application/json',
               },
-            }
+            },
           );
 
           // If the response is successful, return the user object
@@ -109,19 +109,19 @@ const authOptions: NextAuthOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
       authorization: {
         params: {
-          prompt: "consent",
-          access_type: "offline",
-          response_type: "code",
-          userType: "USER" || "ADMIN",
+          prompt: 'consent',
+          access_type: 'offline',
+          response_type: 'code',
+          userType: 'USER',
         },
       },
     }),
   ],
   pages: {
-    signIn: "/login",
+    signIn: '/login',
   },
   session: {
-    strategy: "jwt",
+    strategy: 'jwt',
   },
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
@@ -136,7 +136,7 @@ const authOptions: NextAuthOptions = {
     // the redirect
     async redirect({ url, baseUrl }) {
       // If the URL is a relative path (like `/admin`), return it appended to the baseUrl
-      if (url.startsWith("/")) {
+      if (url.startsWith('/')) {
         return `${baseUrl}${url}`;
       }
 
@@ -150,23 +150,23 @@ const authOptions: NextAuthOptions = {
     },
     // @ts-ignore
     async jwt({ token, user, account, trigger, session }) {
-      const userType = getCookie("userType", { cookies });
-      console.log("User Type", userType);
+      const userType = getCookie('userType', { cookies });
+      console.log('User Type', userType);
 
-      if (trigger && trigger === "update") {
+      if (trigger && trigger === 'update') {
         token.data.user.churchId = session.churchId;
         return token;
       }
 
-      if (account && account.provider === "google") {
-        const response = await api.post("/auth/google-verify", {
+      if (account && account.provider === 'google') {
+        const response = await api.post('/auth/google-verify', {
           token: account.id_token,
           role: userType,
         });
         const user = response.data.data;
 
         if (response.status === 400) {
-          return { ...token, error: "GoogleAuthError" };
+          return { ...token, error: 'GoogleAuthError' };
         }
 
         // process the user object
@@ -207,14 +207,14 @@ const authOptions: NextAuthOptions = {
       }
 
       if (Date.now() < token?.data?.validity?.valid_until * 1000) {
-        console.debug("Access Token is still valid");
+        console.debug('Access Token is still valid');
         return token;
       }
 
       //The refresh token is still valid
       if (Date.now() < token?.data?.validity?.refresh_until * 1000) {
         console.debug(
-          "Access Token has expired, but Refresh Token is still valid"
+          'Access Token has expired, but Refresh Token is still valid',
         );
         return await refreshAccessToken(token);
       }
@@ -223,8 +223,8 @@ const authOptions: NextAuthOptions = {
       // This should not really happen unless you get really unlucky with
       // the timing of the token expiration because the middleware should
       // have caught this case before the callback is called
-      console.debug("Both tokens have expired");
-      return { ...token, error: "RefreshTokenExpired" } as JWT;
+      console.debug('Both tokens have expired');
+      return { ...token, error: 'RefreshTokenExpired' } as JWT;
     },
     async session({ session, token, user }) {
       session.user = token.data.user;

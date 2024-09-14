@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { toast } from "sonner";
-import { Suspense, useEffect } from "react";
-import { useUserCheck } from "@/lib/swr/use-user-check";
-import LayoutLoader from "@/components/ui/layout-loader";
-import { useRouter, useSearchParams } from "next/navigation";
-import { signOut } from "next-auth/react";
+import { toast } from 'sonner';
+import { Suspense, useEffect } from 'react';
+import { useUserCheck } from '@/lib/swr/use-user-check';
+import LayoutLoader from '@/components/ui/layout-loader';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { signOut } from 'next-auth/react';
 
 interface AdminAuthProps {
   children: React.ReactNode;
@@ -17,7 +17,7 @@ export default function AdminAuthWrapper({ children }: AdminAuthProps) {
   const router = useRouter();
 
   useEffect(() => {
-    const fallbackChurchId = searchParams.get("mainChurchId"); // Get churchId from query params
+    const fallbackChurchId = searchParams.get('mainChurchId'); // Get churchId from query params
 
     if (isLoading) return;
 
@@ -26,29 +26,29 @@ export default function AdminAuthWrapper({ children }: AdminAuthProps) {
     }
 
     if (!user) {
-      toast.error("You are not authorized to view this page");
+      toast.error('You are not authorized to view this page');
       signOut();
-      router.replace("/");
+      router.replace('/');
       return;
     }
 
     const { role, mainChurchId } = user;
 
     // Check if the user is an admin and either has a churchId or fallbackChurchId
-    if (role === "ADMIN") {
+    if (role === 'ADMIN') {
       const effectiveChurchId = mainChurchId || fallbackChurchId;
 
       if (!effectiveChurchId) {
         toast.error(
-          "You have not completed your church setup. Please do so in the next step.",
-          { duration: 5000 }
+          'You have not completed your church setup. Please do so in the next step.',
+          { duration: 5000 },
         );
-        router.replace("/register/setup");
+        router.replace('/register/setup');
       } else {
         // If the fallback is used, store it in localStorage for future use
         localStorage.setItem(
-          "user",
-          JSON.stringify({ id: user.id, mainChurchId: effectiveChurchId })
+          'user',
+          JSON.stringify({ id: user.id, mainChurchId: effectiveChurchId }),
         );
       }
     }
@@ -63,13 +63,13 @@ export default function AdminAuthWrapper({ children }: AdminAuthProps) {
   }
 
   if (
-    user?.role === "ADMIN" &&
-    (user?.mainChurchId || searchParams.get("mainChurchId"))
+    user?.role === 'ADMIN' &&
+    (user?.mainChurchId || searchParams.get('mainChurchId'))
   ) {
-    const churchId = user?.mainChurchId || searchParams.get("mainChurchId");
+    const churchId = user?.mainChurchId || searchParams.get('mainChurchId');
     localStorage.setItem(
-      "user",
-      JSON.stringify({ id: user.id, mainChurchId: churchId })
+      'user',
+      JSON.stringify({ id: user.id, mainChurchId: churchId }),
     );
     return (
       <Suspense>
