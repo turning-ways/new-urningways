@@ -1,4 +1,4 @@
-import api from "../axios";
+import api from '../axios';
 
 const addContact = async ({
   churchId,
@@ -37,7 +37,7 @@ const updateContact = async ({
     `/contacts/${churchId}/contact/${contactId}`,
     {
       ...contact,
-    }
+    },
   );
   return data.data;
 };
@@ -49,13 +49,13 @@ const updateContactStatus = async ({
 }: {
   churchId: string;
   contactId: string;
-  status: "NEW" | "CONTACTED" | "WON" | "LOST";
+  status: 'NEW' | 'CONTACTED' | 'WON' | 'LOST';
 }) => {
   const { data } = await api.patch(
     `/contacts/${churchId}/contact/${contactId}/status`,
     {
       contactStatus: status,
-    }
+    },
   );
   return data.data;
 };
@@ -73,7 +73,7 @@ const addContactLabel = async ({
     `/contacts/${churchId}/contact/${contactId}/label/`,
     {
       ...Idata,
-    }
+    },
   );
   return data.data;
 };
@@ -86,7 +86,7 @@ const getContactLabels = async ({
   contactId: string;
 }) => {
   const { data } = await api.get(
-    `/contacts/${churchId}/contact/${contactId}/labels`
+    `/contacts/${churchId}/contact/${contactId}/labels`,
   );
   return data.data;
 };
@@ -101,7 +101,7 @@ const removeContactLabel = async ({
   labelId: string;
 }) => {
   const { data } = await api.delete(
-    `/contacts/${churchId}/contact/${contactId}/label/${labelId}`
+    `/contacts/${churchId}/contact/${contactId}/label/${labelId}`,
   );
   return data.data;
 };
@@ -114,7 +114,7 @@ const getContactActions = async ({
   contactId: string;
 }) => {
   const { data } = await api.get(
-    `/contacts/${churchId}/contact/${contactId}/actions`
+    `/contacts/${churchId}/contact/${contactId}/actions`,
   );
   return data.data;
 };
@@ -132,7 +132,7 @@ const addContactAction = async ({
     `/contacts/${churchId}/contact/${contactId}/action/`,
     {
       ...Idata,
-    }
+    },
   );
   return data.data;
 };
@@ -152,7 +152,7 @@ const updateContactActionStatus = async ({
     `/contacts/${churchId}/contact/${contactId}/action/${actionId}`,
     {
       ...Idata,
-    }
+    },
   );
   return data.data;
 };
@@ -167,7 +167,7 @@ const removeContactAction = async ({
   actionId: string;
 }) => {
   const { data } = await api.delete(
-    `/contacts/${churchId}/contact/${contactId}/action/${actionId}`
+    `/contacts/${churchId}/contact/${contactId}/action/${actionId}`,
   );
   return data.data;
 };
@@ -180,7 +180,7 @@ const getAssignedToContacts = async ({
   contactId: string;
 }) => {
   const { data } = await api.get(
-    `/contacts/${churchId}/contact/${contactId}/assigned-to`
+    `/contacts/${churchId}/contact/${contactId}/assigned-to`,
   );
   return data.data;
 };
@@ -196,7 +196,7 @@ const assignMemberToContact = async ({
 }) => {
   const { data } = await api.post(
     `/contacts/${churchId}/contact/${contactId}/assigned-to/${memberId}`,
-    { memberId }
+    { memberId },
   );
   return data.data;
 };
@@ -211,7 +211,7 @@ const unassignMemberFromContact = async ({
   memberId: string;
 }) => {
   const { data } = await api.delete(
-    `/contacts/${churchId}/contact/${contactId}/assigned-to/${memberId}`
+    `/contacts/${churchId}/contact/${contactId}/assigned-to/${memberId}`,
   );
   return data.data;
 };
@@ -224,7 +224,7 @@ const getContactNotes = async ({
   contactId: string;
 }) => {
   const { data } = await api.get(
-    `/contacts/${churchId}/contact/${contactId}/notes`
+    `/contacts/${churchId}/contact/${contactId}/notes`,
   );
   return data.data as Array<ContactNotes>;
 };
@@ -243,7 +243,7 @@ const addContactNote = async ({
     {
       note: Idata.note,
       recordedBy: Idata.recordedById,
-    }
+    },
   );
   return data.data;
 };
@@ -263,7 +263,7 @@ const updateContactNote = async ({
     `/contacts/${churchId}/contact/${contactId}/note/${noteId}`,
     {
       ...Idata,
-    }
+    },
   );
   return data.data;
 };
@@ -278,7 +278,7 @@ const deleteContactNote = async ({
   noteId: string;
 }) => {
   const { data } = await api.delete(
-    `/contacts/${churchId}/contact/${contactId}/note/${noteId}`
+    `/contacts/${churchId}/contact/${contactId}/note/${noteId}`,
   );
   return data.data;
 };
@@ -314,6 +314,7 @@ interface ContactNotes {
     lastName: string;
     photo: string;
   };
+  isEdited: boolean;
   updatedAt: string;
 }
 
@@ -323,20 +324,20 @@ interface Contact {
   lastName: string;
   email: string;
   phone: string;
-  gender: "MALE" | "FEMALE";
+  gender: 'MALE' | 'FEMALE';
   dateOfBirth: Date | undefined;
   address: string;
   age: number | null;
-  contactStatus: "NEW" | "CONTACTED" | "WON" | "LOST"; // Adjust as needed based on your possible statuses
+  contactStatus: 'NEW' | 'CONTACTED' | 'WON' | 'LOST'; // Adjust as needed based on your possible statuses
   contactType:
-    | "VISITOR"
-    | "REGULAR"
-    | "PARTICIPANT"
-    | "INPROGRESS"
-    | "MEMBER"
+    | 'VISITOR'
+    | 'REGULAR'
+    | 'PARTICIPANT'
+    | 'INPROGRESS'
+    | 'MEMBER'
     | undefined;
   memberStatus: string; // Adjust as needed based on your possible statuses
-  maturityLevel: "INFANT" | "CHILD" | "TEEN" | "ADULT" | "ELDER" | undefined;
+  maturityLevel: 'INFANT' | 'CHILD' | 'TEEN' | 'ADULT' | 'ELDER' | undefined;
   createdAt: Date | string;
   updatedAt: Date | string;
 }
