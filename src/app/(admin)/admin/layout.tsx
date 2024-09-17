@@ -1,8 +1,8 @@
-"use client";
-import Header from "@/components/common/admin/header";
-import { MobileNav } from "@/components/ui/mobile.nav";
-import NavBar from "@/components/ui/nav-bar";
-import useIsMobile from "@/hooks/use_Responsive";
+'use client';
+import Header from '@/components/common/admin/header';
+import { MobileNav } from '@/components/ui/mobile.nav';
+import NavBar from '@/components/ui/nav-bar';
+import useIsMobile from '@/hooks/use_Responsive';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const isMobile = useIsMobile(1024);
