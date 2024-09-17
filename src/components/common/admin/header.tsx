@@ -1,21 +1,21 @@
-"use client";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+'use client';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { Button } from "@/components/ui/button";
-import { useContact } from "@/lib/swr/use-contact";
+} from '@/components/ui/tooltip';
+import { Button } from '@/components/ui/button';
+import { useContact } from '@/lib/swr/use-contact';
 import {
   BellIcon,
   LogOutIcon,
   PlusCircleIcon,
   Settings,
   User,
-} from "lucide-react";
-import { nameCapitalizer } from "@/lib/utils/capitalize";
+} from 'lucide-react';
+import { nameCapitalizer } from '@/lib/utils/capitalize';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,9 +23,9 @@ import {
   DropdownMenuTrigger,
   DropdownMenuItem,
   DropdownMenuSeparator,
-} from "@/components/ui/dropdown-menu";
-import { useEffect } from "react";
-import { usePathname, useSearchParams } from "next/navigation";
+} from '@/components/ui/dropdown-menu';
+import { useEffect } from 'react';
+import { usePathname, useSearchParams } from 'next/navigation';
 import {
   Dialog,
   DialogFooter,
@@ -33,12 +33,12 @@ import {
   DialogTrigger,
   DialogContent,
   DialogClose,
-} from "@/components/ui/dialog";
-import { toast } from "sonner";
-import { signOut } from "next-auth/react";
-import { useContactContext } from "@/context/contact-context";
-import { ADMIN_DIRECTORY } from "@/constants/route-constants";
-import Link from "next/link";
+} from '@/components/ui/dialog';
+import { toast } from 'sonner';
+import { signOut } from 'next-auth/react';
+import { useContactContext } from '@/context/contact-context';
+import { ADMIN_DIRECTORY } from '@/constants/route-constants';
+import Link from 'next/link';
 
 export default function Header() {
   const { contacts } = useContactContext();
@@ -47,25 +47,25 @@ export default function Header() {
   const searchParams = useSearchParams();
 
   const getPageTitle = () => {
-    if (pathname.includes("/admin/directory/") && pathname.includes("/new"))
-      return "Create New Member";
-    if (pathname.includes("/admin/directory/") && pathname.includes("/edit"))
-      return "Edit Member";
-    if (pathname.startsWith("/admin/directory")) {
-      const viewParam = searchParams.get("view");
-      if (viewParam === "personal") return "Personal Information";
-      if (viewParam === "contact") return "Contact Information";
-      if (viewParam === "church") return "Church Information";
-      if (viewParam === "history") return "Membership History";
+    if (pathname.includes('/admin/contacts')) {
+      return 'Contacts';
+    }
+    if (pathname.includes('/admin/directory/') && pathname.includes('/new'))
+      return 'Create New Member';
+    if (pathname.includes('/admin/directory/') && pathname.includes('/edit'))
+      return 'Edit Member';
+    if (pathname.startsWith('/admin/directory')) {
+      const viewParam = searchParams.get('view');
+      if (viewParam === 'personal') return 'Personal Information';
+      if (viewParam === 'contact') return 'Contact Information';
+      if (viewParam === 'church') return 'Church Information';
+      if (viewParam === 'history') return 'Membership History';
 
-      return "Directory";
+      return 'Directory';
     }
 
-    if (pathname.startsWith("/admin/contacts")) {
-      return "Contacts";
-    }
-    if (pathname === "/admin/dashboard") return "Dashboard";
-    return "Dashboard"; // Default title
+    if (pathname === '/admin/dashboard') return 'Dashboard';
+    return 'Dashboard'; // Default title
   };
 
   return (
@@ -91,7 +91,7 @@ export default function Header() {
               <TooltipContent>Add a Member</TooltipContent>
             </Tooltip>
           </TooltipProvider>
-          <BellIcon size={24} aria-disabled />
+          <BellIcon size={24} aria-disabled className="hidden md:block" />
           <AccountDropdown contacts={contacts} />
         </div>
       </div>
@@ -102,9 +102,9 @@ export default function Header() {
 export function AccountDropdown({ contacts }: { contacts: any }) {
   const logout = async () => {
     toast.promise(signOut(), {
-      loading: "Logging out...",
-      success: "Logged out successfully",
-      error: "Failed to log out",
+      loading: 'Logging out...',
+      success: 'Logged out successfully',
+      error: 'Failed to log out',
     });
   };
 
@@ -121,7 +121,7 @@ export function AccountDropdown({ contacts }: { contacts: any }) {
               />
               <AvatarFallback className="bg-main_primary text-white pt-1">
                 {contacts?.firstName[0]}
-                {contacts?.lastName ? contacts.lastName[0] : ""}
+                {contacts?.lastName ? contacts.lastName[0] : ''}
               </AvatarFallback>
             </Avatar>
             <h1 className="text-lg font-normal">
@@ -139,7 +139,7 @@ export function AccountDropdown({ contacts }: { contacts: any }) {
               />
               <AvatarFallback className="bg-main_primary text-white pt-1">
                 {contacts?.firstName[0]}
-                {contacts?.lastName ? contacts.lastName[0] : ""}
+                {contacts?.lastName ? contacts.lastName[0] : ''}
               </AvatarFallback>
             </Avatar>
             <div>

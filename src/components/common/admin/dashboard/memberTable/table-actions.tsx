@@ -1,4 +1,4 @@
-import { ListFilter, Columns3 } from "lucide-react";
+import { ListFilter, Columns3 } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -12,15 +12,15 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuGroup,
   DropdownMenuItem,
-} from "@/components/ui/dropdown-menu";
+} from '@/components/ui/dropdown-menu';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { Input } from "@/components/ui/input";
-import { useCallback, useEffect, useState } from "react";
-import { Table } from "@tanstack/react-table";
+} from '@/components/ui/popover';
+import { Input } from '@/components/ui/input';
+import { useCallback, useEffect, useState } from 'react';
+import { Table } from '@tanstack/react-table';
 import {
   Select,
   SelectContent,
@@ -29,7 +29,7 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select';
 
 interface QuickActionProps {
   table: Table<any>;
@@ -37,20 +37,20 @@ interface QuickActionProps {
 }
 
 export default function QuickAction({ table, entity }: QuickActionProps) {
-  const [position, setPosition] = useState<string>("");
+  const [position, setPosition] = useState<string>('');
   const [availableLabels, setAvailableLabels] = useState<string[]>([]);
-  const [selectedLabel, setSelectedLabel] = useState("");
+  const [selectedLabel, setSelectedLabel] = useState('');
   const [filters, setFilters] = useState({
     ageRange: [0, 200] as [number, number],
     labelNames: [] as string[],
-    alphabeticFilter: "",
-    contactStatus: "",
+    alphabeticFilter: '',
+    contactStatus: '',
   });
 
   // Fetch unique label values dynamically
   useEffect(() => {
-    const labelColumn = table.getColumn("labels");
-    const statusColumn = table.getColumn("contactStatus");
+    const labelColumn = table.getColumn('labels');
+    const statusColumn = table.getColumn('contactStatus');
 
     if (labelColumn) {
       const uniqueLabelValues = labelColumn.getFacetedUniqueValues();
@@ -83,7 +83,7 @@ export default function QuickAction({ table, entity }: QuickActionProps) {
     (e: React.ChangeEvent<HTMLInputElement>) => {
       table.setGlobalFilter(e.target.value);
     },
-    [table]
+    [table],
   );
 
   // Handle Age Filter Change
@@ -93,9 +93,9 @@ export default function QuickAction({ table, entity }: QuickActionProps) {
         ...prev,
         ageRange: [minAge, maxAge],
       }));
-      table.getColumn("age")?.setFilterValue([minAge, maxAge]);
+      table.getColumn('age')?.setFilterValue([minAge, maxAge]);
     },
-    [table]
+    [table],
   );
 
   // Handle Label Filter Change
@@ -105,9 +105,9 @@ export default function QuickAction({ table, entity }: QuickActionProps) {
         ...prev,
         labelNames: selectedLabels,
       }));
-      table.getColumn("labels")?.setFilterValue(selectedLabels);
+      table.getColumn('labels')?.setFilterValue(selectedLabels);
     },
-    [table]
+    [table],
   );
 
   // Handle Alphabetic Name Filter Change
@@ -117,9 +117,9 @@ export default function QuickAction({ table, entity }: QuickActionProps) {
         ...prev,
         alphabeticFilter: letter,
       }));
-      table.getColumn("fullName")?.setFilterValue(letter);
+      table.getColumn('fullName')?.setFilterValue(letter);
     },
-    [table]
+    [table],
   );
 
   // Handle Contact Status Filter Change
@@ -129,15 +129,15 @@ export default function QuickAction({ table, entity }: QuickActionProps) {
         ...prev,
         contactStatus: status,
       }));
-      table.getColumn("contactStatus")?.setFilterValue(status);
+      table.getColumn('contactStatus')?.setFilterValue(status);
     },
-    [table]
+    [table],
   );
 
   return (
     <div className="flex flex-col w-full justify-between mt-6 mb-4 space-y-1 lg:my-8 lg:flex-row lg:space-y-0">
       <h1 id="all-entities" className="text-lg font-semibold text-gray-800">
-        {table.getFilteredRowModel().rows?.length}{" "}
+        {table.getFilteredRowModel().rows?.length}{' '}
         {table.getFilteredRowModel().rows?.length > 1
           ? entity
           : entity.slice(0, -1)}
@@ -156,12 +156,13 @@ export default function QuickAction({ table, entity }: QuickActionProps) {
             <DropdownMenuTrigger asChild>
               <button className="flex items-center gap-2">
                 <ListFilter size={16} />
-                Filter
+                <span className="hidden md:flex">Filter</span>
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent
               className="max-w-lg p-4 shadow-lg shadow-main/10"
-              align="start">
+              align="start"
+            >
               <DropdownMenuLabel>Advanced Filters</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
@@ -181,7 +182,7 @@ export default function QuickAction({ table, entity }: QuickActionProps) {
                               onChange={(e) =>
                                 handleAgeRangeChange(
                                   Number(e.target.value),
-                                  filters.ageRange[1]
+                                  filters.ageRange[1],
                                 )
                               }
                               placeholder="Min Age"
@@ -195,7 +196,7 @@ export default function QuickAction({ table, entity }: QuickActionProps) {
                               onChange={(e) =>
                                 handleAgeRangeChange(
                                   filters.ageRange[0],
-                                  Number(e.target.value)
+                                  Number(e.target.value),
                                 )
                               }
                               placeholder="Max Age"
@@ -215,7 +216,8 @@ export default function QuickAction({ table, entity }: QuickActionProps) {
                   onValueChange={(e) => {
                     setSelectedLabel(e);
                     handleLabelChange([e]);
-                  }}>
+                  }}
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Filter By Label" />
                   </SelectTrigger>
@@ -236,9 +238,10 @@ export default function QuickAction({ table, entity }: QuickActionProps) {
               <DropdownMenuItem
                 className="w-full flex justify-center bg-main rounded-md mt-3 text-white"
                 onClick={() => {
-                  setSelectedLabel("");
+                  setSelectedLabel('');
                   table.resetColumnFilters(true);
-                }}>
+                }}
+              >
                 Clear Fliters
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -247,7 +250,7 @@ export default function QuickAction({ table, entity }: QuickActionProps) {
           {/* Columns UI */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="flex items-center gap-2">
+              <button className="items-center gap-2 hidden md:flex">
                 <Columns3 size={16} />
                 Columns
               </button>
@@ -264,7 +267,8 @@ export default function QuickAction({ table, entity }: QuickActionProps) {
                     checked={column.getIsVisible()}
                     onCheckedChange={(value) =>
                       table.getColumn(column.id)?.toggleVisibility(!!value)
-                    }>
+                    }
+                  >
                     {column.columnDef.header as React.ReactNode}
                   </DropdownMenuCheckboxItem>
                 ))}

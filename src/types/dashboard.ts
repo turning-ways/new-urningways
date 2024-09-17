@@ -3,6 +3,7 @@ export interface Dashboard {
   totalContacts: number;
   verifiedMembers: number;
   unverifiedMembers: number;
+  activeMembers: number;
   members: DashMember[];
 }
 

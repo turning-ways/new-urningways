@@ -1,18 +1,19 @@
-"use client";
-import { useQuery } from "@tanstack/react-query";
-import api from "@/lib/axios";
-import { Dashboard } from "@/types/dashboard";
+'use client';
+import { useQuery } from '@tanstack/react-query';
+import api from '@/lib/axios';
+import { Dashboard } from '@/types/dashboard';
 
 const fetchQuery = ({
   churchId,
   startDate,
   endDate,
   fields = [
-    "totalMembers",
-    "totalContacts",
-    "verifiedMembers",
-    "unverifiedMembers",
-    "members",
+    'totalMembers',
+    'totalContacts',
+    'verifiedMembers',
+    'unverifiedMembers',
+    'activeMembers',
+    'members',
   ],
 }: {
   churchId: string;
@@ -48,6 +49,11 @@ const fetchQuery = ({
           churchId: "${churchId}"
           startDate: "${startDate}"
           endDate: "${endDate}"
+        )
+        ${selectedFields[5]}(
+          churchId: "${churchId}"
+          startDate: "${startDate}"
+          endDate: "${endDate}"
         ) {
           id
           age
@@ -75,14 +81,14 @@ export function useDash({
   endDate?: string;
 }) {
   return useQuery({
-    queryKey: ["dash", { churchId, startDate }],
+    queryKey: ['dash', { churchId, startDate }],
     queryFn: async () => {
       const response = await api.post(
-        "/dash",
+        '/dash',
         {
           query: fetchQuery({ churchId, startDate, endDate }),
         },
-        { timeout: 5000 } // Set a 5-second timeout for the request
+        { timeout: 5000 }, // Set a 5-second timeout for the request
       );
       return response.data.data.dashboard as Dashboard;
     },

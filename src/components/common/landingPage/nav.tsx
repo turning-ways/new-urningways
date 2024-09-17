@@ -1,8 +1,8 @@
-"use client";
+'use client';
 // components/Navigation.tsx
-import Image from "next/image";
-import Link from "next/link";
-import { useSession } from "next-auth/react";
+import Image from 'next/image';
+import Link from 'next/link';
+import { useSession } from 'next-auth/react';
 
 export default function Navigation() {
   const { data: session } = useSession();
@@ -19,19 +19,22 @@ export default function Navigation() {
         {session?.user ? (
           <Link
             href="/admin/dashboard"
-            className="rounded-2xl border py-1 px-8 border-mainLight hidden sm:block hover:bg-white bg-mainLight hover:text-mainLight text-white transition-all duration-400">
+            className="rounded-2xl border py-1 px-8 border-mainLight hidden sm:block hover:bg-white bg-mainLight hover:text-mainLight text-white transition-all duration-400"
+          >
             Dashboard
           </Link>
         ) : (
           <>
             <Link
               href="/register"
-              className="rounded-2xl border border-transparent hover:border-mainLight py-1 px-8 transition-all duration-400">
+              className="rounded-2xl border border-transparent  hover:border-mainLight py-1 px-2 sm:px-8 transition-all duration-400"
+            >
               Sign Up
             </Link>
             <Link
               href="/login"
-              className="rounded-2xl border py-1 px-8 border-mainLight hidden sm:block hover:bg-white bg-mainLight hover:text-mainLight text-white transition-all duration-400">
+              className="rounded-2xl border py-1 px-8 border-mainLight hidden sm:block hover:bg-white bg-mainLight hover:text-mainLight text-white transition-all duration-400"
+            >
               Login
             </Link>
           </>

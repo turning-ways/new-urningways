@@ -1,6 +1,6 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Suspense } from "react";
+import { Card, CardContent } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Suspense } from 'react';
 
 export default function StatsCard({
   title,
@@ -9,7 +9,7 @@ export default function StatsCard({
   isLoading,
 }: {
   title: string;
-  value: string | number;
+  value: string | number | undefined;
   color_variant?: string;
   isLoading?: boolean;
 }) {
@@ -26,7 +26,7 @@ export default function StatsCard({
           </h1>
         </div>
         {isLoading ? (
-          <Skeleton className="h-10 w-20" />
+          <Skeleton className="h-8 w-10 mg:h-10 md:w-20 " />
         ) : (
           <div className="flex items-center justify-center w-full text-2xl lg:text-3xl">
             {value}

@@ -1,23 +1,23 @@
-"use client";
+'use client';
 
-import { useState, useEffect, useMemo, Suspense } from "react";
+import { useState, useEffect, useMemo, Suspense } from 'react';
 import {
   Calendar,
   CalendarCheck2,
   CalendarHeart,
   CalendarSearch,
-} from "lucide-react";
+} from 'lucide-react';
 
-import AgeChart from "@/components/common/admin/dashboard/age-chart";
-import MemberChart from "@/components/common/admin/dashboard/member-chart";
-import MemberTable from "@/components/common/admin/dashboard/member-table";
-import PieChart from "@/components/common/admin/dashboard/pie-chart";
-import StatsCard from "@/components/common/admin/dashboard/stats-cardd";
-import ChipTabs from "@/components/ui/chip-tabs";
-import Tabs from "@/components/ui/table-tabs";
-import { useDash } from "@/lib/client/useDash";
-import { useContactContext } from "@/context/contact-context";
-import { useSearchParams, useRouter } from "next/navigation"; // Import useSearchParams and useRouter
+import AgeChart from '@/components/common/admin/dashboard/age-chart';
+import MemberChart from '@/components/common/admin/dashboard/member-chart';
+import MemberTable from '@/components/common/admin/dashboard/member-table';
+import PieChart from '@/components/common/admin/dashboard/pie-chart';
+import StatsCard from '@/components/common/admin/dashboard/stats-cardd';
+import ChipTabs from '@/components/ui/chip-tabs';
+import Tabs from '@/components/ui/table-tabs';
+import { useDash } from '@/lib/client/useDash';
+import { useContactContext } from '@/context/contact-context';
+import { useSearchParams, useRouter } from 'next/navigation'; // Import useSearchParams and useRouter
 
 export default function PageClient() {
   const { contacts } = useContactContext();
@@ -27,32 +27,32 @@ export default function PageClient() {
 
   const memberTabs = useMemo(
     () => [
-      { name: "All Members" },
-      { name: "First Timers" },
-      { name: "Upcoming Birthday" },
+      { name: 'All Members' },
+      { name: 'First Timers' },
+      { name: 'Upcoming Birthday' },
     ],
-    []
+    [],
   );
 
   const tabs = useMemo(
     () => [
-      { name: "Till Date", icon: <Calendar size={14} /> },
-      { name: "Last Week", icon: <CalendarCheck2 size={14} /> },
-      { name: "Last Month", icon: <CalendarSearch size={14} /> },
-      { name: "Last Quarter", icon: <CalendarHeart size={14} /> },
+      { name: 'Till Date', icon: <Calendar size={14} /> },
+      { name: 'Last Week', icon: <CalendarCheck2 size={14} /> },
+      { name: 'Last Month', icon: <CalendarSearch size={14} /> },
+      { name: 'Last Quarter', icon: <CalendarHeart size={14} /> },
     ],
-    []
+    [],
   );
 
   const [selectedFilter, setSelectedFilter] = useState(memberTabs[0]);
   const [selectedTab, setSelectedTab] = useState(tabs[0]);
 
   const churchId = useMemo(() => {
-    return contacts?.churchId ?? "";
+    return contacts?.churchId ?? '';
   }, [contacts?.churchId]);
 
   const churchCreatedAt = useMemo(() => {
-    return contacts?.churchCreatedAt ?? "";
+    return contacts?.churchCreatedAt ?? '';
   }, [contacts?.churchCreatedAt]);
 
   const { data, isLoading, refetch, isRefetching } = useDash({
@@ -66,7 +66,7 @@ export default function PageClient() {
   }, [endDate]);
 
   useEffect(() => {
-    const mainChurchId = searchParams.get("mainChurchId");
+    const mainChurchId = searchParams.get('mainChurchId');
 
     if (mainChurchId) {
       // Perform any operations with the searchParams value here
@@ -80,10 +80,10 @@ export default function PageClient() {
   const chartData = useMemo(() => {
     if (data) {
       const maleMembers = data.members.filter(
-        (member) => member.gender === "MALE"
+        (member) => member.gender === 'MALE',
       ).length;
       const femaleMembers = data.members.filter(
-        (member) => member.gender === "FEMALE"
+        (member) => member.gender === 'FEMALE',
       ).length;
       return {
         totalMembers: data.totalMembers,
@@ -97,25 +97,29 @@ export default function PageClient() {
   const stats = useMemo(() => {
     return [
       {
-        title: "Total Members",
+        title: 'Total Members',
         value: data?.totalMembers ?? 0,
-        color_variant: "#F2CCCC",
+        color_variant: '#F2CCCC',
       },
       {
-        title: "Verified",
+        title: 'Verified',
         value: data?.verifiedMembers ?? 0,
-        color_variant: "#CFF4CF",
+        color_variant: '#CFF4CF',
       },
       {
-        title: "Unverified",
+        title: 'Unverified',
         value: data?.unverifiedMembers ?? 0,
-        color_variant: "#CCCCFF",
+        color_variant: '#CCCCFF',
       },
-      { title: "Active Members", value: "10", color_variant: "green" },
       {
-        title: "Contacts",
+        title: 'Active Members',
+        value: data?.activeMembers,
+        color_variant: 'green',
+      },
+      {
+        title: 'Contacts',
         value: data?.totalContacts ?? 0,
-        color_variant: "#E2CCE2",
+        color_variant: '#E2CCE2',
       },
     ];
   }, [data]);

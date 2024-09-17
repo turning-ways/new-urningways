@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { Pie } from "react-chartjs-2";
+import { Pie } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   Tooltip,
@@ -8,8 +8,8 @@ import {
   ArcElement,
   ChartData,
   ChartOptions,
-} from "chart.js";
-import { Skeleton } from "@/components/ui/skeleton";
+} from 'chart.js';
+import { Skeleton } from '@/components/ui/skeleton';
 
 ChartJS.register(Tooltip, Legend, ArcElement);
 
@@ -37,9 +37,9 @@ export default function PieChart({
     labels: Object.keys(chartInfo),
     datasets: [
       {
-        label: "Total Members",
+        label: 'Total Members',
         data: Object.values(chartInfo),
-        backgroundColor: ["#758CD7", "#A0D7AB"],
+        backgroundColor: ['#758CD7', '#A0D7AB'],
         borderWidth: 1,
         hoverOffset: 4,
       },
@@ -50,14 +50,14 @@ export default function PieChart({
     plugins: {
       legend: {
         display: false,
-        position: "top",
+        position: 'top',
         labels: {
           usePointStyle: true,
-          pointStyle: "rectRounded",
+          pointStyle: 'rectRounded',
           padding: 10,
         },
 
-        align: "center",
+        align: 'center',
       },
     },
     responsive: true,
@@ -65,10 +65,10 @@ export default function PieChart({
   } satisfies ChartOptions;
 
   const getGenderPercentage = (type: string) => {
-    if (!data.totalMembers) return "0";
+    if (!data.totalMembers) return '0';
     const percent =
       ((chartInfo[type] / data.totalMembers) * 100).toFixed(0) || 0;
-    return Number.isNaN(percent) ? "0" : `${percent}`;
+    return Number.isNaN(percent) ? '0' : `${percent}`;
   };
 
   return (
@@ -90,13 +90,13 @@ export default function PieChart({
                   <div className="flex gap-1 items-center">
                     <div
                       className={`w-3 h-3 rounded-full ${
-                        key === "Male" ? "bg-[#758CD7]" : "bg-[#A0D7AB]"
+                        key === 'Male' ? 'bg-[#758CD7]' : 'bg-[#A0D7AB]'
                       } rounded-full`}
                     />
                     <span className="text-base text-gray-400">{key}</span>
                   </div>
                   <span className="text-right text-[#2B3674] text-[18px] font-bold">
-                    {getGenderPercentage(key)}
+                    {getGenderPercentage(key)} %
                   </span>
                 </div>
               </div>

@@ -16,7 +16,7 @@ export default function PageClient() {
   return (
     <div className="flex flex-col w-full h-full pt-6 pr-4 overflow-auto gap-4 relative">
       <DataTable columns={columns} data={data} isLoading={isLoading} />
-      <div className="absolute bottom-4 right-4">
+      <div className="fixed bottom-4 right-4">
         <Link
           href={`${ADMIN_DIRECTORY}/new`}
           className="flex items-center gap-2 bg-main_DarkBlue text-white text-lg px-4 py-3 rounded-lg">

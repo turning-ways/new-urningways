@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { Sheet, SheetContent, SheetTrigger } from "./sheet";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Sheet, SheetContent, SheetTrigger, SheetClose } from './sheet';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   BellIcon,
   CircleHelpIcon,
@@ -12,15 +12,16 @@ import {
   Settings,
   Users,
   Workflow,
-} from "lucide-react";
-import { AccountDropdown } from "../common/admin/header";
-import { AnimatedHamburgerButton } from "./hamburger";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
-import { LogoutDialog } from "./nav-bar";
-import { useContactContext } from "@/context/contact-context";
-import { ADMIN_DASHBOARD, ADMIN_DIRECTORY } from "@/constants/route-constants";
+} from 'lucide-react';
+import { AccountDropdown } from '../common/admin/header';
+import { AnimatedHamburgerButton } from './hamburger';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useState } from 'react';
+import { LogoutDialog } from './nav-bar';
+import { useContactContext } from '@/context/contact-context';
+import { ADMIN_DASHBOARD, ADMIN_DIRECTORY } from '@/constants/route-constants';
+import Image from 'next/image';
 
 export const MobileNav = () => {
   const [active, setActive] = useState(false);
@@ -29,15 +30,15 @@ export const MobileNav = () => {
 
   const navLinks = [
     {
-      title: "Dashboard",
-      to: "/admin/dashboard",
+      title: 'Dashboard',
+      to: '/admin/dashboard',
       icon: <LayoutGrid size={24} />,
     },
-    { title: "Directory", to: "/admin/directory", icon: <Users size={24} /> },
-    { title: "Contacts", to: "/admin/contacts", icon: <Workflow size={24} /> },
-    { title: "Forms", to: "/admin/forms", icon: <NewspaperIcon size={24} /> },
-    { title: "Settings", to: "/admin/settings", icon: <Settings size={24} /> },
-    { title: "Help", to: "/admin/help", icon: <CircleHelpIcon size={24} /> },
+    { title: 'Directory', to: '/admin/directory', icon: <Users size={24} /> },
+    { title: 'Contacts', to: '/admin/contacts', icon: <Workflow size={24} /> },
+    { title: 'Forms', to: '/admin/forms', icon: <NewspaperIcon size={24} /> },
+    { title: 'Settings', to: '/admin/settings', icon: <Settings size={24} /> },
+    { title: 'Help', to: '/admin/help', icon: <CircleHelpIcon size={24} /> },
   ];
 
   return (
@@ -47,34 +48,44 @@ export const MobileNav = () => {
           <AnimatedHamburgerButton active={active} setActive={setActive} />
         </SheetTrigger>
         <SheetContent
-          side={"left"}
-          className="bg-main_DarkBlue text-white flex flex-col justify-between pt-16">
+          side={'left'}
+          className="bg-main_DarkBlue text-white flex flex-col justify-between pt-16"
+        >
           <div className="flex flex-col gap-4 items-center justify-between w-full">
             <Link
               href={`${ADMIN_DASHBOARD}`}
-              className="flex items-center gap-2 mb-10">
+              className="flex items-center gap-2 mb-10"
+            >
               <div className="flex items-center bg-main_secondaryDark p-2 rounded-xl">
-                <Group size={24} />
+                <Image
+                  src={'/assets/images/Membership.svg'}
+                  width={20}
+                  height={20}
+                  alt="membership"
+                />
               </div>
-              <p className="text-lg font-bold">Church Admin</p>
+              <p className="text-lg font-bold">Membership</p>
             </Link>
             <ul className="flex flex-col gap-4 w-full items-center">
               {navLinks.map((link: any) => (
-                <Link
-                  key={link.to}
-                  href={link.to}
-                  className={`hover:bg-main_DarkBlueHover p-3 text-gray-400 rounded-lg gap-4 flex w-full justify-center text-center  hover:animate-scale-in ${
-                    pathname.startsWith(link.to)
-                      ? "bg-main_DarkBlueHover !text-white"
-                      : ""
-                  }`}>
-                  <div className="flex justify-start items-center gap-4 self-center ">
-                    {link.icon}
-                    <p className="hover:text-main_primaryLight w-20 xl:w-28">
-                      {link.title}
-                    </p>
-                  </div>
-                </Link>
+                <SheetClose key={link.to} asChild>
+                  <Link
+                    key={link.to}
+                    href={link.to}
+                    className={`hover:bg-main_DarkBlueHover p-3 text-gray-400 rounded-lg gap-4 flex w-full justify-center text-center  hover:animate-scale-in ${
+                      pathname.startsWith(link.to)
+                        ? 'bg-main_DarkBlueHover !text-white'
+                        : ''
+                    }`}
+                  >
+                    <div className="flex justify-start items-center gap-4 self-center ">
+                      {link.icon}
+                      <p className="hover:text-main_primaryLight w-20 xl:w-28">
+                        {link.title}
+                      </p>
+                    </div>
+                  </Link>
+                </SheetClose>
               ))}
             </ul>
           </div>
@@ -96,7 +107,7 @@ export const MobileNav = () => {
           <Link href={`${ADMIN_DIRECTORY}/new`}>
             <PlusCircleIcon size={28} />
           </Link>
-          <BellIcon size={24} aria-disabled />
+          <BellIcon size={24} aria-disabled className="hidden md:block" />
           <AccountDropdown contacts={contacts} />
         </div>
       </div>

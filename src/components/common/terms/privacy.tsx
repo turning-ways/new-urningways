@@ -1,12 +1,13 @@
-"use client";
+'use client';
 
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTrigger,
-} from "@/components/ui/dialog";
+} from '@/components/ui/dialog';
 import {
   Agreement,
   termList,
@@ -15,12 +16,12 @@ import {
   UserRepresentations,
   ProhibitedActivites,
   Disclaimer,
-} from "@/components/common/terms/constants/terms";
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
+} from '@/components/common/terms/constants/terms';
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
 
 export default function Policy() {
-  const [active, setActive] = useState("AGREEMENT TO OUR LEGAL TERMS");
+  const [active, setActive] = useState('AGREEMENT TO OUR LEGAL TERMS');
 
   return (
     <Dialog>
@@ -58,7 +59,7 @@ export default function Policy() {
                 <p>{Agreement.p1}</p>
                 <p>{Agreement.p2}</p>
                 <p>
-                  {Agreement.p3}{" "}
+                  {Agreement.p3}{' '}
                   <span className="font-azoBold">{Agreement.p3Bold}</span>
                 </p>
                 <p>{Agreement.p4}</p>
@@ -84,7 +85,8 @@ export default function Policy() {
               <div className="space-y-4">
                 <h1
                   id={UserRepresentations.title}
-                  className="text-2xl font-bold">
+                  className="text-2xl font-bold"
+                >
                   {UserRepresentations.title.toUpperCase()}
                 </h1>
                 <p>{UserRepresentations.p1}</p>
@@ -93,7 +95,8 @@ export default function Policy() {
               <div className="space-y-4">
                 <h1
                   id={ProhibitedActivites.title}
-                  className="text-2xl font-bold">
+                  className="text-2xl font-bold"
+                >
                   {ProhibitedActivites.title.toUpperCase()}
                 </h1>
                 <p>{ProhibitedActivites.p1}</p>
@@ -112,9 +115,11 @@ export default function Policy() {
               </div>
             </div>
           </div>
-          <div className="!sticky bottom-0 w-full py-4 px-4">
-            <Button className="w-full h-auto py-4 bg-mainLight">Close</Button>
-          </div>
+          <DialogClose>
+            <div className="!sticky bottom-0 w-full py-4 px-4">
+              <Button className="w-full h-auto py-4 bg-mainLight">Close</Button>
+            </div>
+          </DialogClose>
         </div>
       </DialogContent>
     </Dialog>

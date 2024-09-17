@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   ColumnDef,
@@ -14,7 +14,7 @@ import {
   useReactTable,
   getFacetedRowModel,
   getFacetedUniqueValues,
-} from "@tanstack/react-table";
+} from '@tanstack/react-table';
 
 import {
   Table,
@@ -23,10 +23,10 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { useState } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import QuickAction from "./table-actions";
+} from '@/components/ui/table';
+import { useState } from 'react';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import QuickAction from './table-actions';
 import {
   ChevronLeft,
   ChevronRight,
@@ -34,23 +34,23 @@ import {
   GripIcon,
   List,
   PlusCircle,
-} from "lucide-react";
-import { Skeleton } from "@/components/ui/skeleton";
-import { NameFormatter } from "@/lib/utils/capitalize";
-import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
-import { ADMIN_CONTACTS, ADMIN_DIRECTORY } from "@/constants/route-constants";
+} from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
+import { NameFormatter } from '@/lib/utils/capitalize';
+import Link from 'next/link';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ADMIN_CONTACTS, ADMIN_DIRECTORY } from '@/constants/route-constants';
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
-} from "@/components/ui/card";
-import { formatDate } from "@/lib/utils/date-formatter";
-import { LabelStack } from "@/components/ui/labels";
-import { AvatarStack } from "@/components/ui/avatarStack";
-import AddContactsModal from "../../contacts/addContactsModal";
-import { useRouter } from "next/navigation";
+} from '@/components/ui/card';
+import { formatDate } from '@/lib/utils/date-formatter';
+import { LabelStack } from '@/components/ui/labels';
+import { AvatarStack } from '@/components/ui/avatarStack';
+import AddContactsModal from '../../contacts/addContactsModal';
+import { useRouter } from 'next/navigation';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -63,18 +63,18 @@ export function DataTable<TData, TValue>({
   columns,
   data,
   isLoading,
-  entity = "members",
+  entity = 'members',
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [columnOrder, setColumnOrder] = useState<string[]>([
-    "photo",
-    "fullName",
-    "email",
-    "phone",
-    "gender",
-    "dateOfBirth",
+    'photo',
+    'fullName',
+    'email',
+    'phone',
+    'gender',
+    'dateOfBirth',
   ]);
   const router = useRouter();
 
@@ -104,7 +104,7 @@ export function DataTable<TData, TValue>({
       maxSize: 400,
     },
   });
-  const [view, setView] = useState<"list" | "grid">("list");
+  const [view, setView] = useState<'list' | 'grid'>('list');
 
   if (isLoading) {
     return (
@@ -119,13 +119,14 @@ export function DataTable<TData, TValue>({
   return (
     <>
       <QuickAction table={table} entity={entity} />
-      {entity !== "members" && <ViewsComponent setView={setView} view={view} />}
-      {view === "list" && (
+      {entity !== 'members' && <ViewsComponent setView={setView} view={view} />}
+      {view === 'list' && (
         <motion.div
           initial={{ opacity: 0, x: 100 }}
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -100 }}
-          transition={{ duration: 0.5 }}>
+          transition={{ duration: 0.5 }}
+        >
           <div className="hidden border rounded-md lg:flex">
             <Table>
               <TableHeader>
@@ -135,12 +136,13 @@ export function DataTable<TData, TValue>({
                       return (
                         <TableHead
                           key={header.id}
-                          className="font-sans font-semibold text-gray-600">
+                          className="font-sans font-semibold text-gray-600"
+                        >
                           {header.isPlaceholder
                             ? null
                             : flexRender(
                                 header.column.columnDef.header,
-                                header.getContext()
+                                header.getContext(),
                               )}
                         </TableHead>
                       );
@@ -155,21 +157,22 @@ export function DataTable<TData, TValue>({
                       key={row.id}
                       className="font-sans text-base"
                       onClick={() => {
-                        if (entity !== "members") {
+                        if (entity !== 'members') {
                           router.push(
                             `${ADMIN_CONTACTS}/${
                               (row.original as { id: string }).id
-                            }`
+                            }`,
                           );
                           return;
                         }
                       }}
-                      data-state={row.getIsSelected() && "selected"}>
+                      data-state={row.getIsSelected() && 'selected'}
+                    >
                       {row.getVisibleCells().map((cell) => (
                         <TableCell key={cell.id}>
                           {flexRender(
                             cell.column.columnDef.cell,
-                            cell.getContext()
+                            cell.getContext(),
                           )}
                         </TableCell>
                       ))}
@@ -179,7 +182,8 @@ export function DataTable<TData, TValue>({
                   <TableRow>
                     <TableCell
                       colSpan={columns.length}
-                      className="h-24 text-center">
+                      className="h-24 text-center"
+                    >
                       No results.
                     </TableCell>
                   </TableRow>
@@ -192,7 +196,8 @@ export function DataTable<TData, TValue>({
               <button
                 className="flex items-center"
                 onClick={() => table.previousPage()}
-                disabled={!table.getCanPreviousPage()}>
+                disabled={!table.getCanPreviousPage()}
+              >
                 <ChevronLeft className="size-5 mb-0.5" /> Previous
               </button>
               <div className="flex items-center gap-1">
@@ -203,17 +208,16 @@ export function DataTable<TData, TValue>({
                       // size="sm"
                       className={`${
                         table.getState().pagination.pageIndex === index
-                          ? "bg-primary text-mainLight"
-                          : "text-primary"
+                          ? 'bg-primary text-mainLight'
+                          : 'text-primary'
                       } w-6 h-6 rounded-full flex items-center justify-center pt-1`}
                       key={index}
                       onClick={() => table.setPageIndex(index)}
-                      disabled={
-                        table.getState().pagination.pageIndex === index
-                      }>
+                      disabled={table.getState().pagination.pageIndex === index}
+                    >
                       {index + 1}
                     </button>
-                  )
+                  ),
                 )}
               </div>
               <button
@@ -221,7 +225,8 @@ export function DataTable<TData, TValue>({
                 // size="sm"
                 onClick={() => table.nextPage()}
                 className="flex items-center"
-                disabled={!table.getCanNextPage()}>
+                disabled={!table.getCanNextPage()}
+              >
                 Next <ChevronRight className="size-5 mb-0.5" />
               </button>
             </div>
@@ -231,14 +236,15 @@ export function DataTable<TData, TValue>({
             {table.getRowModel().rows.map((row) => (
               <Link
                 href={
-                  entity === "members"
+                  entity === 'members'
                     ? `${ADMIN_DIRECTORY}/${
                         (row.original as { id: string }).id
                       }`
                     : `${ADMIN_CONTACTS}/${(row.original as { id: string }).id}`
                 }
                 key={row.id}
-                className="flex items-center justify-between px-4 py-2 hover:bg-gray-100">
+                className="flex items-center justify-between px-4 py-2 hover:bg-gray-100"
+              >
                 {/* Profile */}
                 <div className="flex items-center gap-4">
                   <Avatar className="w-10 h-10 rounded-full">
@@ -253,7 +259,7 @@ export function DataTable<TData, TValue>({
                     <div className="flex items-center gap-2 text-base font-semibold capitalize">
                       {NameFormatter(
                         (row.original as { firstName: string }).firstName,
-                        (row.original as { lastName: string }).lastName
+                        (row.original as { lastName: string }).lastName,
                       )}
                     </div>
                     <div className="flex gap-4">
@@ -269,7 +275,8 @@ export function DataTable<TData, TValue>({
               <button
                 className="flex items-center text-base cursor-pointer"
                 onClick={() => table.previousPage()}
-                disabled={!table.getCanPreviousPage()}>
+                disabled={!table.getCanPreviousPage()}
+              >
                 <ChevronLeft className="size-5 mb-0.5" /> Previous
               </button>
               <div className="flex items-center gap-1">
@@ -280,17 +287,16 @@ export function DataTable<TData, TValue>({
                       // size="sm"
                       className={`${
                         table.getState().pagination.pageIndex === index
-                          ? "bg-primary text-mainLight"
-                          : "text-primary"
+                          ? 'bg-primary text-mainLight'
+                          : 'text-primary'
                       } w-6 h-6 rounded-full flex items-center justify-center pt-1`}
                       key={index}
                       onClick={() => table.setPageIndex(index)}
-                      disabled={
-                        table.getState().pagination.pageIndex === index
-                      }>
+                      disabled={table.getState().pagination.pageIndex === index}
+                    >
                       {index + 1}
                     </button>
-                  )
+                  ),
                 )}
               </div>
               <button
@@ -298,36 +304,39 @@ export function DataTable<TData, TValue>({
                 // size="sm"
                 onClick={() => table.nextPage()}
                 className="flex items-center text-base cursor-pointer"
-                disabled={!table.getCanNextPage()}>
+                disabled={!table.getCanNextPage()}
+              >
                 Next <ChevronRight className="size-5 mb-0.5" />
               </button>
             </div>
           )}
         </motion.div>
       )}
-      {view === "grid" && (
+      {view === 'grid' && (
         // A grid view of the data with animation that fades in
         <motion.div
           initial={{ opacity: 0, x: 100 }}
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: 100 }}
           transition={{ duration: 0.5 }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-6">
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-6"
+        >
           {table.getRowModel().rows.map((row) => (
             <Card
               key={row.id}
               onClick={() =>
                 router.push(
-                  `${ADMIN_CONTACTS}/${(row.original as { id: string }).id}`
+                  `${ADMIN_CONTACTS}/${(row.original as { id: string }).id}`,
                 )
               }
-              className="py-2 border-slate-800 hover:bg-gray-50">
+              className="py-2 border-slate-800 hover:bg-gray-50"
+            >
               <CardHeader className="py-2">
                 <div className="flex items-center justify-between gap-4">
                   <h1 className="text-lg font-semibold text-gray-800 ">
                     {NameFormatter(
                       (row.original as { firstName: string }).firstName,
-                      (row.original as { lastName: string }).lastName
+                      (row.original as { lastName: string }).lastName,
                     )}
                   </h1>
                   <button className="p-2 transition-colors duration-200 rounded-full hover:bg-gray-100">
@@ -369,12 +378,12 @@ export function DataTable<TData, TValue>({
                 {/* For the last Modified Date */}
                 <div className="flex items-center justify-between w-full h-full gap-2 py-3">
                   <p className="text-gray-500 ">
-                    Last Modified:{" "}
+                    Last Modified:{' '}
                     {(row.original as { updatedAt: string })?.updatedAt
                       ? formatDate(
-                          (row.original as { updatedAt: string }).updatedAt
+                          (row.original as { updatedAt: string }).updatedAt,
                         )
-                      : "N/A"}
+                      : 'N/A'}
                   </p>
                   {/* Assigned to */}
                   <div className="flex items-center capitalize gap-x-2">
@@ -389,7 +398,7 @@ export function DataTable<TData, TValue>({
                             }
                           ).assignedTo
                         }
-                        spacing={"sm"}
+                        spacing={'sm'}
                         maxAvatarsAmount={3}
                       />
                     ) : (
@@ -412,7 +421,7 @@ function ViewsComponent({
   view,
 }: {
   setView: Function;
-  view: "list" | "grid";
+  view: 'list' | 'grid';
 }) {
   return (
     <div className="justify-between mb-10 md:flex">
@@ -425,18 +434,20 @@ function ViewsComponent({
           whileTap={{ scale: 0.9 }}
           transition={{
             duration: 0.2,
-            type: "spring",
+            type: 'spring',
             stiffness: 260,
             damping: 20,
           }}
           className={`flex space-x-2 items-center justify-center text-sm md:text-base shadow-main_DarkBlueHover/10 rounded-md shadow-md py-2 px-5 w-1/2 md:w-fit ${
-            view === "list"
-              ? "bg-[#17275B] text-white"
-              : "bg-white text-[#17275B] border border-[#17275B]"
+            view === 'list'
+              ? 'bg-[#17275B] text-white'
+              : 'bg-white text-[#17275B] border border-[#17275B]'
           }`}
-          onClick={() => setView("list")}>
+          onClick={() => setView('list')}
+        >
           <List size={16} />
-          <p>List View</p>
+          <p className="hidden md:flex pt-1">List View</p>
+          <p className="flex md:hidden pt-1">List</p>
         </motion.button>
         <motion.button
           initial={{ opacity: 0, x: -100 }}
@@ -445,18 +456,20 @@ function ViewsComponent({
           whileTap={{ scale: 0.9 }}
           transition={{
             duration: 0.2,
-            type: "spring",
+            type: 'spring',
             stiffness: 260,
             damping: 20,
           }}
           className={`flex space-x-2 items-center justify-center text-sm md:text-base shadow-main_DarkBlueHover/10 rounded-md shadow-md py-2 px-5 w-1/2 md:w-fit ${
-            view === "grid"
-              ? "bg-[#17275B] text-white"
-              : "bg-white text-[#17275B] border border-[#17275B]"
+            view === 'grid'
+              ? 'bg-[#17275B] text-white'
+              : 'bg-white text-[#17275B] border border-[#17275B]'
           }`}
-          onClick={() => setView("grid")}>
+          onClick={() => setView('grid')}
+        >
           <GripIcon size={16} />
-          <p>Gallery View</p>
+          <p className="hidden md:flex pt-1">Gallery View</p>
+          <p className="flex md:hidden pt-1">Gallery</p>
         </motion.button>
       </motion.div>
     </div>

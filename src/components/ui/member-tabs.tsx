@@ -1,48 +1,55 @@
-"use client";
-import { motion } from "framer-motion";
-import { User, Church, History, Contact2Icon } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { ADMIN_DIRECTORY } from "@/constants/route-constants";
-import React, { useCallback, useMemo } from "react";
+'use client';
+import { motion } from 'framer-motion';
+import { User, Church, History, Contact2Icon } from 'lucide-react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { ADMIN_DIRECTORY } from '@/constants/route-constants';
+import React, { useCallback, useMemo } from 'react';
 
 // Define the tabs outside to prevent recreation on every render
 const tabLists = [
   {
-    name: "Personal Information",
-    view: "personal",
+    name: 'Personal Information',
+    smallerName: 'Personal',
+    view: 'personal',
     icon: User,
   },
   {
-    name: "Contact Information",
-    view: "contact",
+    name: 'Contact Information',
+    smallerName: 'Contact',
+    view: 'contact',
     icon: Contact2Icon,
   },
   {
-    name: "Church Information",
-    view: "church",
+    name: 'Church Information',
+    smallerName: 'Church',
+    view: 'church',
     icon: Church,
   },
   {
-    name: "Member History",
-    view: "history",
+    name: 'Member History',
+    smallerName: 'History',
+    view: 'history',
     icon: History,
   },
 ];
 
 const CreateAndEditTabs = [
   {
-    name: "Personal Information",
-    view: "personal",
+    name: 'Personal Information',
+    smallerName: 'Personal',
+    view: 'personal',
     icon: User,
   },
   {
-    name: "Contact Information",
-    view: "contact",
+    name: 'Contact Information',
+    smallerName: 'Contact',
+    view: 'contact',
     icon: Contact2Icon,
   },
   {
-    name: "Church Information",
-    view: "church",
+    name: 'Church Information',
+    smallerName: 'Church',
+    view: 'church',
     icon: Church,
   },
 ];
@@ -59,7 +66,7 @@ const InfoTabs = React.memo(
   }) => {
     const router = useRouter();
     const searchParams = useSearchParams();
-    const currentView = searchParams.get("view") || "personal"; // Get the current view from the URL
+    const currentView = searchParams.get('view') || 'personal'; // Get the current view from the URL
 
     const handleTabClick = useCallback(
       (view: string) => {
@@ -71,7 +78,7 @@ const InfoTabs = React.memo(
           router.push(`${ADMIN_DIRECTORY}/${memberId}?view=${view}`);
         }
       },
-      [create, edit, memberId, router]
+      [create, edit, memberId, router],
     );
     const tabList = create || edit ? CreateAndEditTabs : tabLists;
     const tabs = useMemo(
@@ -81,7 +88,7 @@ const InfoTabs = React.memo(
           selected: tab.view === currentView,
           onClick: () => handleTabClick(tab.view),
         })),
-      [currentView, handleTabClick]
+      [currentView, handleTabClick],
     );
 
     return (
@@ -91,16 +98,17 @@ const InfoTabs = React.memo(
             key={index}
             icon={tab.icon}
             text={tab.name}
+            smallText={tab.smallerName}
             selected={tab.selected}
             onClick={tab.onClick}
           />
         ))}
       </div>
     );
-  }
+  },
 );
 
-InfoTabs.displayName = "InfoTabs";
+InfoTabs.displayName = 'InfoTabs';
 
 export default InfoTabs;
 
@@ -108,11 +116,13 @@ const Tab = React.memo(
   ({
     icon: Icon,
     text,
+    smallText,
     selected,
     onClick,
   }: {
     icon: React.ElementType;
     text: string;
+    smallText: string;
     selected: boolean;
     onClick: () => void;
   }) => {
@@ -121,22 +131,25 @@ const Tab = React.memo(
         onClick={onClick}
         className={`${
           selected
-            ? "text-main !fill-main_primary"
-            : "text-slate-400 fill-slate-400 hover:text-slate-500 hover:bg-slate-50"
-        } text-xs md:text-sm transition-colors px-1 md:px-2.5 py-1 rounded-md relative`}>
+            ? 'text-main !fill-main_primary'
+            : 'text-slate-400 fill-slate-400 hover:text-slate-500 hover:bg-slate-50'
+        } text-xs md:text-sm transition-colors px-1 md:px-2.5 py-1 rounded-md relative`}
+      >
         <span className="relative z-10 flex gap-2 items-center">
           <Icon className="size-4 md:size-5" />
-          <span className="mt-0.5">{text}</span>
+          <span className="mt-0.5 hidden md:flex">{text}</span>
+          <span className="mt-0.5 flex md:hidden">{smallText}</span>
         </span>
         {selected && (
           <motion.span
             layoutId="pill-tab"
-            transition={{ type: "spring", duration: 0.5 }}
-            className="absolute inset-x-0 origin-bottom bottom-0 z-0 h-1 bg-gradient-to-r from-main to-mainLight rounded-md "></motion.span>
+            transition={{ type: 'spring', duration: 0.5 }}
+            className="absolute inset-x-0 origin-bottom bottom-0 z-0 h-1 bg-gradient-to-r from-main to-mainLight rounded-md "
+          ></motion.span>
         )}
       </button>
     );
-  }
+  },
 );
 
-Tab.displayName = "Tab";
+Tab.displayName = 'Tab';

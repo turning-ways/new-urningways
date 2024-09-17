@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import {
   Form,
   FormControl,
@@ -6,41 +6,41 @@ import {
   FormLabel,
   FormField,
   FormMessage,
-} from "@/components/ui/form";
-import InputComponent from "@/components/common/Input/input";
-import SelectComponent from "@/components/common/Input/select";
-import { PhoneInput } from "@/components/common/Input/phone";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { isValidPhoneNumber } from "react-phone-number-input";
-import { DatePicker } from "@/components/common/Input/datePicker";
-import { useUpdateContact } from "@/lib/client/useContact";
-import { useContactContext } from "@/context/contact-context";
-import { toast } from "sonner";
-import { LoadingCircle } from "@/components/ui/loading-circle";
-import { Contact } from "@/lib/client/contactApiFunction";
-import { matchQuery } from "@tanstack/react-query";
+} from '@/components/ui/form';
+import InputComponent from '@/components/common/Input/input';
+import SelectComponent from '@/components/common/Input/select';
+import { PhoneInput } from '@/components/common/Input/phone';
+import { z } from 'zod';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { isValidPhoneNumber } from 'react-phone-number-input';
+import { DatePicker } from '@/components/common/Input/datePicker';
+import { useUpdateContact } from '@/lib/client/useContact';
+import { useContactContext } from '@/context/contact-context';
+import { toast } from 'sonner';
+import { LoadingCircle } from '@/components/ui/loading-circle';
+import { Contact } from '@/lib/client/contactApiFunction';
+import { matchQuery } from '@tanstack/react-query';
 
 const schema = z.object({
-  firstName: z.string({ message: "First name is required" }),
+  firstName: z.string({ message: 'First name is required' }),
   lastName: z.string().optional(),
   phone: z
-    .string({ message: "Phone number is required" })
+    .string({ message: 'Phone number is required' })
     .refine((value) => isValidPhoneNumber(value), {
-      message: "Invalid phone number",
+      message: 'Invalid phone number',
     }),
-  email: z.string().email({ message: "Invalid email address" }).optional(),
-  maturity: z.enum(["INFANT", "CHILD", "TEEN", "ADULT", "ELDER"]).optional(),
+  email: z.string().email({ message: 'Invalid email address' }).optional(),
+  maturity: z.enum(['INFANT', 'CHILD', 'TEEN', 'ADULT', 'ELDER']).optional(),
   contactType: z.enum([
-    "VISITOR",
-    "REGULAR",
-    "PARTICIPANT",
-    "INPROGRESS",
-    "MEMBER",
+    'VISITOR',
+    'REGULAR',
+    'PARTICIPANT',
+    'INPROGRESS',
+    'MEMBER',
   ]),
   dateOfBirth: z.date().optional(),
-  gender: z.enum(["MALE", "FEMALE", "OTHER"]),
+  gender: z.enum(['MALE', 'FEMALE', 'OTHER']),
   address: z.string().optional(),
 });
 
@@ -56,10 +56,10 @@ export default function ContactUpdateForm({
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: {
-      firstName: initialData?.firstName ? initialData?.firstName : "",
-      lastName: initialData?.lastName ? initialData?.lastName : "",
-      phone: initialData?.phone ? initialData?.phone : "",
-      email: initialData?.email ? initialData?.email : "",
+      firstName: initialData?.firstName ? initialData?.firstName : '',
+      lastName: initialData?.lastName ? initialData?.lastName : '',
+      phone: initialData?.phone ? initialData?.phone : '',
+      email: initialData?.email ? initialData?.email : undefined,
       maturity: initialData?.maturityLevel
         ? initialData?.maturityLevel
         : undefined,
@@ -70,7 +70,7 @@ export default function ContactUpdateForm({
         ? new Date(initialData?.dateOfBirth)
         : undefined,
       gender: initialData?.gender ? initialData?.gender : undefined,
-      address: initialData?.address ? initialData?.address : "",
+      address: initialData?.address ? initialData?.address : '',
     },
   });
 
@@ -95,15 +95,15 @@ export default function ContactUpdateForm({
         },
         {
           onSuccess: () => {
-            toast.success("Contact updated successfully");
+            toast.success('Contact updated successfully');
             setIsOpen(false);
           },
-        }
+        },
       );
     } catch (error: any) {
       // Additional safety catch block
-      toast.error(error?.response?.data?.message || "An error occurred");
-      console.error("Error updating contact:", error);
+      toast.error(error?.response?.data?.message || 'An error occurred');
+      console.error('Error updating contact:', error);
     }
   }
 
@@ -111,7 +111,8 @@ export default function ContactUpdateForm({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-4 px-1 mb-4">
+        className="space-y-4 px-1 mb-4"
+      >
         <FormField
           control={form.control}
           name="firstName"
@@ -191,10 +192,10 @@ export default function ContactUpdateForm({
                   {...field}
                   placeholder=""
                   shouldVariedOptions={true}
-                  options={["MALE", "FEMALE"]}
+                  options={['MALE', 'FEMALE']}
                   variedOptions={[
-                    { label: "Male", value: "MALE" },
-                    { label: "Female", value: "FEMALE" },
+                    { label: 'Male', value: 'MALE' },
+                    { label: 'Female', value: 'FEMALE' },
                   ]}
                   value={field.value}
                   setValue={field.onChange}
@@ -217,13 +218,13 @@ export default function ContactUpdateForm({
                   {...field}
                   placeholder=""
                   shouldVariedOptions={true}
-                  options={["INFANT", "CHILD", "TEEN", "ADULT", "ELDER"]}
+                  options={['INFANT', 'CHILD', 'TEEN', 'ADULT', 'ELDER']}
                   variedOptions={[
-                    { label: "Infant", value: "INFANT" },
-                    { label: "Child", value: "CHILD" },
-                    { label: "Teen", value: "TEEN" },
-                    { label: "Adult", value: "ADULT" },
-                    { label: "Elder", value: "ELDER" },
+                    { label: 'Infant', value: 'INFANT' },
+                    { label: 'Child', value: 'CHILD' },
+                    { label: 'Teen', value: 'TEEN' },
+                    { label: 'Adult', value: 'ADULT' },
+                    { label: 'Elder', value: 'ELDER' },
                   ]}
                   value={field.value}
                   setValue={field.onChange}
@@ -247,18 +248,18 @@ export default function ContactUpdateForm({
                   placeholder=""
                   shouldVariedOptions={true}
                   options={[
-                    "VISITOR",
-                    "REGULAR",
-                    "PARTICIPANT",
-                    "INPROGRESS",
-                    "MEMBER",
+                    'VISITOR',
+                    'REGULAR',
+                    'PARTICIPANT',
+                    'INPROGRESS',
+                    'MEMBER',
                   ]}
                   variedOptions={[
-                    { label: "Vistor", value: "VISITOR" },
-                    { label: "Regular", value: "REGULAR" },
-                    { label: "Participant", value: "PARTICIPANT" },
-                    { label: "Inprogress", value: "INPROGRESS" },
-                    { label: "Member", value: "MEMBER" },
+                    { label: 'Vistor', value: 'VISITOR' },
+                    { label: 'Regular', value: 'REGULAR' },
+                    { label: 'Participant', value: 'PARTICIPANT' },
+                    { label: 'Inprogress', value: 'INPROGRESS' },
+                    { label: 'Member', value: 'MEMBER' },
                   ]}
                   value={field.value}
                   setValue={field.onChange}
@@ -305,8 +306,9 @@ export default function ContactUpdateForm({
           <button
             type="submit"
             disabled={updateContact.isPending}
-            className="btn px-8 py-2 bg-white hover:bg-gray-100 rounded-md text-main_DarkBlue border border-main_DarkBlue">
-            {updateContact.isPending ? <LoadingCircle /> : "Update Contact"}
+            className="btn px-8 py-2 bg-white hover:bg-gray-100 rounded-md text-main_DarkBlue border border-main_DarkBlue"
+          >
+            {updateContact.isPending ? <LoadingCircle /> : 'Update Contact'}
           </button>
         </div>
       </form>
