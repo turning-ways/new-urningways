@@ -63,11 +63,11 @@ export async function uploadImage(
   formData.append('signature', signature);
   formData.append('timestamp', timestamp);
   formData.append('public_id', nameAndPhone);
-  formData.append('api_key', `${process.env.CLOUDINARY_API_KEY}`);
+  formData.append('api_key', `${process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY}`);
 
   try {
     const { data } = await axios.post(
-      `https://api.cloudinary.com/v1_1/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload`,
+      `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
       formData,
     );
     return data.url;
