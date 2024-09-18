@@ -12,7 +12,7 @@ import { JWT } from 'next-auth/jwt';
 import { jwtDecode } from 'jwt-decode';
 import { redirect } from 'next/navigation';
 import { signOut } from 'next-auth/react';
-import { getCookie } from 'cookies-next';
+import { getCookie, setCookie } from 'cookies-next';
 import { cookies } from 'next/headers';
 import api from '@/lib/axios';
 
@@ -107,13 +107,13 @@ const authOptions: NextAuthOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-      authorization: {
-        params: {
-          prompt: 'consent',
-          access_type: 'offline',
-          response_type: 'code',
-        },
-      },
+      // authorization: {
+      //   params: {
+      //     prompt: 'consent',
+      //     access_type: 'offline',
+      //     response_type: 'code',
+      //   },
+      // },
     }),
   ],
   pages: {
@@ -126,6 +126,7 @@ const authOptions: NextAuthOptions = {
   callbacks: {
     async signIn({ user }: { user: any }) {
       if (user?.error) {
+        return `/auth/error?error=${user.error}`;
         throw new Error(user?.error);
       }
 
@@ -150,7 +151,7 @@ const authOptions: NextAuthOptions = {
     // @ts-ignore
     async jwt({ token, user, account, trigger, session }) {
       const userType = getCookie('userType', { cookies });
-      console.log('User Type', userType);
+      // console.log('User Type', userType);
 
       if (trigger && trigger === 'update') {
         token.data.user.churchId = session.churchId;
@@ -158,45 +159,50 @@ const authOptions: NextAuthOptions = {
       }
 
       if (account && account.provider === 'google') {
-        const response = await api.post('/auth/google-verify', {
-          token: account.id_token,
-          role: userType,
-        });
-        const user = response.data.data;
+        try {
+          const response = await api.post('/auth/google-verify', {
+            token: account.id_token,
+            role: userType,
+          });
+          const user = response?.data?.data;
 
-        if (response.status === 400) {
-          return { ...token, error: 'GoogleAuthError' };
-        }
+          // process the user object
+          // set the tokens in the user object
+          const tokens: BackendJWT = {
+            accessToken: user.accessToken,
+            refreshToken: user.refreshToken,
+          };
 
-        // process the user object
-        // set the tokens in the user object
-        const tokens: BackendJWT = {
-          accessToken: user.accessToken,
-          refreshToken: user.refreshToken,
-        };
+          // set the validity of the token
+          const validity: AuthValidity = {
+            valid_until: jwtDecode(user.accessToken)?.exp || 0,
+            refresh_until: jwtDecode(user.refreshToken).exp || 0,
+          };
 
-        // set the validity of the token
-        const validity: AuthValidity = {
-          valid_until: jwtDecode(user.accessToken)?.exp || 0,
-          refresh_until: jwtDecode(user.refreshToken).exp || 0,
-        };
-
-        return {
-          ...token,
-          data: {
-            user: {
-              id: user.id,
-              firstName: user.firstName,
-              lastName: user.lastName,
-              email: user.email,
-              churchId: user.churchId,
-              accessToken: user.accessToken,
-              refreshToken: user.refreshToken,
+          return {
+            ...token,
+            data: {
+              user: {
+                id: user.id,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+                churchId: user.churchId,
+                accessToken: user.accessToken,
+                refreshToken: user.refreshToken,
+              },
+              tokens,
+              validity,
             },
-            tokens,
-            validity,
-          },
-        };
+          };
+        } catch (err) {
+          cookies().set('AuthError', 'User_not_registered', {
+            maxAge: 60,
+            // domain: `localhost`,
+          });
+          console.error(err);
+          return { ...token, error: 'User not registered' };
+        }
       }
 
       if (user) {
@@ -229,7 +235,7 @@ const authOptions: NextAuthOptions = {
       session.user = token.data.user;
       session.validity = token.data.validity;
       session.error = token.error;
-      // console.debug("Session:", session);
+      // console.debug('Session:', session);
       return session;
     },
   },

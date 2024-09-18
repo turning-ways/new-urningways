@@ -1,24 +1,24 @@
-import { AvatarStack } from "@/components/ui/avatarStack";
-import { Header } from "./header";
+import { AvatarStack } from '@/components/ui/avatarStack';
+import { Header } from './header';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { Plus, X } from "lucide-react";
-import { useMembers } from "@/lib/client/useMembers";
-import { useContactContext } from "@/context/contact-context";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { NameFormatter, ProfileNameFormatter } from "@/lib/utils/capitalize";
-import { Key } from "react";
+} from '@/components/ui/popover';
+import { Plus, X } from 'lucide-react';
+import { useMembers } from '@/lib/client/useMembers';
+import { useContactContext } from '@/context/contact-context';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { NameFormatter, ProfileNameFormatter } from '@/lib/utils/capitalize';
+import { Key } from 'react';
 import {
   useAssignMemberToContact,
   useGetAssignedToContacts,
   useUnassignMemberFromContact,
-} from "@/lib/client/useContact";
-import { Skeleton } from "@/components/ui/skeleton";
-import { StringOrTemplateHeader } from "@tanstack/react-table";
-import { toast } from "sonner";
+} from '@/lib/client/useContact';
+import { Skeleton } from '@/components/ui/skeleton';
+import { StringOrTemplateHeader } from '@tanstack/react-table';
+import { toast } from 'sonner';
 
 interface AssignedToProps {
   isLoading?: boolean;
@@ -37,12 +37,12 @@ export default function AssignedTo({
   contactId,
 }: AssignedToProps) {
   const { data } = useGetAssignedToContacts({
-    churchId: authContact?.churchId ?? "",
-    contactId: contactId ?? "",
+    churchId: authContact?.churchId ?? '',
+    contactId: contactId ?? '',
   });
   return (
     <div className="flex flex-col gap-3 mt-2">
-      <Header title="Assigned To" size={"sm"} headerColor="primary" />
+      <Header title="Assigned To" size={'sm'} headerColor="primary" />
       {isLoading ? (
         <AvatarStackLoader />
       ) : (
@@ -52,12 +52,12 @@ export default function AssignedTo({
               <AvatarStack
                 avatars={data}
                 maxAvatarsAmount={10}
-                spacing={"xl"}
+                spacing={'xl'}
                 avatarSize="size-14"
               />
               <AssignContactToMember
                 churchId={authContact?.churchId}
-                contactId={contactId ?? ""}
+                contactId={contactId ?? ''}
                 assignedToMembers={data}
               />
             </>
@@ -66,7 +66,7 @@ export default function AssignedTo({
               <div className="text-gray-500 text-lg">No one assigned</div>
               <AssignContactToMember
                 churchId={authContact?.churchId}
-                contactId={contactId ?? ""}
+                contactId={contactId ?? ''}
                 assignedToMembers={data}
               />
             </>
@@ -90,25 +90,25 @@ function AssignContactToMember({
     photo: string;
   }>;
 }) {
-  const { data } = useMembers({ churchId: churchId ?? "" });
+  const { data } = useMembers({ churchId: churchId ?? '' });
   const assignedToMutation = useAssignMemberToContact();
   const unassign = useUnassignMemberFromContact();
-  console.log(data, assignedToMembers);
+  // console.log(data, assignedToMembers);
   // Find members that are not assigned by ensuring their `id` is not in `assignedToMembers`.
   const nonAssignedMembers = data?.filter(
     (member: { id: string }) =>
-      !assignedToMembers.find((contact) => contact.id === member.id)
+      !assignedToMembers.find((contact) => contact.id === member.id),
   );
 
   // Filter assigned contacts correctly by matching the member's `id` with `assignedToMembers`.
   const assignedContacts = data?.filter((member: { id: string }) =>
-    assignedToMembers.find((contact) => contact.id === member.id)
+    assignedToMembers.find((contact) => contact.id === member.id),
   );
 
   async function handleAssignMemberToContact(
     memberId: string,
     name: string,
-    photo: string
+    photo: string,
   ) {
     try {
       await assignedToMutation.mutateAsync(
@@ -123,18 +123,18 @@ function AssignContactToMember({
         },
         {
           onSuccess: () => {
-            toast.success("Member successfully assigned to contact");
+            toast.success('Member successfully assigned to contact');
           },
           onError: (error: any) => {
-            toast.error("Error assigning member to contact");
-            console.error("Error assigning member:", error);
+            toast.error('Error assigning member to contact');
+            console.error('Error assigning member:', error);
           },
-        }
+        },
       );
     } catch (error: any) {
       // Additional safety catch block
-      toast.error("Error assigning member to contact");
-      console.error("Error assigning member:", error);
+      toast.error('Error assigning member to contact');
+      // console.error('Error assigning member:', error);
     }
   }
 
@@ -148,18 +148,18 @@ function AssignContactToMember({
         },
         {
           onSuccess: () => {
-            toast.success("Member successfully unassigned from contact");
+            toast.success('Member successfully unassigned from contact');
           },
           onError: (error: any) => {
-            toast.error("Error unassigning member from contact");
-            console.error("Error unassigning member:", error);
+            toast.error('Error unassigning member from contact');
+            // console.error('Error unassigning member:', error);
           },
-        }
+        },
       );
     } catch (error: any) {
       // Additional safety catch block
-      toast.error("Error unassigning member from contact");
-      console.error("Error unassigning member:", error);
+      toast.error('Error unassigning member from contact');
+      // console.error('Error unassigning member:', error);
     }
   }
 
@@ -185,7 +185,8 @@ function AssignContactToMember({
               }) => (
                 <div
                   className="flex items-center gap-4 py-1.5 px-2 rounded-md hover:bg-gray-50"
-                  key={member.id}>
+                  key={member.id}
+                >
                   <Avatar className="size-8">
                     <AvatarImage
                       src={member.photo}
@@ -202,13 +203,14 @@ function AssignContactToMember({
                     </span>
                     <button
                       onClick={() =>
-                        handleUnassignMemberToContact(member?.id ?? "")
-                      }>
+                        handleUnassignMemberToContact(member?.id ?? '')
+                      }
+                    >
                       <X size={16} />
                     </button>
                   </div>
                 </div>
-              )
+              ),
             )
           ) : (
             <div className="text-gray-500">No members assigned yet</div>
@@ -230,13 +232,14 @@ function AssignContactToMember({
                 <div
                   onClick={() =>
                     handleAssignMemberToContact(
-                      member.id ?? "",
+                      member.id ?? '',
                       `${member.firstName} ${member.lastName}`,
-                      member.photo ?? ""
+                      member.photo ?? '',
                     )
                   }
                   className="flex items-center gap-4 py-1.5 px-2 rounded-md hover:bg-gray-50 cursor-pointer"
-                  key={member.id}>
+                  key={member.id}
+                >
                   <Avatar className="size-8">
                     <AvatarImage
                       src={member.photo}
@@ -251,7 +254,7 @@ function AssignContactToMember({
                     {NameFormatter(member.firstName, member.lastName)}
                   </span>
                 </div>
-              )
+              ),
             )
           ) : (
             <div className="text-gray-500">No members available to assign</div>

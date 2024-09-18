@@ -1,6 +1,6 @@
-"use server";
+'use server';
 
-import api from "@/lib/axios";
+import api from '@/lib/axios';
 
 export const register = async (data: {
   email: string;
@@ -10,7 +10,7 @@ export const register = async (data: {
   role: string;
 }) => {
   try {
-    const res = await api.post("/auth/register", data);
+    const res = await api.post('/auth/register', data);
     return {
       data: res.data,
       status: 201,
@@ -22,7 +22,7 @@ export const register = async (data: {
 
 export const resendEmail = async (data: { email: string }) => {
   try {
-    const res = await api.post("/auth/resend-email", data);
+    const res = await api.post('/auth/resend-email', data);
     return {
       data: res.data,
       status: 200,
@@ -34,7 +34,7 @@ export const resendEmail = async (data: { email: string }) => {
 
 export const verifyEmail = async (data: { token: string }) => {
   try {
-    const res = await api.post("/auth/verify-email", data);
+    const res = await api.post('/auth/verify-email', data);
     return {
       data: res.data,
       status: 200,
@@ -46,14 +46,19 @@ export const verifyEmail = async (data: { token: string }) => {
 
 export const sendResetPasswordEmail = async (data: { email: string }) => {
   try {
-    const res = await api.post("/auth/forgot-password?type=web", data);
+    const res = await api.post('/auth/forgot-password?type=web', data);
     return {
       data: res.data,
       status: 200,
     };
   } catch (error: any) {
+    const errorMessage =
+      error.response.data?.message === 'User signed up with social account'
+        ? 'It appears you signed up using a social account like Google or Facebook. Please use the corresponding social login option to sign in.'
+        : 'We could not find an account associated with this email, or you may have signed up using a social account. Please verify the email or try signing in using your social login.';
+
     return {
-      data: "Either the email is not registered or the request is invalid",
+      data: errorMessage,
       status: 400,
     };
   }
@@ -62,7 +67,7 @@ export const sendResetPasswordEmail = async (data: { email: string }) => {
 export const verifyResetPasswordToken = async (data: { token: string }) => {
   try {
     const res = await api.get(
-      `/auth/verify-password-reset?token=${data.token}`
+      `/auth/verify-password-reset?token=${data.token}`,
     );
     return {
       data: res.data,

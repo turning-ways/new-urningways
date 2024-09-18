@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { signIn } from "next-auth/react";
-import { deleteCookie, setCookie } from "cookies-next";
+import { signIn } from 'next-auth/react';
+import { deleteCookie, setCookie } from 'cookies-next';
 import {
   Dialog,
   DialogContent,
@@ -9,25 +9,26 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import Image from "next/image";
+} from '@/components/ui/dialog';
+import Image from 'next/image';
 
 export const GoogleButton = ({
-  authType = "SIGNIN",
+  authType = 'SIGNIN',
 }: {
-  authType?: "SIGNIN" | "REGISTER" | "INVITE";
+  authType?: 'SIGNIN' | 'REGISTER' | 'INVITE';
 }) => {
-  if (authType === "SIGNIN") {
+  if (authType === 'SIGNIN') {
     return (
       <div
         onClick={async () => {
-          deleteCookie("userType");
-          signIn("google", {
-            redirect: true,
-            callbackUrl: "/admin",
+          deleteCookie('userType');
+          signIn('google', {
+            redirect: false,
+            callbackUrl: '/admin',
           });
         }}
-        className="border border-[#CBD5E0] rounded-[8px] py-3 px-6 flex justify-center lg:justify-normal space-x-2 lg:space-x-3 items-center w-full  cursor-pointer mt-5 hover:bg-slate-50">
+        className="border border-[#CBD5E0] rounded-[8px] py-3 px-6 flex justify-center lg:justify-normal space-x-2 lg:space-x-3 items-center w-full  cursor-pointer mt-5 hover:bg-slate-50"
+      >
         <Image
           src="/assets/images/Google.svg"
           alt="Google Logo"
@@ -39,7 +40,7 @@ export const GoogleButton = ({
         </p>
       </div>
     );
-  } else if (authType === "REGISTER") {
+  } else if (authType === 'REGISTER') {
     return (
       <Dialog>
         <DialogTrigger className="w-full">
@@ -66,13 +67,14 @@ export const GoogleButton = ({
           <div className="flex justify-between gap-4 items-center">
             <div
               onClick={async () => {
-                setCookie("userType", "USER");
-                signIn("google", {
+                setCookie('userType', 'USER');
+                signIn('google', {
                   redirect: true,
-                  callbackUrl: "/admin",
+                  callbackUrl: '/admin',
                 });
               }}
-              className="border border-[#CBD5E0] rounded-[8px] py-3 px-6 flex justify-center lg:justify-normal space-x-2 lg:space-x-3 items-center w-full  cursor-pointer mt-5 hover:bg-slate-50">
+              className="border border-[#CBD5E0] rounded-[8px] py-3 px-6 flex justify-center lg:justify-normal space-x-2 lg:space-x-3 items-center w-full  cursor-pointer mt-5 hover:bg-slate-50"
+            >
               <Image
                 src="/assets/images/Google.svg"
                 alt="Google Logo"
@@ -86,13 +88,14 @@ export const GoogleButton = ({
             </div>
             <div
               onClick={async () => {
-                setCookie("userType", "ADMIN");
-                signIn("google", {
+                setCookie('userType', 'ADMIN');
+                signIn('google', {
                   redirect: true,
-                  callbackUrl: "/admin",
+                  callbackUrl: '/admin',
                 });
               }}
-              className="border border-[#CBD5E0] rounded-[8px] py-3 px-6 flex justify-center lg:justify-normal space-x-2 lg:space-x-3 items-center w-full  cursor-pointer mt-5 hover:bg-slate-50">
+              className="border border-[#CBD5E0] rounded-[8px] py-3 px-6 flex justify-center lg:justify-normal space-x-2 lg:space-x-3 items-center w-full  cursor-pointer mt-5 hover:bg-slate-50"
+            >
               <Image
                 src="/assets/images/Google.svg"
                 alt="Google Logo"
