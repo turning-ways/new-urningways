@@ -27,6 +27,7 @@ export default function Layout({
           description:
             'It looks like your Google account is not yet registered with our system. Please create an account or contact support for assistance.',
         });
+        router.replace('/register');
       }
     }
     // clear the error cookie
