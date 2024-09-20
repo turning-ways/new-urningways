@@ -59,7 +59,7 @@ export default function ContactUpdateForm({
       firstName: initialData?.firstName ? initialData?.firstName : '',
       lastName: initialData?.lastName ? initialData?.lastName : '',
       phone: initialData?.phone ? initialData?.phone : '',
-      email: initialData?.email ? initialData?.email : undefined,
+      email: initialData?.email && initialData?.email !== '' ? initialData?.email : undefined,
       maturity: initialData?.maturityLevel
         ? initialData?.maturityLevel
         : undefined,
