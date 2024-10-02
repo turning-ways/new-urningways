@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from 'zod';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Form,
   FormControl,
@@ -10,37 +10,37 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import InputComponent from "@/components/common/Input/input";
-import PasswordInput from "@/components/common/Input/passwordInput";
-import { NextButton, PhoneButton } from "@/components/common/Input/buttons";
-import { GoogleButton } from "@/components/common/Input/google-btn";
-import Link from "next/link";
-import { useAuthEmailStore } from "@/lib/stores/authEmail.store";
-import Terms from "@/components/common/terms/terms";
-import { Checkbox } from "@/components/ui/checkbox";
-import Policy from "@/components/common/terms/privacy";
-import { register } from "@/app/api/auth/regsiter";
-import { useState } from "react";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+} from '@/components/ui/form';
+import InputComponent from '@/components/common/Input/input';
+import PasswordInput from '@/components/common/Input/passwordInput';
+import { NextButton, PhoneButton } from '@/components/common/Input/buttons';
+import { GoogleButton } from '@/components/common/Input/google-btn';
+import Link from 'next/link';
+import { useAuthEmailStore } from '@/lib/stores/authEmail.store';
+import Terms from '@/components/common/terms/terms';
+import { Checkbox } from '@/components/ui/checkbox';
+import Policy from '@/components/common/terms/privacy';
+import { register } from '@/app/api/auth/regsiter';
+import { useState } from 'react';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 const schema = z
   .object({
-    firstName: z.string().min(3, { message: "Invalid first name" }),
-    lastName: z.string().min(3, { message: "Invalid last name" }),
-    email: z.string().email({ message: "Invalid email" }),
-    password: z.string().min(6, { message: "Invalid password" }),
-    confirmPassword: z.string().min(6, { message: "Invalid password" }),
+    firstName: z.string().min(3, { message: 'Invalid first name' }),
+    lastName: z.string().min(3, { message: 'Invalid last name' }),
+    email: z.string().email({ message: 'Invalid email' }),
+    password: z.string().min(6, { message: 'Invalid password' }),
+    confirmPassword: z.string().min(6, { message: 'Invalid password' }),
     accessTerms: z.boolean(),
   })
   .refine((data) => data.accessTerms, {
-    message: "Please accept the terms",
-    path: ["accessTerms"],
+    message: 'Please accept the terms',
+    path: ['accessTerms'],
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"],
+    message: 'Passwords do not match',
+    path: ['confirmPassword'],
   });
 
 export default function RegisterForm() {
@@ -51,11 +51,11 @@ export default function RegisterForm() {
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: {
-      firstName: "",
-      lastName: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
     },
   });
 
@@ -68,13 +68,13 @@ export default function RegisterForm() {
         password: data.password,
         firstName: data.firstName,
         lastName: data.lastName,
-        role: "ADMIN",
+        role: 'ADMIN',
       });
 
       if (res.status === 201) {
         setIsLoading(false);
-        toast.success("Account created successfully");
-        router.push("/register/otp");
+        toast.success('Account created successfully');
+        router.push('/register/otp');
       }
     } catch (error: any) {
       setIsLoading(false);
@@ -88,17 +88,19 @@ export default function RegisterForm() {
       <div className="mb-2">
         <h1 className="text-4xl font-bold text-textGray mb-4">Sign up</h1>
         <p className="text-textDark text-base lg:text-lg">
-          Already have an account?{" "}
+          Already have an account?{' '}
           <Link
-            href={"/login"}
-            className="text-secondary underline underline-offset-2 cursor-pointer">
+            href={'/login'}
+            className="text-secondary underline underline-offset-2 cursor-pointer"
+          >
             Sign in
           </Link>
         </p>
       </div>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-6 mt-4 w-full">
+        className="space-y-6 mt-4 w-full"
+      >
         <FormField
           control={form.control}
           name="firstName"
@@ -108,9 +110,10 @@ export default function RegisterForm() {
                 htmlFor="firstName"
                 className={`font-sans text-lightText font-normal lg:text-lg ${
                   form.formState.errors.firstName
-                    ? "text-red-500"
-                    : "text-lightText"
-                }`}>
+                    ? 'text-red-500'
+                    : 'text-lightText'
+                }`}
+              >
                 First Name
               </FormLabel>
               <FormControl>
@@ -129,9 +132,10 @@ export default function RegisterForm() {
                 htmlFor="lastName"
                 className={`font-sans text-lightText font-normal lg:text-lg ${
                   form.formState.errors.lastName
-                    ? "text-red-500"
-                    : "text-lightText"
-                }`}>
+                    ? 'text-red-500'
+                    : 'text-lightText'
+                }`}
+              >
                 Last Name
               </FormLabel>
               <FormControl>
@@ -150,9 +154,10 @@ export default function RegisterForm() {
                 htmlFor="email"
                 className={`font-sans text-lightText font-normal lg:text-lg ${
                   form.formState.errors.email
-                    ? "text-red-500"
-                    : "text-lightText"
-                }`}>
+                    ? 'text-red-500'
+                    : 'text-lightText'
+                }`}
+              >
                 Email
               </FormLabel>
               <FormControl>
@@ -175,9 +180,10 @@ export default function RegisterForm() {
                 htmlFor="password"
                 className={`font-sans text-lightText font-normal lg:text-lg ${
                   form.formState.errors.password
-                    ? "text-red-500"
-                    : "text-lightText"
-                }`}>
+                    ? 'text-red-500'
+                    : 'text-lightText'
+                }`}
+              >
                 Password
               </FormLabel>
               <FormControl>
@@ -196,9 +202,10 @@ export default function RegisterForm() {
                 htmlFor="confirmPassword"
                 className={`font-sans text-lightText font-normal lg:text-lg ${
                   form.formState.errors.confirmPassword
-                    ? "text-red-500"
-                    : "text-lightText"
-                }`}>
+                    ? 'text-red-500'
+                    : 'text-lightText'
+                }`}
+              >
                 Confirm Password
               </FormLabel>
               <FormControl>
@@ -221,7 +228,7 @@ export default function RegisterForm() {
                   checked={field.value}
                   onCheckedChange={field.onChange}
                   className={`${
-                    field.value && "!bg-mainLight border-mainLight"
+                    field.value && '!bg-mainLight border-mainLight'
                   }`}
                 />
               </FormControl>

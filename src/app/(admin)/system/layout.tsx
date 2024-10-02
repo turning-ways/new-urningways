@@ -8,8 +8,8 @@ export default function SystemLayout({
 }) {
   return (
     <div className="flex flex-col w-full min-h-screen">
-      <SystemNavBar />I am the system
-      <div>{children}</div>
+      <SystemNavBar />
+      <div className='py-8'>{children}</div>
     </div>
   );
 }
