@@ -126,7 +126,6 @@ const authOptions: NextAuthOptions = {
   callbacks: {
     async signIn({ user }: { user: any }) {
       if (user?.error) {
-        return `/auth/error?error=${user.error}`;
         throw new Error(user?.error);
       }
 
