@@ -1,60 +1,63 @@
-"use client";
+'use client';
 
-import Actions from "@/components/common/admin/contacts/actions";
-import AssignedTo from "@/components/common/admin/contacts/assignedTo";
-import Comments from "@/components/common/admin/contacts/comments";
-import ContactStatus from "@/components/common/admin/contacts/contactStatus";
-import EditContactsModal from "@/components/common/admin/contacts/editContactModal";
-import { Header } from "@/components/common/admin/contacts/header";
-import Labels from "@/components/common/admin/contacts/label";
-import { Skeleton } from "@/components/ui/skeleton";
-import { ADMIN_CONTACTS } from "@/constants/route-constants";
-import { useContactContext } from "@/context/contact-context";
-import { useGetContact } from "@/lib/client/useContact";
-import { NameFormatter, textCapitalizer } from "@/lib/utils/capitalize";
-import { formatDate, formatDateToCustom } from "@/lib/utils/date-formatter";
-import { ChevronDown, ChevronLeft } from "lucide-react";
-import Link from "next/link";
+import Actions from '@/components/common/admin/contacts/actions';
+import AssignedTo from '@/components/common/admin/contacts/assignedTo';
+import Comments from '@/components/common/admin/contacts/comments';
+import ContactStatus from '@/components/common/admin/contacts/contactStatus';
+import EditContactsModal from '@/components/common/admin/contacts/editContactModal';
+import { Header } from '@/components/common/admin/contacts/header';
+import Labels from '@/components/common/admin/contacts/label';
+import { Skeleton } from '@/components/ui/skeleton';
+import { useContactContext } from '@/context/contact-context';
+import { useGetContact } from '@/lib/client/useContact';
+import { NameFormatter, textCapitalizer } from '@/lib/utils/capitalize';
+import { formatDate, formatDateToCustom } from '@/lib/utils/date-formatter';
+import { ChevronDown, ChevronLeft } from 'lucide-react';
+import Link from 'next/link';
 
-export default function Page({ params }: { params: { contactId: string } }) {
-  const { contactId } = params;
+export default function Page({
+  params,
+}: {
+  params: { churchId: string; contactId: string };
+}) {
+  const { contactId, churchId } = params;
   const { contacts: authContact } = useContactContext();
   const { data, isLoading } = useGetContact({
-    churchId: authContact?.churchId ?? "",
+    churchId: authContact?.churchId ?? '',
     contactId,
   });
 
   const generateFields = (gdata: any) => {
     return [
       {
-        label: "Contact Type",
-        value: gdata?.contactType ? textCapitalizer(gdata.contactType) : "N/A",
+        label: 'Contact Type',
+        value: gdata?.contactType ? textCapitalizer(gdata.contactType) : 'N/A',
       },
       {
-        label: "Maturity",
+        label: 'Maturity',
         value: gdata?.maturityLevel
           ? textCapitalizer(gdata.maturityLevel)
-          : "N/A",
+          : 'N/A',
       },
       {
-        label: "Phone Number",
-        value: gdata?.phone || "N/A",
+        label: 'Phone Number',
+        value: gdata?.phone || 'N/A',
       },
       {
-        label: "Email",
-        value: gdata?.email || "N/A",
+        label: 'Email',
+        value: gdata?.email || 'N/A',
       },
       {
-        label: "Date of Birth",
-        value: gdata?.dateOfBirth ? formatDate(gdata.dateOfBirth) : "N/A",
+        label: 'Date of Birth',
+        value: gdata?.dateOfBirth ? formatDate(gdata.dateOfBirth) : 'N/A',
       },
       {
-        label: "Gender",
-        value: gdata?.gender ? textCapitalizer(gdata.gender) : "N/A",
+        label: 'Gender',
+        value: gdata?.gender ? textCapitalizer(gdata.gender) : 'N/A',
       },
       {
-        label: "Address",
-        value: gdata?.address || "N/A",
+        label: 'Address',
+        value: gdata?.address || 'N/A',
       },
     ];
   };
@@ -67,13 +70,14 @@ export default function Page({ params }: { params: { contactId: string } }) {
       <div id="header" className="flex flex-col gap-4">
         <Link
           className="bg-blue-50 rounded-lg p-2 w-fit cursor-pointer h-fit self-start hover:bg-blue-100 lg:self-auto"
-          href={ADMIN_CONTACTS}>
+          href={`/admin/${churchId}/contacts`}
+        >
           <ChevronLeft className="text-main_DarkBlue size-6" />
         </Link>
         <div className="flex justify-between items-center">
           <Header
             title="Contact Information"
-            size={"sm"}
+            size={'sm'}
             headerColor="primary"
           />
         </div>
@@ -84,8 +88,8 @@ export default function Page({ params }: { params: { contactId: string } }) {
                 {NameFormatter(data?.firstName, data?.lastName)}
               </div>
               <p className="text-sm text-textDark">
-                Created: {formatDateToCustom(data?.createdAt ?? "")} | Last
-                Modified: {formatDateToCustom(data?.updatedAt ?? "")}
+                Created: {formatDateToCustom(data?.createdAt ?? '')} | Last
+                Modified: {formatDateToCustom(data?.updatedAt ?? '')}
               </p>
             </div>
           ) : (
@@ -124,8 +128,9 @@ export default function Page({ params }: { params: { contactId: string } }) {
               <div
                 key={index}
                 className={`flex flex-col gap-2 ${
-                  fields.length - 1 === index ? "md:col-span-2" : ""
-                }`}>
+                  fields.length - 1 === index ? 'md:col-span-2' : ''
+                }`}
+              >
                 <h4 className=" text-textDark">{field.label}</h4>
                 <div className="text-lg border border-gray-200 rounded-lg p-2">
                   {field.value}
@@ -164,8 +169,9 @@ const GridSkeletonLoader = () => {
         <div
           key={index}
           className={`flex flex-col gap-2 ${
-            index === 5 ? "md:col-span-2" : ""
-          }`}>
+            index === 5 ? 'md:col-span-2' : ''
+          }`}
+        >
           <Skeleton className="h-4 w-1/2 bg-gray-200 rounded-md" />
           <div className="text-lg border border-gray-200 rounded-lg p-2">
             <Skeleton className="h-10 bg-gray-200 rounded-md" />

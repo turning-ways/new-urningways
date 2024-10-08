@@ -1,8 +1,8 @@
 // components/AuthForm.tsx
-"use client";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+'use client';
+import { z } from 'zod';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Form,
   FormControl,
@@ -10,35 +10,36 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import InputComponent from "@/components/common/Input/input";
-import PasswordInput from "@/components/common/Input/passwordInput";
+} from '@/components/ui/form';
+import InputComponent from '@/components/common/Input/input';
+import PasswordInput from '@/components/common/Input/passwordInput';
 import {
   NextButton,
   TurningWaysButton,
-} from "@/components/common/Input/buttons";
-import { GoogleButton } from "@/components/common/Input/google-btn";
-import { LoginSchema as schema } from "@/lib/schema";
-import Link from "next/link";
-import { signIn } from "next-auth/react";
-import { toast } from "sonner";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+} from '@/components/common/Input/buttons';
+import { GoogleButton } from '@/components/common/Input/google-btn';
+import { LoginSchema as schema } from '@/lib/schema';
+import Link from 'next/link';
+import { signIn } from 'next-auth/react';
+import { toast } from 'sonner';
+import { useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
 
 export default function AuthForm() {
   const router = useRouter();
+  const { churchId } = useParams();
   const [isloading, setIsLoading] = useState(false);
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: {
-      inputKey: "",
-      password: "",
+      inputKey: '',
+      password: '',
     },
   });
 
   function onSubmit(data: z.infer<typeof schema>) {
     setIsLoading(true);
-    signIn("credentials", {
+    signIn('credentials', {
       email: data.inputKey,
       password: data.password,
       redirect: false,
@@ -46,19 +47,19 @@ export default function AuthForm() {
       console.log(res);
       if (res?.error?.length ?? 0 > 3) {
         setIsLoading(false);
-        if (res?.error === "Email not verified") {
-          toast.warning("Email not verified", {
-            description: "Please verify your email to continue",
+        if (res?.error === 'Email not verified') {
+          toast.warning('Email not verified', {
+            description: 'Please verify your email to continue',
           });
-          return router.push("/register/otp");
+          return router.push('/register/otp');
         }
         return toast.error(res?.error);
       }
       if (res?.ok) {
         setIsLoading(false);
-        toast.success("Login Succesfull");
+        toast.success('Login Succesfull');
         // if there is a callback url, redirect to it
-        return router.push("/admin/dashboard");
+        return router.push(`/app/home`);
       }
     });
   }
@@ -73,7 +74,8 @@ export default function AuthForm() {
             <FormItem>
               <FormLabel
                 htmlFor="inputKey"
-                className="font-sans text-lightText font-normal lg:text-lg">
+                className="font-sans text-lightText font-normal lg:text-lg"
+              >
                 Email or Phone Number
               </FormLabel>
               <FormControl>
@@ -94,7 +96,8 @@ export default function AuthForm() {
             <FormItem>
               <FormLabel
                 htmlFor="password"
-                className="font-sans text-lightText font-normal lg:text-lg">
+                className="font-sans text-lightText font-normal lg:text-lg"
+              >
                 Password
               </FormLabel>
               <FormControl>

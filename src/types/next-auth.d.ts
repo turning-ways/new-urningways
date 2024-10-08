@@ -1,6 +1,6 @@
-import NextAuth, { User, type DefaultSession } from "next-auth";
+import NextAuth, { User, type DefaultSession } from 'next-auth';
 
-declare module "next-auth" {
+declare module 'next-auth' {
   /**
    * The contents of our refresh call to the backend is a new access Token
    */
@@ -29,9 +29,11 @@ declare module "next-auth" {
       firstName: string;
       lastName: string;
       email: string;
+      role: string;
       churchId: string;
       accessToken: string;
       refreshToken: string;
+      createdAt: string;
     };
     tokens: BackendJWT;
     validity: AuthValidity;
@@ -45,17 +47,17 @@ declare module "next-auth" {
   export interface Session {
     user: User.user;
     validity: AuthValidity;
-    error: "RefreshTokenExpired" | "RefreshAccessTokenError";
+    error: 'RefreshTokenExpired' | 'RefreshAccessTokenError';
   }
 }
 
-declare module "next-auth/jwt" {
+declare module 'next-auth/jwt' {
   /**
    * The JWT token that we receive from the backend is a user object
    * Returned by the `jwt` callback and `getToken`, when using JWT sessions
    */
   export interface JWT {
     data: User;
-    error: "RefreshTokenExpired" | "RefreshAccessTokenError";
+    error: 'RefreshTokenExpired' | 'RefreshAccessTokenError';
   }
 }

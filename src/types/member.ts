@@ -1,4 +1,4 @@
-import { Url } from "url";
+import { Url } from 'url';
 
 export interface IMember {
   id: string;
@@ -8,17 +8,17 @@ export interface IMember {
   prefix: string | null;
   suffix: string | null;
   serviceUnit: string | null;
-  verificationStatus: "VERIFIED" | "UNVERIFIED" | "PENDING";
+  verificationStatus: 'VERIFIED' | 'UNVERIFIED' | 'PENDING';
   workerStatus: string | null; // TODO - To be hanged
   workerType: string;
   role: { id: string; name: string }[];
   email: string;
   phone: string;
-  gender: "MALE" | "FEMALE" | "OTHER";
+  gender: 'MALE' | 'FEMALE' | 'OTHER';
   active: boolean;
   address: string | null;
   dateOfBirth: string | number;
-  maritalStatus: "SINGLE" | "MARRIED" | "DIVORCED" | "WIDOWED";
+  maritalStatus: 'SINGLE' | 'MARRIED' | 'DIVORCED' | 'WIDOWED';
   educationLevel: string | null;
   employmentStatus: string | null;
   healthStatus: string | null;
@@ -35,7 +35,7 @@ interface Permission {
 
 interface Role {
   name: string;
-  permissions: Permission[];
+  // permissions: Permission[];
 }
 
 export interface AContact {

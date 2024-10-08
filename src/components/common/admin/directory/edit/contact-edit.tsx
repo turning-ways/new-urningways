@@ -1,16 +1,14 @@
-"use client";
+'use client';
 
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Form } from "@/components/ui/form";
-import { contactInfoFields } from "../new/fields";
-import { MemberContactCreationschema as schema } from "@/lib/schema";
-import { useForm } from "react-hook-form";
-import FormFieldComponent from "@/components/common/form-field";
-import { useRouter } from "next/navigation";
-import { ADMIN_DIRECTORY } from "@/constants/route-constants";
-import { useMemberCreationStore } from "@/lib/stores/newMember.store";
-import { LoadingCircle } from "@/components/ui/loading-circle";
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Form } from '@/components/ui/form';
+import { contactInfoFields } from '../new/fields';
+import { MemberContactCreationschema as schema } from '@/lib/schema';
+import { useForm } from 'react-hook-form';
+import FormFieldComponent from '@/components/common/form-field';
+import { useRouter } from 'next/navigation';
+import { LoadingCircle } from '@/components/ui/loading-circle';
 
 export default function ContactEdit({
   setFormData,
@@ -37,7 +35,7 @@ export default function ContactEdit({
     defaultValues: {
       email: formData.email || undefined,
       address: formData.address || undefined,
-      phoneNumber: formData.phone || "",
+      phoneNumber: formData.phone || '',
     },
   });
 
@@ -53,7 +51,8 @@ export default function ContactEdit({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="grid grid-cols-1 gap-4 md:grid-cols-2 !font-sans">
+        className="grid grid-cols-1 gap-4 md:grid-cols-2 !font-sans"
+      >
         {formFields.map((field, index) => (
           <FormFieldComponent
             key={index}
@@ -72,7 +71,8 @@ export default function ContactEdit({
                   previousView?.();
                   setFormData(form.getValues());
                 }}
-                className="px-4 py-2 text-white bg-main_DarkBlue rounded-lg">
+                className="px-4 py-2 text-white bg-main_DarkBlue rounded-lg"
+              >
                 Previous
               </button>
               <button
@@ -81,15 +81,17 @@ export default function ContactEdit({
                   nextView?.();
                   setFormData(form.getValues());
                 }}
-                className="px-4 py-2 text-white bg-main_DarkBlue rounded-lg">
+                className="px-4 py-2 text-white bg-main_DarkBlue rounded-lg"
+              >
                 Next
               </button>
             </div>
             <button
               type="submit"
               disabled={isLoading}
-              className="px-4 py-2 text-white bg-main_DarkBlue rounded-lg">
-              {isLoading ? <LoadingCircle /> : "Save"}
+              className="px-4 py-2 text-white bg-main_DarkBlue rounded-lg"
+            >
+              {isLoading ? <LoadingCircle /> : 'Save'}
             </button>
           </div>
         </div>

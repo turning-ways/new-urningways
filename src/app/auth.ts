@@ -15,6 +15,7 @@ import { signOut } from 'next-auth/react';
 import { getCookie, setCookie } from 'cookies-next';
 import { cookies } from 'next/headers';
 import api from '@/lib/axios';
+import { create } from 'domain';
 
 async function refreshAccessToken(nextAuthJWTCookie: JWT): Promise<JWT> {
   try {
@@ -88,6 +89,8 @@ const authOptions: NextAuthOptions = {
                 firstName: user.firstName,
                 lastName: user.lastName,
                 email: user.email,
+                role: user.role,
+                createdAt: user.createdAt,
                 churchId: user.churchId,
                 accessToken: user.accessToken,
                 refreshToken: user.refreshToken,

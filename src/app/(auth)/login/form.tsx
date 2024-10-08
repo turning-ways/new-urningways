@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useSession } from "next-auth/react";
-import { signIn } from "next-auth/react";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useSession } from 'next-auth/react';
+import { signIn } from 'next-auth/react';
+import { z } from 'zod';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Form,
   FormControl,
@@ -12,44 +12,44 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import InputComponent from "@/components/common/Input/input";
-import PasswordInput from "@/components/common/Input/passwordInput";
+} from '@/components/ui/form';
+import InputComponent from '@/components/common/Input/input';
+import PasswordInput from '@/components/common/Input/passwordInput';
 import {
   NextButton,
   PhoneButton,
   TurningWaysButton,
-} from "@/components/common/Input/buttons";
-import { GoogleButton } from "@/components/common/Input/google-btn";
-import Link from "next/link";
-import { toast } from "sonner";
-import { signOut } from "next-auth/react";
-import { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+} from '@/components/common/Input/buttons';
+import { GoogleButton } from '@/components/common/Input/google-btn';
+import Link from 'next/link';
+import { toast } from 'sonner';
+import { signOut } from 'next-auth/react';
+import { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 const schema = z.object({
-  inputKey: z.string().min(3, { message: "Invalid email or phone number" }),
+  inputKey: z.string().min(3, { message: 'Invalid email or phone number' }),
   password: z
     .string()
-    .min(6, { message: "Password must be at least 6 characters" }),
+    .min(6, { message: 'Password must be at least 6 characters' }),
 });
 
 export default function LoginForm() {
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl");
+  const callbackUrl = searchParams.get('callbackUrl');
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: {
-      inputKey: "",
-      password: "",
+      inputKey: '',
+      password: '',
     },
   });
 
   function onSubmit(data: z.infer<typeof schema>) {
     setIsLoading(true);
-    signIn("credentials", {
+    signIn('credentials', {
       email: data.inputKey,
       password: data.password,
       redirect: false,
@@ -57,23 +57,23 @@ export default function LoginForm() {
       console.log(res);
       if (res?.error?.length ?? 0 > 3) {
         setIsLoading(false);
-        if (res?.error === "Email not verified") {
-          toast.warning("Email not verified", {
-            description: "Please verify your email to continue",
+        if (res?.error === 'Email not verified') {
+          toast.warning('Email not verified', {
+            description: 'Please verify your email to continue',
           });
-          return router.push("/register/otp");
+          return router.push('/register/otp');
         }
         return toast.error(res?.error);
       }
       if (res?.ok) {
         setIsLoading(false);
-        toast.success("Login Succesfull");
+        toast.success('Login Succesfull');
         // if there is a callback url, redirect to it
         if (callbackUrl) {
-          console.log("callbackUrl", callbackUrl);
+          console.log('callbackUrl', callbackUrl);
           return router.push(`${callbackUrl}`);
         }
-        return router.push("/admin/dashboard");
+        return router.push('/app/home');
       }
     });
   }
@@ -82,17 +82,19 @@ export default function LoginForm() {
       <div className="mb-6 ">
         <h1 className="text-4xl font-bold text-textGray mb-4">Sign in</h1>
         <p className="text-textDark text-base lg:text-lg">
-          Don&apos;t have an account?{" "}
+          Don&apos;t have an account?{' '}
           <Link
-            href={"/register"}
-            className="text-secondary underline underline-offset-2 cursor-pointer">
+            href={'/register'}
+            className="text-secondary underline underline-offset-2 cursor-pointer"
+          >
             Create One
           </Link>
         </p>
       </div>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-6 mt-10 w-full">
+        className="space-y-6 mt-10 w-full"
+      >
         <FormField
           control={form.control}
           name="inputKey"
@@ -100,7 +102,8 @@ export default function LoginForm() {
             <FormItem>
               <FormLabel
                 htmlFor="inputKey"
-                className="font-sans text-lightText font-normal lg:text-lg">
+                className="font-sans text-lightText font-normal lg:text-lg"
+              >
                 Email or Phone Number
               </FormLabel>
               <FormControl>
@@ -121,7 +124,8 @@ export default function LoginForm() {
             <FormItem>
               <FormLabel
                 htmlFor="password"
-                className="font-sans text-lightText font-normal lg:text-lg">
+                className="font-sans text-lightText font-normal lg:text-lg"
+              >
                 Password
               </FormLabel>
               <FormControl>

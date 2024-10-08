@@ -5,7 +5,7 @@ import { Suspense, useEffect } from 'react';
 import { useUserCheck } from '@/lib/swr/use-user-check';
 import LayoutLoader from '@/components/ui/layout-loader';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { signOut } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 
 interface AdminAuthProps {
   children: React.ReactNode;
@@ -18,72 +18,42 @@ export default function AdminAuthWrapper({ children }: AdminAuthProps) {
 
   useEffect(() => {
     const fallbackChurchId = searchParams.get('mainChurchId'); // Get churchId from query params
+    if (isError) {
+      toast.error('An error occurred. Please Log in again');
+      signOut();
+    }
 
     if (isLoading) return;
 
-    if (isError) {
+    if (!isLoading && !user) {
+      toast.error('You are not authorized to view this page. Please log in');
       signOut();
     }
 
-    if (!user) {
-      toast.error('You are not authorized to view this page');
-      signOut();
-      router.replace('/');
-      return;
-    }
+    if (user && 'userRole' in user && user.userRole === 'ADMIN') {
+      if (
+        'message' in user &&
+        user.message === "'Has Church but not this one"
+      ) {
+        router.push('/app/home');
+      }
 
-    const { role, mainChurchId } = user;
-
-    // if the role is a User, redirect to the home page
-    if (role === 'USER') {
-      toast.error('You are not authorized to view this page');
-      router.replace('/');
-      return;
-    }
-
-    // Check if the user is an admin and either has a churchId or fallbackChurchId
-    if (role === 'ADMIN') {
-      const effectiveChurchId = mainChurchId || fallbackChurchId;
-
-      if (!effectiveChurchId) {
-        toast.error(
-          'You have not completed your church setup. Please do so in the next step.',
-          { duration: 5000 },
-        );
-        router.replace('/register/setup');
-      } else {
-        // If the fallback is used, store it in localStorage for future use
-        localStorage.setItem(
-          'user',
-          JSON.stringify({ id: user.id, mainChurchId: effectiveChurchId }),
-        );
+      if ('message' in user && user.message === 'No Church') {
+        toast.error('You have not set up your church yet');
+        router.push('/register/setup');
       }
     }
-  }, [user, isLoading, router, isError, searchParams]);
+  }, [isLoading, isError, user, searchParams, router]);
 
   if (isLoading) {
     return (
       <Suspense>
-        <LayoutLoader text="Checking user access..." />
+        <LayoutLoader text="Checking user authentication..." />
       </Suspense>
     );
   }
 
-  if (
-    user?.role === 'ADMIN' &&
-    (user?.mainChurchId || searchParams.get('mainChurchId'))
-  ) {
-    const churchId = user?.mainChurchId || searchParams.get('mainChurchId');
-    localStorage.setItem(
-      'user',
-      JSON.stringify({ id: user.id, mainChurchId: churchId }),
-    );
-    return (
-      <Suspense>
-        <>{children}</>
-      </Suspense>
-    );
+  if (user) {
+    return <>{children}</>;
   }
-
-  return null;
 }

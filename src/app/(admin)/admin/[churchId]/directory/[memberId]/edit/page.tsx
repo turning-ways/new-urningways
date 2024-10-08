@@ -18,7 +18,6 @@ import { useContactContext } from '@/context/contact-context';
 import { useMemberUpdateStore } from '@/lib/stores/updateMember.store';
 import { useMember, useUpdateMember } from '@/lib/client/useMember';
 import { ProfileNameFormatter } from '@/lib/utils/capitalize';
-import { ADMIN_DIRECTORY } from '@/constants/route-constants';
 import ContactEdit from '@/components/common/admin/directory/edit/contact-edit';
 import ChurchEdit from '@/components/common/admin/directory/edit/church-edit';
 import { useRoles } from '@/lib/client/useRoles';
@@ -29,11 +28,14 @@ import { base64ToFile, uploadImage } from '@/lib/utils/image';
 export default function MemberEditPage({
   params,
 }: {
-  params: { memberId: string };
+  params: {
+    churchId: string;
+    memberId: string;
+  };
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { memberId } = params;
+  const { memberId, churchId } = params;
   const view = searchParams.get('view') || 'personal';
 
   // To Handle image upload
@@ -69,7 +71,7 @@ export default function MemberEditPage({
   const navigateToView = (index: number) => {
     if (index >= 0 && index < views.length) {
       router.replace(
-        `${ADMIN_DIRECTORY}/${memberId}/edit?view=${views[index]}`,
+        `/admin/${churchId}/directory/${memberId}/edit?view=${views[index]}`,
       );
     }
   };
@@ -122,7 +124,7 @@ export default function MemberEditPage({
           onSuccess: () => {
             setIsLoading(false);
             toast.success('Member Updated Successfully');
-            router.replace(`${ADMIN_DIRECTORY}/${memberId}`);
+            router.replace(`/admin/${churchId}/directory/${memberId}`);
           },
         },
       );
@@ -136,7 +138,7 @@ export default function MemberEditPage({
     <div className="flex flex-col w-full py-4 relative overflow-auto px-2 h-full">
       <Link
         className="bg-blue-50 rounded-lg p-2 w-fit cursor-pointer hover:bg-blue-100 absolute top-1 left-0"
-        href={`${ADMIN_DIRECTORY}/${memberId}`}
+        href={`/admin/${churchId}/directory/${memberId}`}
       >
         <ChevronLeft className="text-main_DarkBlue size-6" />
       </Link>

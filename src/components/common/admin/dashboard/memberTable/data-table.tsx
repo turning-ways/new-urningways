@@ -38,8 +38,7 @@ import {
 import { Skeleton } from '@/components/ui/skeleton';
 import { NameFormatter } from '@/lib/utils/capitalize';
 import Link from 'next/link';
-import { motion, AnimatePresence } from 'framer-motion';
-import { ADMIN_CONTACTS, ADMIN_DIRECTORY } from '@/constants/route-constants';
+import { motion } from 'framer-motion';
 import {
   Card,
   CardContent,
@@ -50,7 +49,7 @@ import { formatDate } from '@/lib/utils/date-formatter';
 import { LabelStack } from '@/components/ui/labels';
 import { AvatarStack } from '@/components/ui/avatarStack';
 import AddContactsModal from '../../contacts/addContactsModal';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -105,6 +104,7 @@ export function DataTable<TData, TValue>({
     },
   });
   const [view, setView] = useState<'list' | 'grid'>('list');
+  const { churchId } = useParams();
 
   if (isLoading) {
     return (
@@ -159,7 +159,7 @@ export function DataTable<TData, TValue>({
                       onClick={() => {
                         if (entity !== 'members') {
                           router.push(
-                            `${ADMIN_CONTACTS}/${
+                            `/admin/${churchId}/contacts/${
                               (row.original as { id: string }).id
                             }`,
                           );
@@ -237,10 +237,12 @@ export function DataTable<TData, TValue>({
               <Link
                 href={
                   entity === 'members'
-                    ? `${ADMIN_DIRECTORY}/${
+                    ? `/admin/${churchId}/directory/${
                         (row.original as { id: string }).id
                       }`
-                    : `${ADMIN_CONTACTS}/${(row.original as { id: string }).id}`
+                    : `/admin/${churchId}/contacts/${
+                        (row.original as { id: string }).id
+                      }`
                 }
                 key={row.id}
                 className="flex items-center justify-between px-4 py-2 hover:bg-gray-100"
@@ -326,7 +328,9 @@ export function DataTable<TData, TValue>({
               key={row.id}
               onClick={() =>
                 router.push(
-                  `${ADMIN_CONTACTS}/${(row.original as { id: string }).id}`,
+                  `/admin/${churchId}/contacts/${
+                    (row.original as { id: string }).id
+                  }`,
                 )
               }
               className="py-2 border-slate-800 hover:bg-gray-50"

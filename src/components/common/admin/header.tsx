@@ -24,7 +24,6 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
-import { useEffect } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 import {
   Dialog,
@@ -37,24 +36,31 @@ import {
 import { toast } from 'sonner';
 import { signOut } from 'next-auth/react';
 import { useContactContext } from '@/context/contact-context';
-import { ADMIN_DIRECTORY } from '@/constants/route-constants';
 import Link from 'next/link';
+import { useParams } from 'next/navigation';
 
 export default function Header() {
   const { contacts } = useContactContext();
+  const { churchId } = useParams();
 
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
   const getPageTitle = () => {
-    if (pathname.includes('/admin/contacts')) {
+    if (pathname.includes(`/admin/${churchId}/contacts/`)) {
       return 'Contacts';
     }
-    if (pathname.includes('/admin/directory/') && pathname.includes('/new'))
+    if (
+      pathname.includes(`/admin/${churchId}/directory/`) &&
+      pathname.includes('/new')
+    )
       return 'Create New Member';
-    if (pathname.includes('/admin/directory/') && pathname.includes('/edit'))
+    if (
+      pathname.includes(`/admin/${churchId}/directory/`) &&
+      pathname.includes('/edit')
+    )
       return 'Edit Member';
-    if (pathname.startsWith('/admin/directory')) {
+    if (pathname.startsWith(`/admin/${churchId}/directory/`)) {
       const viewParam = searchParams.get('view');
       if (viewParam === 'personal') return 'Personal Information';
       if (viewParam === 'contact') return 'Contact Information';
@@ -64,7 +70,7 @@ export default function Header() {
       return 'Directory';
     }
 
-    if (pathname === '/admin/dashboard') return 'Dashboard';
+    if (pathname === `/admin/${churchId}/`) return 'Dashboard';
     return 'Dashboard'; // Default title
   };
 
@@ -84,7 +90,7 @@ export default function Header() {
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger>
-                <Link href={`${ADMIN_DIRECTORY}/new`}>
+                <Link href={`/admin/${churchId}/directory/new`}>
                   <PlusCircleIcon size={28} />
                 </Link>
               </TooltipTrigger>

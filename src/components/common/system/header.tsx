@@ -7,7 +7,11 @@ import {
   DialogHeader,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { nameCapitalizer } from '@/lib/utils/capitalize';
+import {
+  nameCapitalizer,
+  NameFormatter,
+  ProfileNameFormatter,
+} from '@/lib/utils/capitalize';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,10 +22,11 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { ChevronDown, LogOutIcon, Settings, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { signOut } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import { toast } from 'sonner';
 
 export default function ProfileDropdown() {
+  const { data: session } = useSession();
   const logout = async () => {
     toast.promise(signOut(), {
       loading: 'Logging out...',
@@ -41,11 +46,14 @@ export default function ProfileDropdown() {
                 className="object-cover"
               />
               <AvatarFallback className="bg-main_primary text-white pt-1">
-                MA
+                {ProfileNameFormatter(
+                  session?.user?.firstName,
+                  session?.user?.lastName,
+                )}
               </AvatarFallback>
             </Avatar>
             <h1 className="text-lg text-white text-ellipsis overflow-hidden truncate w-32 font-normal capitalize">
-              {nameCapitalizer('mayokun Areola')}
+              {NameFormatter(session?.user?.firstName, session?.user?.lastName)}
             </h1>
             <ChevronDown size={26} className="text-white" />
           </div>
@@ -59,14 +67,20 @@ export default function ProfileDropdown() {
                 className="object-cover"
               />
               <AvatarFallback className="bg-main_primary text-white pt-1">
-                MA
+                {ProfileNameFormatter(
+                  session?.user?.firstName,
+                  session?.user?.lastName,
+                )}
               </AvatarFallback>
             </Avatar>
             <div>
               <h1 className="text-lg font-normal capitalize">
-                {nameCapitalizer('mayokun areola')}
+                {NameFormatter(
+                  session?.user?.firstName,
+                  session?.user?.lastName,
+                )}
               </h1>
-              <p className="text-sm text-gray-500">{'kareola960@gmail.com'}</p>
+              <p className="text-sm text-gray-500">{session?.user?.email}</p>
             </div>
           </div>
           <DropdownMenuSeparator />
@@ -92,7 +106,9 @@ export default function ProfileDropdown() {
       <DialogContent>
         <DialogHeader>Are you sure you want to logout?</DialogHeader>
         <DialogFooter className="gap-4">
-          <Button className="bg-red-600 hover:bg-red-400">Logout</Button>
+          <Button onClick={logout} className="bg-red-600 hover:bg-red-400">
+            Logout
+          </Button>
           <DialogClose asChild>
             <Button variant="secondary">Cancel</Button>
           </DialogClose>

@@ -1,10 +1,6 @@
 'use client';
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
-  BellIcon,
-  CircleHelpIcon,
-  Group,
   LayoutGrid,
   NewspaperIcon,
   PlusCircleIcon,
@@ -15,8 +11,6 @@ import {
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
-import { useContactContext } from '@/context/contact-context';
-import { ADMIN_DASHBOARD, ADMIN_DIRECTORY } from '@/constants/route-constants';
 import Image from 'next/image';
 import {
   Sheet,
@@ -27,11 +21,12 @@ import {
 import { AnimatedHamburgerButton } from '@/components/ui/hamburger';
 import { LogoutDialog } from '@/components/ui/nav-bar';
 import ProfileDropdown from './header';
+import { useSession } from 'next-auth/react';
 
 export const MobileNav = () => {
   const [active, setActive] = useState(false);
   const pathname = usePathname();
-  const { contacts } = useContactContext();
+  const { data: session } = useSession();
 
   const navLinks = [
     {
@@ -66,7 +61,7 @@ export const MobileNav = () => {
                   alt="membership"
                 />
               </div>
-              <p className="text-lg font-bold">Admin</p>
+              <p className="text-lg font-bold">System Admin</p>
             </Link>
             <ul className="flex flex-col gap-4 w-full items-center">
               {navLinks.map((link: any) => (
@@ -82,7 +77,7 @@ export const MobileNav = () => {
                   >
                     <div className="flex justify-start items-center gap-4  ">
                       {link.icon}
-                      <p className="hover:text-main_primaryLight w-20 xl:w-28">
+                      <p className="hover:text-main_primaryLight w-36 ">
                         {link.title}
                       </p>
                     </div>

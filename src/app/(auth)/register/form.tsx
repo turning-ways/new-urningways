@@ -24,12 +24,14 @@ import { register } from '@/app/api/auth/regsiter';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
+import { InfoTooltip } from '@/components/ui/info-tooltip';
 
 const schema = z
   .object({
     firstName: z.string().min(3, { message: 'Invalid first name' }),
     lastName: z.string().min(3, { message: 'Invalid last name' }),
     email: z.string().email({ message: 'Invalid email' }),
+    isChurchCreator: z.boolean().optional(),
     password: z.string().min(6, { message: 'Invalid password' }),
     confirmPassword: z.string().min(6, { message: 'Invalid password' }),
     accessTerms: z.boolean(),
@@ -56,6 +58,7 @@ export default function RegisterForm() {
       email: '',
       password: '',
       confirmPassword: '',
+      isChurchCreator: false,
     },
   });
 
@@ -68,7 +71,7 @@ export default function RegisterForm() {
         password: data.password,
         firstName: data.firstName,
         lastName: data.lastName,
-        role: 'ADMIN',
+        role: data.isChurchCreator ? 'ADMIN' : 'USER',
       });
 
       if (res.status === 201) {
@@ -171,50 +174,74 @@ export default function RegisterForm() {
             </FormItem>
           )}
         />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full">
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel
+                  htmlFor="password"
+                  className={`font-sans text-lightText font-normal lg:text-lg ${
+                    form.formState.errors.password
+                      ? 'text-red-500'
+                      : 'text-lightText'
+                  }`}
+                >
+                  Password
+                </FormLabel>
+                <FormControl>
+                  <PasswordInput placeholder="Enter your password" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="confirmPassword"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel
+                  htmlFor="confirmPassword"
+                  className={`font-sans text-lightText font-normal lg:text-lg ${
+                    form.formState.errors.confirmPassword
+                      ? 'text-red-500'
+                      : 'text-lightText'
+                  }`}
+                >
+                  Confirm Password
+                </FormLabel>
+                <FormControl>
+                  <PasswordInput
+                    placeholder="Re-enter your password"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
         <FormField
           control={form.control}
-          name="password"
+          name="isChurchCreator"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel
-                htmlFor="password"
-                className={`font-sans text-lightText font-normal lg:text-lg ${
-                  form.formState.errors.password
-                    ? 'text-red-500'
-                    : 'text-lightText'
-                }`}
-              >
-                Password
-              </FormLabel>
+            <FormItem className="flex flex-row items-start space-x-3 space-y-0">
               <FormControl>
-                <PasswordInput placeholder="Enter your password" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="confirmPassword"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel
-                htmlFor="confirmPassword"
-                className={`font-sans text-lightText font-normal lg:text-lg ${
-                  form.formState.errors.confirmPassword
-                    ? 'text-red-500'
-                    : 'text-lightText'
-                }`}
-              >
-                Confirm Password
-              </FormLabel>
-              <FormControl>
-                <PasswordInput
-                  placeholder="Re-enter your password"
-                  {...field}
+                <Checkbox
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                  className={`${
+                    field.value && '!bg-mainLight border-mainLight'
+                  }`}
                 />
               </FormControl>
-              <FormMessage />
+              <FormLabel className="text-md font-normal flex items-center gap-2">
+                I am a church creator{' '}
+                <InfoTooltip content="Church creators are able to create and manage churches on the platform" />
+              </FormLabel>
+              <FormMessage className="ml-8" />
             </FormItem>
           )}
         />

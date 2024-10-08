@@ -1,8 +1,7 @@
 'use client';
 import { motion } from 'framer-motion';
 import { User, Church, History, Contact2Icon } from 'lucide-react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { ADMIN_DIRECTORY } from '@/constants/route-constants';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import React, { useCallback, useMemo } from 'react';
 
 // Define the tabs outside to prevent recreation on every render
@@ -65,17 +64,20 @@ const InfoTabs = React.memo(
     create?: boolean;
   }) => {
     const router = useRouter();
+    const { churchId } = useParams();
     const searchParams = useSearchParams();
     const currentView = searchParams.get('view') || 'personal'; // Get the current view from the URL
 
     const handleTabClick = useCallback(
       (view: string) => {
         if (create) {
-          router.push(`${ADMIN_DIRECTORY}/new?view=${view}`);
+          router.push(`/admin/${churchId}/directory/new?view=${view}`);
         } else if (edit) {
-          router.push(`${ADMIN_DIRECTORY}/${memberId}/edit?view=${view}`);
+          router.push(
+            `/admin/${churchId}/directory/${memberId}/edit?view=${view}`,
+          );
         } else {
-          router.push(`${ADMIN_DIRECTORY}/${memberId}?view=${view}`);
+          router.push(`/admin/${churchId}/directory/${memberId}?view=${view}`);
         }
       },
       [create, edit, memberId, router],

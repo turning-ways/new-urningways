@@ -169,7 +169,7 @@ export default function PageClient() {
             selected={selectedFilter}
           />
         </div>
-        <MemberTable data={data?.members ?? []} />
+        <MemberTable data={data?.members ?? []} churchId={churchId} />
       </div>
     </Suspense>
   );

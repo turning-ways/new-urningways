@@ -7,14 +7,19 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { ADMIN_DIRECTORY } from "@/constants/route-constants";
-import { dobFormatter } from "@/lib/utils/date-formatter";
-import { DashMember } from "@/types/dashboard";
-import { ChevronRight } from "lucide-react";
-import Link from "next/link";
+} from '@/components/ui/table';
+import { dobFormatter } from '@/lib/utils/date-formatter';
+import { DashMember } from '@/types/dashboard';
+import { ChevronRight } from 'lucide-react';
+import Link from 'next/link';
 
-export default function MemberTable({ data }: { data: DashMember[] }) {
+export default function MemberTable({
+  data,
+  churchId,
+}: {
+  data: DashMember[];
+  churchId: string;
+}) {
   return (
     <>
       <div className="w-full h-full lg:flex justify-center items-center hidden font-sans">
@@ -35,16 +40,16 @@ export default function MemberTable({ data }: { data: DashMember[] }) {
             {data.map((member, index) => (
               <TableRow key={index}>
                 <TableCell>{`${member.firstName} ${
-                  member?.lastName || ""
+                  member?.lastName || ''
                 }`}</TableCell>
                 <TableCell>{member.age}</TableCell>
                 <TableCell>{member.gender}</TableCell>
                 <TableCell>
                   {dobFormatter(parseInt(member.dateOfBirth))}
                 </TableCell>
-                <TableCell>{member.phone || "N/A"}</TableCell>
+                <TableCell>{member.phone || 'N/A'}</TableCell>
                 <TableCell>{member.email}</TableCell>
-                <TableCell>{member.maritalStatus || "N/A"}</TableCell>
+                <TableCell>{member.maritalStatus || 'N/A'}</TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -55,12 +60,13 @@ export default function MemberTable({ data }: { data: DashMember[] }) {
         <h1 className="text-start py-2 text-lg font-bold">Members</h1>
         {data.map((member, index) => (
           <Link
-            href={`${ADMIN_DIRECTORY}/${member.id}`}
+            href={`/admin/${churchId}/directory/${member.id}`}
             key={index}
-            className="flex justify-between items-center w-full py-4 hover:bg-gray-100 px-3">
+            className="flex justify-between items-center w-full py-4 hover:bg-gray-100 px-3"
+          >
             <div className="w-full">
               <div className="w-full text-slate-500">{`${member.firstName} ${
-                member?.lastName || ""
+                member?.lastName || ''
               }`}</div>
               <div className="w-1/6">{member.phone}</div>
             </div>

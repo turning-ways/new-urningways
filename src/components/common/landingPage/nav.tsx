@@ -18,10 +18,10 @@ export default function Navigation() {
       <div className="flex text-main sm:space-x-4 items-center font-sans text-base sm:text-lg">
         {session?.user ? (
           <Link
-            href="/admin/dashboard"
+            href="/app/home"
             className="rounded-2xl border py-1 px-8 border-mainLight hidden sm:block hover:bg-white bg-mainLight hover:text-mainLight text-white transition-all duration-400"
           >
-            Dashboard
+            Home
           </Link>
         ) : (
           <>

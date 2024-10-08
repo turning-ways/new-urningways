@@ -1,3 +1,4 @@
+import { MobileNav } from "@/components/common/system/mobile-nav";
 import SystemNavBar from "@/components/common/system/nav";
 
 export default function Layout({children}: {children: React.ReactNode}) {
@@ -8,11 +9,11 @@ export default function Layout({children}: {children: React.ReactNode}) {
     },
     {
       name: 'Explore',
-      to: '/app/explore',
+      to: '#',
     },
     {
       name: 'Events',
-      to: '/app/events',
+      to: '#',
     },
   ]
 

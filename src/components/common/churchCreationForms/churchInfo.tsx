@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useForm, useWatch } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm, useWatch } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Form,
   FormField,
@@ -10,34 +10,34 @@ import {
   FormLabel,
   FormControl,
   FormMessage,
-} from "@/components/ui/form";
-import InputComponent from "../Input/input";
-import SelectComponent from "../Input/select";
-import { NextButton } from "../Input/buttons";
-import { PhoneInput } from "../Input/phone";
-import { useChurchCreationStore } from "@/lib/stores/churchCreation.store";
-import { HeaderInfo } from "./form1";
-import { motion } from "framer-motion";
-import { Country, State } from "country-state-city";
-import { useEffect, useState } from "react";
-import { createOnboarding } from "@/app/api/church/create-onboarding";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-import { invalidateUserCheck, useUserCheck } from "@/lib/swr/use-user-check";
-import { useSession } from "next-auth/react";
-import { OrgInfoSchema } from "@/app/(auth)/register/setup/step";
-import useCountryState from "@/hooks/useCountryState";
+} from '@/components/ui/form';
+import InputComponent from '../Input/input';
+import SelectComponent from '../Input/select';
+import { NextButton } from '../Input/buttons';
+import { PhoneInput } from '../Input/phone';
+import { useChurchCreationStore } from '@/lib/stores/churchCreation.store';
+import { HeaderInfo } from './form1';
+import { motion } from 'framer-motion';
+import { Country, State } from 'country-state-city';
+import { useEffect, useState } from 'react';
+import { createOnboarding } from '@/app/api/church/create-onboarding';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
+import { invalidateUserCheck, useUserCheck } from '@/lib/swr/use-user-check';
+import { useSession } from 'next-auth/react';
+import { OrgInfoSchema } from '@/app/(auth)/register/setup/step';
+import useCountryState from '@/hooks/useCountryState';
 
 function useHandleSubmit(
   formData: any,
   updateFormData: any,
   router: any,
-  update: any
+  update: any,
 ) {
   const onSubmit = async (data: z.infer<typeof OrgInfoSchema>) => {
     try {
       updateFormData(data);
-      const loadingToast = toast.loading("Creating your church profile...");
+      const loadingToast = toast.loading('Creating your church profile...');
 
       const response = await createOnboarding({
         churchEmail: data.churchEmail,
@@ -48,11 +48,11 @@ function useHandleSubmit(
         churchState: data.churchState,
         churchCountry: data.churchCountry,
         churchZip: data.churchZip,
-        churchWebsite: data.churchWebsite || "",
-        denomination: formData?.denomination || "Branch",
+        churchWebsite: data.churchWebsite || '',
+        denomination: formData?.denomination || 'Branch',
         parentChurchId: formData.parentChurch || undefined,
         parentChurchLevelId: formData.parentChurchLevel || undefined,
-        isParent: formData.isParent === "true",
+        isParent: formData.isParent === 'true',
         firstName: formData.firstName,
         lastName: formData.lastName,
         email: formData.email,
@@ -65,29 +65,29 @@ function useHandleSubmit(
       if (response.success) {
         invalidateUserCheck();
         toast.dismiss(loadingToast);
-        toast.success("Church profile created successfully");
+        toast.success('Church profile created successfully');
         update({ churchId: response.data?.churchId });
         setTimeout(() => {
           router.push(
-            `/admin/dashboard?mainChurchId=${response.data?.churchId}`
+            `/admin/${response.data?.churchId}?mainChurchId=${response.data?.churchId}`,
           );
         }, 1500);
       } else {
-        if (response.error.message === "Church already exists") {
-          throw new Error("Church already exists");
+        if (response.error.message === 'Church already exists') {
+          throw new Error('Church already exists');
         }
-        throw new Error("Failed to create church profile");
+        throw new Error('Failed to create church profile');
       }
     } catch (error: any) {
       toast.dismiss();
-      if (error.message === "Church already exists") {
-        toast.error("Church already exists", {
+      if (error.message === 'Church already exists') {
+        toast.error('Church already exists', {
           description:
-            "The church information you provided matches an existing record. Please double-check your details or contact support if you need assistance.",
+            'The church information you provided matches an existing record. Please double-check your details or contact support if you need assistance.',
         });
         return;
       }
-      toast.error("An error occurred while creating your church profile");
+      toast.error('An error occurred while creating your church profile');
     }
   };
 
@@ -101,36 +101,36 @@ export default function ChurchProfileForm({
 }) {
   const { update } = useSession();
   const router = useRouter();
-  const [defaultCountry, setDefaultCountry] = useState("NG");
+  const [defaultCountry, setDefaultCountry] = useState('NG');
   const { countryArray, stateArray } = useCountryState(defaultCountry);
   const updateFormData = useChurchCreationStore(
-    (state) => state.updateFormData
+    (state) => state.updateFormData,
   );
   const formData = useChurchCreationStore((state) => state.formData);
   const form = useForm<z.infer<typeof OrgInfoSchema>>({
     resolver: zodResolver(OrgInfoSchema),
     defaultValues: {
-      parentChurch: formData.parentChurch || "",
-      parentChurchLevel: formData.parentChurchLevel || "",
-      churchWebsite: formData.churchWebsite || "",
-      churchEmail: "",
-      churchPhone: formData.churchPhone || "",
-      churchAddress: formData.churchAddress || "",
-      churchCity: formData.churchCity || "",
-      churchState: formData.churchState || "",
-      churchCountry: formData.churchCountry || "Nigeria",
-      churchZip: formData.churchZip || "",
+      parentChurch: formData.parentChurch || '',
+      parentChurchLevel: formData.parentChurchLevel || '',
+      churchWebsite: formData.churchWebsite || '',
+      churchEmail: '',
+      churchPhone: formData.churchPhone || '',
+      churchAddress: formData.churchAddress || '',
+      churchCity: formData.churchCity || '',
+      churchState: formData.churchState || '',
+      churchCountry: formData.churchCountry || 'Nigeria',
+      churchZip: formData.churchZip || '',
     },
   });
 
   const selectedCountry = useWatch({
     control: form.control,
-    name: "churchCountry",
+    name: 'churchCountry',
   });
 
   useEffect(() => {
     const countryCode = Country.getAllCountries().find(
-      (country) => country.name === selectedCountry
+      (country) => country.name === selectedCountry,
     )?.isoCode;
 
     if (countryCode) setDefaultCountry(countryCode);
@@ -140,14 +140,14 @@ export default function ChurchProfileForm({
     formData,
     updateFormData,
     router,
-    update
+    update,
   );
 
   const renderFormField = (
     name: keyof z.infer<typeof OrgInfoSchema>,
     label: string,
     placeholder: string,
-    type: string = "text"
+    type: string = 'text',
   ) => (
     <FormField
       name={name}
@@ -156,8 +156,9 @@ export default function ChurchProfileForm({
         <FormItem>
           <FormLabel
             className={
-              form.formState.errors[name] ? "text-red-500" : "text-lightText"
-            }>
+              form.formState.errors[name] ? 'text-red-500' : 'text-lightText'
+            }
+          >
             {label}
           </FormLabel>
           <FormControl>
@@ -179,31 +180,33 @@ export default function ChurchProfileForm({
       />
       <form
         onSubmit={form.handleSubmit(handleSubmit)}
-        className="space-y-6 mt-4 w-full">
-        {formData.isParent === "false" && (
+        className="space-y-6 mt-4 w-full"
+      >
+        {formData.isParent === 'false' && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
-            className="grid grid-cols-1 gap-6 md:grid-cols-2">
+            className="grid grid-cols-1 gap-6 md:grid-cols-2"
+          >
             {renderFormField(
-              "parentChurch",
-              "Parent Church *",
-              "Parent Church"
+              'parentChurch',
+              'Parent Church *',
+              'Parent Church',
             )}
             {renderFormField(
-              "parentChurchLevel",
-              "Parent Church Level *",
-              "Parent Church Level"
+              'parentChurchLevel',
+              'Parent Church Level *',
+              'Parent Church Level',
             )}
           </motion.div>
         )}
-        {renderFormField("churchWebsite", "Church Website", "Church Website")}
+        {renderFormField('churchWebsite', 'Church Website', 'Church Website')}
         {renderFormField(
-          "churchEmail",
-          "Church Email *",
-          "Church Email",
-          "email"
+          'churchEmail',
+          'Church Email *',
+          'Church Email',
+          'email',
         )}
         <FormField
           name="churchPhone"
@@ -213,9 +216,10 @@ export default function ChurchProfileForm({
               <FormLabel
                 className={
                   form.formState.errors.churchPhone
-                    ? "text-red-500"
-                    : "text-lightText"
-                }>
+                    ? 'text-red-500'
+                    : 'text-lightText'
+                }
+              >
                 Church Phone *
               </FormLabel>
               <FormControl>
@@ -231,9 +235,9 @@ export default function ChurchProfileForm({
           )}
         />
         {renderFormField(
-          "churchAddress",
-          "Church Street Address *",
-          "Enter street address"
+          'churchAddress',
+          'Church Street Address *',
+          'Enter street address',
         )}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormField
@@ -244,9 +248,10 @@ export default function ChurchProfileForm({
                 <FormLabel
                   className={
                     form.formState.errors.churchCountry
-                      ? "text-red-500"
-                      : "text-lightText"
-                  }>
+                      ? 'text-red-500'
+                      : 'text-lightText'
+                  }
+                >
                   Country *
                 </FormLabel>
                 <SelectComponent
@@ -268,9 +273,10 @@ export default function ChurchProfileForm({
                 <FormLabel
                   className={
                     form.formState.errors.churchState
-                      ? "text-red-500"
-                      : "text-lightText"
-                  }>
+                      ? 'text-red-500'
+                      : 'text-lightText'
+                  }
+                >
                   State *
                 </FormLabel>
                 <FormControl>
@@ -286,8 +292,8 @@ export default function ChurchProfileForm({
               </FormItem>
             )}
           />
-          {renderFormField("churchCity", "City *", "Enter City")}
-          {renderFormField("churchZip", "Zip Code *", "Enter Zip Code")}
+          {renderFormField('churchCity', 'City *', 'Enter City')}
+          {renderFormField('churchZip', 'Zip Code *', 'Enter Zip Code')}
         </div>
         <div className="grid grid-cols-2 gap-10">
           <NextButton overrideFn={prevStep} text="Back" />

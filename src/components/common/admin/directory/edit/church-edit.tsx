@@ -1,22 +1,18 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import { z } from "zod";
-import { MemberChurchCreationschema as schema } from "@/lib/schema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Form } from "@/components/ui/form";
-import { useForm } from "react-hook-form";
-import FormFieldComponent from "@/components/common/form-field";
-import { useRouter } from "next/navigation";
-import { ADMIN_DIRECTORY } from "@/constants/route-constants";
-import { toast } from "sonner";
-import { useAddMember } from "@/lib/client/useMember";
-import InputComponent from "@/components/common/Input/input";
-import SelectComponent from "@/components/common/Input/select";
-import { useRoles } from "@/lib/client/useRoles"; // Import the custom hook
-import { uploadImage } from "@/lib/utils/image";
-import api from "@/lib/axios";
-import { LoadingCircle } from "@/components/ui/loading-circle";
-import { AContact } from "@/types/member";
+'use client';
+import React, { useEffect, useState } from 'react';
+import { z } from 'zod';
+import { MemberChurchCreationschema as schema } from '@/lib/schema';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Form } from '@/components/ui/form';
+import { useForm } from 'react-hook-form';
+import FormFieldComponent from '@/components/common/form-field';
+import { useRouter } from 'next/navigation';
+import SelectComponent from '@/components/common/Input/select';
+import { useRoles } from '@/lib/client/useRoles'; // Import the custom hook
+import api from '@/lib/axios';
+import { LoadingCircle } from '@/components/ui/loading-circle';
+import { AContact } from '@/types/member';
+import InputComponent from '@/components/common/Input/input';
 
 export default function ChurchEdit({
   setFormData,
@@ -61,53 +57,53 @@ export default function ChurchEdit({
   const formFields = [
     {
       control: form.control,
-      name: "workerStatus",
-      label: "Worker Status",
+      name: 'workerStatus',
+      label: 'Worker Status',
       isDropdown: true,
-      options: ["Active", "Inactive"],
+      options: ['Active', 'Inactive'],
       component: SelectComponent,
       shouldVariedOptions: true,
       variedOptions: [
-        { value: "ACTIVE", label: "Active" },
-        { value: "INACTIVE", label: "Inactive" },
+        { value: 'ACTIVE', label: 'Active' },
+        { value: 'INACTIVE', label: 'Inactive' },
       ],
     },
     {
       control: form.control,
-      name: "workerType",
-      label: "Worker Type",
+      name: 'workerType',
+      label: 'Worker Type',
       component: SelectComponent,
       isDropdown: true,
       options: [
-        "ADMIN",
-        "WORKER",
-        "USHER",
-        "CHOIR",
-        "GREETER",
-        "SECURITY",
-        "OTHER",
+        'ADMIN',
+        'WORKER',
+        'USHER',
+        'CHOIR',
+        'GREETER',
+        'SECURITY',
+        'OTHER',
       ],
       shouldVariedOptions: true,
       variedOptions: [
-        { value: "ADMIN", label: "Admin" },
-        { value: "WORKER", label: "Worker" },
-        { value: "USHER", label: "Usher" },
-        { value: "CHOIR", label: "Choir" },
-        { value: "GREETER", label: "Greeter" },
-        { value: "SECURITY", label: "Security" },
-        { value: "OTHER", label: "Other" },
+        { value: 'ADMIN', label: 'Admin' },
+        { value: 'WORKER', label: 'Worker' },
+        { value: 'USHER', label: 'Usher' },
+        { value: 'CHOIR', label: 'Choir' },
+        { value: 'GREETER', label: 'Greeter' },
+        { value: 'SECURITY', label: 'Security' },
+        { value: 'OTHER', label: 'Other' },
       ],
     },
     {
       control: form.control,
-      name: "serviceUnit",
-      label: "Service Unit",
+      name: 'serviceUnit',
+      label: 'Service Unit',
       component: InputComponent,
     },
     {
       control: form.control,
-      name: "churchRole",
-      label: "Church Role",
+      name: 'churchRole',
+      label: 'Church Role',
       isCompulsory: true,
       component: SelectComponent,
       isDropdown: true,
@@ -118,7 +114,7 @@ export default function ChurchEdit({
         label: role.name,
       })),
       isDisabled: true,
-      reason: "This Member Role cannot be changed",
+      reason: 'This Member Role cannot be changed',
     },
   ];
 
@@ -126,7 +122,8 @@ export default function ChurchEdit({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="grid grid-cols-1 gap-4 md:grid-cols-2 !font-sans">
+        className="grid grid-cols-1 gap-4 md:grid-cols-2 !font-sans"
+      >
         {formFields.map((field, index) => (
           <FormFieldComponent
             key={index}
@@ -145,13 +142,15 @@ export default function ChurchEdit({
                   previousView?.();
                   setFormData(form.getValues());
                 }}
-                className="px-4 py-2 text-white bg-main_DarkBlue rounded-lg">
+                className="px-4 py-2 text-white bg-main_DarkBlue rounded-lg"
+              >
                 Previous
               </button>
               {!isLastView && (
                 <button
                   type="submit"
-                  className="px-4 py-2 text-white bg-main_DarkBlue rounded-lg">
+                  className="px-4 py-2 text-white bg-main_DarkBlue rounded-lg"
+                >
                   Next
                 </button>
               )}
@@ -159,8 +158,9 @@ export default function ChurchEdit({
             <button
               type="submit"
               disabled={isLoading}
-              className="px-4 py-2 text-white bg-main_DarkBlue rounded-lg">
-              {isLoading ? <LoadingCircle /> : "Save"}
+              className="px-4 py-2 text-white bg-main_DarkBlue rounded-lg"
+            >
+              {isLoading ? <LoadingCircle /> : 'Save'}
             </button>
           </div>
         </div>

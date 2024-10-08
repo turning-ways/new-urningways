@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import {
   ChevronLeft,
   VerifiedIcon,
@@ -11,12 +11,11 @@ import {
   PencilIcon,
   PencilOff,
   X,
-} from "lucide-react";
-import Link from "next/link";
-import { ADMIN_DIRECTORY } from "@/constants/route-constants";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { AContact, IMember } from "@/types/member";
-import { ProfileNameFormatter, NameFormatter } from "@/lib/utils/capitalize";
+} from 'lucide-react';
+import Link from 'next/link';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { AContact, IMember } from '@/types/member';
+import { ProfileNameFormatter, NameFormatter } from '@/lib/utils/capitalize';
 import {
   Dialog,
   DialogContent,
@@ -25,22 +24,22 @@ import {
   DialogFooter,
   DialogClose,
   DialogTitle,
-} from "@/components/ui/modal";
-import { AutosizeTextarea } from "@/components/ui/text-area";
-import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
-import { useDeleteMember } from "@/lib/client/useMember";
-import { LoadingCircle } from "@/components/ui/loading-circle";
-import { toast } from "sonner";
+} from '@/components/ui/modal';
+import { AutosizeTextarea } from '@/components/ui/text-area';
+import { Button } from '@/components/ui/button';
+import { useRouter } from 'next/navigation';
+import { useDeleteMember } from '@/lib/client/useMember';
+import { LoadingCircle } from '@/components/ui/loading-circle';
+import { toast } from 'sonner';
 import {
   IMemberNotes,
   useAddMemberNote,
   useDeleteMemberNote,
   useGetMemberNotes,
   useUpdateMemberNote,
-} from "@/lib/client/useMemberNote";
-import { formatTime } from "@/lib/utils/date-formatter";
-import { useEffect, useState } from "react";
+} from '@/lib/client/useMemberNote';
+import { formatTime } from '@/lib/utils/date-formatter';
+import { useEffect, useState } from 'react';
 
 export default function MemberHeader({
   member,
@@ -56,7 +55,8 @@ export default function MemberHeader({
       <div className="flex gap-8 items-center flex-col lg:flex-row">
         <Link
           className="bg-blue-50 rounded-lg p-2 w-fit cursor-pointer h-fit self-start hover:bg-blue-100 lg:self-auto"
-          href={ADMIN_DIRECTORY}>
+          href={`/admin/${churchId}/directory/`}
+        >
           <ChevronLeft className="text-main_DarkBlue size-6" />
         </Link>
         <div className="flex gap-6 items-center justify-center flex-col lg:flex-row">
@@ -71,11 +71,11 @@ export default function MemberHeader({
                 {ProfileNameFormatter(member?.firstName, member?.lastName)}
               </AvatarFallback>
             </Avatar>
-            {member?.verificationStatus !== "UNVERIFIED" && (
+            {member?.verificationStatus !== 'UNVERIFIED' && (
               <div className="absolute bottom-1 right-1">
                 <VerifiedIcon
                   fill={`${
-                    member?.verificationStatus === "VERIFIED" ? "green" : "gray"
+                    member?.verificationStatus === 'VERIFIED' ? 'green' : 'gray'
                   }`}
                   color="white"
                   className="size-8 lg:size-6"
@@ -97,21 +97,21 @@ export default function MemberHeader({
                 <Phone
                   className="size-4 md:size-5  text-gray-600"
                   strokeWidth={1}
-                />{" "}
+                />{' '}
                 Call
               </div>
               <div className="flex gap-1 md:gap-2 items-center hover:bg-slate-100 p-1 px-2 rounded-md">
                 <MessageCircleMoreIcon
                   className="size-4 md:size-5 text-gray-600"
                   strokeWidth={1}
-                />{" "}
+                />{' '}
                 Text
               </div>
               <div className="flex gap-1 md:gap-2 items-center hover:bg-slate-100 p-1 px-2 rounded-md">
                 <Mail
                   className="size-4 md:size-5 text-gray-600"
                   strokeWidth={1}
-                />{" "}
+                />{' '}
                 Email
               </div>
               <Note memberId={member?.id} churchId={churchId} editor={editor} />
@@ -121,8 +121,9 @@ export default function MemberHeader({
       </div>
       <div className="flex gap-3 items-center justify-center w-3/4 lg:w-fit">
         <Link
-          href={`${ADMIN_DIRECTORY}/${member?.id}/edit`}
-          className="bg-white text-center w-full text-gray-600 border border-gray-400 px-3 lg:px-6 py-3 rounded-lg font-medium h-fit whitespace-nowrap">
+          href={`/admin/${churchId}/directory/${member?.id}/edit`}
+          className="bg-white text-center w-full text-gray-600 border border-gray-400 px-3 lg:px-6 py-3 rounded-lg font-medium h-fit whitespace-nowrap"
+        >
           Edit Profile
         </Link>
         <DeleteMemberDialog memberId={member?.id} churchId={churchId} />
@@ -137,20 +138,20 @@ const Comment: React.FC<{
   memberId: string | undefined;
 }> = ({ note, churchId, memberId }) => {
   const [editMode, setEditMode] = useState<boolean>(false);
-  const [noteValue, setNoteValue] = useState<string>(note?.note || "");
+  const [noteValue, setNoteValue] = useState<string>(note?.note || '');
   const updateNote = useUpdateMemberNote();
   const deleteNote = useDeleteMemberNote();
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (editMode && e.key === "Enter") {
+    if (editMode && e.key === 'Enter') {
       e.preventDefault(); // Prevents the default behavior of adding a new line
-      console.log("New value:", noteValue);
+      console.log('New value:', noteValue);
       updateNote.mutate({
-        churchId: churchId ?? "",
+        churchId: churchId ?? '',
         data: {
           note: noteValue,
         },
-        memberId: memberId ?? "",
+        memberId: memberId ?? '',
         noteId: note.id,
       });
 
@@ -160,18 +161,18 @@ const Comment: React.FC<{
 
   function handleDelete() {
     deleteNote.mutate({
-      churchId: churchId ?? "",
-      memberId: memberId ?? "",
+      churchId: churchId ?? '',
+      memberId: memberId ?? '',
       noteId: note?.id,
     });
   }
 
   useEffect(() => {
     if (deleteNote.isSuccess) {
-      toast.success("Note deleted successfully");
+      toast.success('Note deleted successfully');
     }
     if (deleteNote?.isError) {
-      toast.error("An error occured, Try again later");
+      toast.error('An error occured, Try again later');
     }
   }, [deleteNote]);
 
@@ -181,7 +182,7 @@ const Comment: React.FC<{
         <AvatarFallback className="pt-1 ">
           {ProfileNameFormatter(
             note?.recordedBy?.firstName,
-            note?.recordedBy?.lastName
+            note?.recordedBy?.lastName,
           )}
         </AvatarFallback>
       </Avatar>
@@ -190,7 +191,7 @@ const Comment: React.FC<{
           <h2 className="font-semibold text-lg">
             {NameFormatter(
               note?.recordedBy?.firstName,
-              note?.recordedBy?.lastName
+              note?.recordedBy?.lastName,
             )}
           </h2>
           <p className="text-sm text-gray-600">{formatTime(note?.updatedAt)}</p>
@@ -208,7 +209,8 @@ const Comment: React.FC<{
         <div className="flex justify-end gap-4">
           <button
             className="w-fit py-1 text-sm"
-            onClick={() => setEditMode(!editMode)}>
+            onClick={() => setEditMode(!editMode)}
+          >
             {editMode ? (
               <PencilOff className="text-gray-500 size-5 hover:text-main_DarkBlue" />
             ) : (
@@ -233,17 +235,17 @@ function Note({
   churchId: string | undefined;
   editor: AContact;
 }) {
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState('');
   const mutation = useAddMemberNote();
   const { data } = useGetMemberNotes({
-    churchId: churchId ?? "",
-    memberId: memberId ?? "",
+    churchId: churchId ?? '',
+    memberId: memberId ?? '',
   });
 
   function handleSubmit() {
     mutation.mutate({
-      churchId: churchId ?? "",
-      memberId: memberId ?? "",
+      churchId: churchId ?? '',
+      memberId: memberId ?? '',
       firstName: editor?.firstName,
       lastName: editor?.lastName,
       data: {
@@ -251,7 +253,7 @@ function Note({
         recordedBy: editor?.id,
       },
     });
-    setValue("");
+    setValue('');
   }
 
   const comments = data;
@@ -265,15 +267,16 @@ function Note({
           <SquarePen
             className="size-4 md:size-5 text-gray-600"
             strokeWidth={1}
-          />{" "}
+          />{' '}
           Note
         </div>
       </DialogTrigger>
       <DialogContent
         position="br"
         shouldCloseButton={false}
-        className="max-h-[600px] h-full min-h-[400px] ">
-        <DialogTitle className="absolute">{""}</DialogTitle>
+        className="max-h-[600px] h-full min-h-[400px] "
+      >
+        <DialogTitle className="absolute">{''}</DialogTitle>
         <div className="flex flex-col gap-4 p-4 w-full h-full  overflow-hidden overscroll-none">
           <div className="flex justify-between w-full">
             <h1 className="font-sans text-2xl font-semibold">Comments</h1>
@@ -328,15 +331,15 @@ function DeleteMemberDialog({
         churchId,
         memberId,
       });
-      toast.success("Member deleted successfully");
-      router.replace(ADMIN_DIRECTORY);
+      toast.success('Member deleted successfully');
+      router.replace(`/admin/${churchId}/directory/`);
     } catch (error: any) {
       console.log(error);
       if (error.response?.data?.code === 403) {
-        toast.error("You do not have permission to delete this member");
+        toast.error('You do not have permission to delete this member');
         return;
       }
-      toast.error("Failed to delete member");
+      toast.error('Failed to delete member');
     }
   };
 
@@ -359,8 +362,9 @@ function DeleteMemberDialog({
           <Button
             disabled={mutation.isPending}
             onClick={deleteMember}
-            className="bg-red-600 hover:bg-red-400 mr-3">
-            {mutation.isPending ? <LoadingCircle /> : "Delete"}
+            className="bg-red-600 hover:bg-red-400 mr-3"
+          >
+            {mutation.isPending ? <LoadingCircle /> : 'Delete'}
           </Button>
 
           <DialogClose asChild>

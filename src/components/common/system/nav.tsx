@@ -6,11 +6,12 @@ import NavItem from './navItem';
 import { BellIcon } from 'lucide-react';
 import ProfileDropdown from './header';
 import { MobileNav } from './mobile-nav';
+import useIsMobile from '@/hooks/use_Responsive';
 
-const navItems = [
+const navs = [
   {
     name: 'Dashboard',
-    to:'/system/dashboard',
+    to: '/system/dashboard',
   },
   {
     name: 'Accounts',
@@ -22,13 +23,30 @@ const navItems = [
   },
 ];
 
-export default function SystemNavBar() {
+export default function SystemNavBar({ nav }: { nav?: { name: string; to: string }[] }) {
+  const isMobile = useIsMobile();
+  const navItems = nav || navs;
   const pathname = usePathname();
+
+  if (isMobile) {
+    return (
+      <div className="text-white lg:sticky lg:top-0 px-3 md:px-10 lg:px-20 py-2 lg:py-5 bg-main_DarkBlue flex flex-row justify-between items-center">
+        <Image
+        src="/assets/images/whiteLogo.png"
+        width={200}
+        height={40}
+        priority={true}
+        alt="logo"
+      />
+        <MobileNav />
+      </div>
+    );
+  }
 
   return (
     <div className="text-white lg:sticky lg:top-0 px-3 md:px-10 lg:px-20 py-2 lg:py-5 bg-main_DarkBlue flex flex-row justify-between items-center">
       <Image
-        src={'/assets/images/whiteLogo.png'}
+        src="/assets/images/whiteLogo.png"
         width={200}
         height={40}
         priority={true}
@@ -43,17 +61,14 @@ export default function SystemNavBar() {
           />
         ))}
       </div>
-      <div className='flex items-center md:gap-3 lg:gap-6'>
-        <div className='relative'>
-          <span className='absolute -top-2 -right-1 bg-main_primary rounded-full px-1.5 py-0.5 flex text-xs items-center justify-center text-white font-medium'>4</span>
-          <BellIcon
-            size={28}
-            aria-disabled
-            className="text-white"
-          />
+      <div className="flex items-center md:gap-3 lg:gap-6">
+        <div className="relative">
+          <span className="absolute -top-2 -right-1 bg-main_primary rounded-full px-1.5 py-0.5 flex text-xs items-center justify-center text-white font-medium">
+            4
+          </span>
+          <BellIcon size={28} aria-disabled className="text-white" />
         </div>
-        <ProfileDropdown/>
-        <MobileNav/>
+        <ProfileDropdown />
       </div>
     </div>
   );
