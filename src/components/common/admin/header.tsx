@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { useContact } from '@/lib/swr/use-contact';
 import {
   BellIcon,
+  Lock,
   LogOutIcon,
   PlusCircleIcon,
   Settings,
@@ -34,7 +35,7 @@ import {
   DialogClose,
 } from '@/components/ui/dialog';
 import { toast } from 'sonner';
-import { signOut } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import { useContactContext } from '@/context/contact-context';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
@@ -106,6 +107,9 @@ export default function Header() {
 }
 
 export function AccountDropdown({ contacts }: { contacts: any }) {
+  const {data: session} = useSession();
+  console.log(session);
+
   const logout = async () => {
     toast.promise(signOut(), {
       loading: 'Logging out...',
@@ -164,6 +168,19 @@ export function AccountDropdown({ contacts }: { contacts: any }) {
             <DropdownMenuItem className="flex items-center gap-2 text-lg">
               <Settings className="mr-2 h-4 w-4" />
               <span>Settings</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem className="flex items-center gap-2 text-lg">
+              {session?.user.isDev && (
+                <Link
+                  href="/system"
+                  className=" rounded-lg gap-4 flex w-full text-center "
+                >
+                  <div className="flex justify-start items-center gap-2 self-center">
+                    <Lock size={18} />
+                    <p className="">System Admin</p>
+                  </div>
+                </Link>
+              )}
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>

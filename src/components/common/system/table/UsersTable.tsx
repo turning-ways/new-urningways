@@ -13,10 +13,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import {
-  ArrowUpDown,
-  Search,
-} from 'lucide-react';
+import { ArrowUpDown, Search } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -33,6 +30,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { EditDialog } from '../modals/EditUserRoles';
 import { AssignRoleDialog } from '../modals/AssignRole';
 import { DeleteUserDialog } from '../modals/DeleteUser';
+import { useGetUsers } from '@/lib/client/useSystemAdmin';
 
 const data: Users[] = [
   {
@@ -128,7 +126,11 @@ export const columns: ColumnDef<Users>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => <div className="capitalize">{row.getValue('role')}</div>,
+    cell: ({ row }) => (
+      <div className="capitalize">
+        {row.getValue('role')?.toString().toLowerCase() ?? ''}
+      </div>
+    ),
   },
   {
     accessorKey: 'phone',
@@ -148,13 +150,18 @@ export const columns: ColumnDef<Users>[] = [
     id: 'actions',
     enableHiding: false,
     cell: ({ row }) => {
-      const payment = row.original;
+      const roleValue = row.getValue('role');
+      const existingRole =
+        typeof roleValue === 'string'
+          ? roleValue.toLowerCase().charAt(0).toUpperCase() +
+            roleValue.toLowerCase().slice(1)
+          : '';
 
       return (
         <div className="flex items-center gap-3">
-          <EditDialog />
-          {row.getValue('role') !== 'admin' && (
-            <DeleteUserDialog/>
+          <EditDialog existingEmail={row.getValue('email')?.toString() || ''} existingRole={existingRole} />
+          {row.getValue('role')?.toString().toLowerCase() !== 'admin' && (
+            <DeleteUserDialog email={row.getValue('email')?.toString() || ''} />
           )}
         </div>
       );
@@ -170,6 +177,30 @@ export function UsersDataTable() {
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
+  const { data: adminUsers, isLoading } = useGetUsers();
+
+  const data: Users[] = React.useMemo(() => {
+    return adminUsers
+      ? adminUsers
+          .map((user) => {
+            if (user) {
+              const { id, firstName, lastName, email, phone, devRole } = user;
+              const phoneNumber = phone || 'None';
+
+              return {
+                id,
+                profile: firstName + ' ' + lastName,
+                name: firstName + ' ' + lastName,
+                email,
+                phone: phoneNumber,
+                role: devRole,
+              };
+            }
+            return undefined;
+          })
+          .filter((church): church is Users => church !== undefined)
+      : [];
+  }, [adminUsers]);
 
   const table = useReactTable({
     data,
@@ -192,21 +223,21 @@ export function UsersDataTable() {
 
   return (
     <div className="w-full overflow-auto py-2 space-y-2">
-        <div className='max-w-lg flex justify-center w-full'>
-            <div className="border-textDark md:hidden border-2 rounded-md w-full p-1 flex items-center">
-              <Search className="text-textDark" />
-              <Input
-                placeholder="Filter accounts..."
-                value={
-                  (table.getColumn('account')?.getFilterValue() as string) ?? ''
-                }
-                onChange={(event) =>
-                  table.getColumn('account')?.setFilterValue(event.target.value)
-                }
-                className="max-w-sm focus-visible:ring-0 focus-visible:ring-offset-0 border-0"
-              />
-            </div>
+      <div className="max-w-lg flex justify-center w-full">
+        <div className="border-textDark md:hidden border-2 rounded-md w-full p-1 flex items-center">
+          <Search className="text-textDark" />
+          <Input
+            placeholder="Filter accounts..."
+            value={
+              (table.getColumn('account')?.getFilterValue() as string) ?? ''
+            }
+            onChange={(event) =>
+              table.getColumn('account')?.setFilterValue(event.target.value)
+            }
+            className="max-w-sm focus-visible:ring-0 focus-visible:ring-offset-0 border-0"
+          />
         </div>
+      </div>
       <div className="w-full flex items-center px-2 justify-end md:justify-between">
         <div className="border-textDark hidden border-2 rounded-md p-1 md:flex items-center">
           <Search className="text-textDark" />

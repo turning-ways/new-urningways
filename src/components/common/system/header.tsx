@@ -20,10 +20,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { ChevronDown, LogOutIcon, Settings, User } from 'lucide-react';
+import { ChevronDown, Lock, LogOutIcon, Settings, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { signOut, useSession } from 'next-auth/react';
 import { toast } from 'sonner';
+import Link from 'next/link';
 
 export default function ProfileDropdown() {
   const { data: session } = useSession();
@@ -38,7 +39,7 @@ export default function ProfileDropdown() {
     <Dialog>
       <DropdownMenu>
         <DropdownMenuTrigger>
-          <div className="hidden lg:flex items-center gap-2">
+          <div className="hidden md:flex items-center gap-2">
             <Avatar>
               <AvatarImage
                 src={''}
@@ -52,7 +53,7 @@ export default function ProfileDropdown() {
                 )}
               </AvatarFallback>
             </Avatar>
-            <h1 className="text-lg text-white text-ellipsis overflow-hidden truncate w-32 font-normal capitalize">
+            <h1 className="text-md text-white text-ellipsis overflow-hidden truncate w-32 font-normal capitalize">
               {NameFormatter(session?.user?.firstName, session?.user?.lastName)}
             </h1>
             <ChevronDown size={26} className="text-white" />
@@ -92,6 +93,19 @@ export default function ProfileDropdown() {
             <DropdownMenuItem className="flex items-center gap-2 text-lg">
               <Settings className="mr-2 h-4 w-4" />
               <span>Settings</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem className="flex items-center gap-2 text-lg">
+              {session?.user.isDev && (
+                <Link
+                  href="/system"
+                  className=" rounded-lg gap-4 flex w-full text-center "
+                >
+                  <div className="flex justify-start items-center gap-2 self-center">
+                    <Lock size={18} />
+                    <p className="">System Admin</p>
+                  </div>
+                </Link>
+              )}
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>

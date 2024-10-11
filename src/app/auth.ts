@@ -90,6 +90,8 @@ const authOptions: NextAuthOptions = {
                 lastName: user.lastName,
                 email: user.email,
                 role: user.role,
+                isDev: user.isDev,
+                devRole: user.devRole,
                 createdAt: user.createdAt,
                 churchId: user.churchId,
                 accessToken: user.accessToken,

@@ -43,6 +43,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useGetAccounts } from '@/lib/client/useSystemAdmin';
 
 const data: Users[] = [
   {
@@ -174,7 +175,7 @@ export const columns: ColumnDef<Users>[] = [
     accessorKey: 'adminNumber',
     header: 'Admin Phone Number',
     cell: ({ row }) => (
-      <div className="lowercase">{row.getValue('adminNumber')}</div>
+      <div className="capitalize">{row.getValue('adminNumber')}</div>
     ),
   },
   {
@@ -203,6 +204,34 @@ export function AccountsDataTable() {
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
+
+  const { data: accounts, isLoading } = useGetAccounts();
+
+  const data: Users[] = React.useMemo(() => {
+    return accounts
+      ? accounts
+          .map((church) => {
+            if (church) {
+              const { id, name, createdAt, creator } = church;
+              const adminName = `${creator?.firstName || ''} ${
+                creator?.lastName || ''
+              }`;
+              const adminNumber = creator?.phone || 'None';
+
+              return {
+                id,
+                account: name,
+                adminName: adminName,
+                adminNumber: adminNumber,
+                createdOn: new Date(createdAt).toISOString().split('T')[0],
+                profile: `${adminName}`,
+              };
+            }
+            return undefined;
+          })
+          .filter((church): church is Users => church !== undefined)
+      : [];
+  }, [accounts]);
 
   const table = useReactTable({
     data,
@@ -270,10 +299,10 @@ export function AccountsDataTable() {
               />
             </div>
           </div>
-          <div className='flex text-textDark cursor-pointer gap-2 items-center'>
-            <Upload/>
+          {/* <div className="flex text-textDark cursor-pointer gap-2 items-center">
+            <Upload />
             <p>Export data</p>
-          </div>
+          </div> */}
         </div>
       </div>
       <div className="rounded-md border">
@@ -296,15 +325,24 @@ export function AccountsDataTable() {
               </TableRow>
             ))}
           </TableHeader>
-          <TableBody >
-            {table.getRowModel().rows?.length ? (
+          <TableBody>
+            { isLoading ? (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
+                  Loading...
+                </TableCell>
+              </TableRow>
+            ) : table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className='p-2'>
+                    <TableCell key={cell.id} className="p-2">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),

@@ -2,6 +2,7 @@ import {
   CircleHelpIcon,
   Home,
   LayoutGrid,
+  Lock,
   LogOutIcon,
   NewspaperIcon,
   Settings,
@@ -21,7 +22,7 @@ import {
   DialogContent,
   DialogClose,
 } from './dialog';
-import { signOut } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import { Button } from './button';
 import Image from 'next/image';
 import { useContactContext } from '@/context/contact-context';
@@ -166,6 +167,7 @@ export default function NavBar() {
             <p className="w-20 text-gray-400">Go Home</p>
           </div>
         </Link>
+       
         <LogoutDialog />
       </div>
     </nav>
