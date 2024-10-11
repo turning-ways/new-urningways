@@ -38,7 +38,7 @@ export default function ProfileDropdown() {
     <Dialog>
       <DropdownMenu>
         <DropdownMenuTrigger>
-          <div className="hidden lg:flex items-center gap-2">
+          <div className="hidden md:flex items-center gap-2">
             <Avatar>
               <AvatarImage
                 src={''}
@@ -52,7 +52,7 @@ export default function ProfileDropdown() {
                 )}
               </AvatarFallback>
             </Avatar>
-            <h1 className="text-lg text-white text-ellipsis overflow-hidden truncate w-32 font-normal capitalize">
+            <h1 className="text-md text-white text-ellipsis overflow-hidden truncate w-32 font-normal capitalize">
               {NameFormatter(session?.user?.firstName, session?.user?.lastName)}
             </h1>
             <ChevronDown size={26} className="text-white" />

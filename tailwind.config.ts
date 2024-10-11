@@ -165,6 +165,7 @@ const config = {
         main_secondaryDark: "#5E9942",
         main_DarkBlue: "#17275B",
         main_DarkBlueHover: "#2A3260",
+        head: "#E8EDFF"
       },
       fontFamily: {
         sans: ["azosans", "sans-serif"],

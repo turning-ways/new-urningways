@@ -13,6 +13,7 @@ interface AdminAuthProps {
 
 export default function AdminAuthWrapper({ children }: AdminAuthProps) {
   const { user, isLoading, isError } = useUserCheck();
+  console.log(user);
   const searchParams = useSearchParams();
   const router = useRouter();
 

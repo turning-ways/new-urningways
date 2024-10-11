@@ -41,49 +41,8 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-
-const data: Users[] = [
-  {
-    id: 'm5gr84i9',
-    account: 'Living Faith Church',
-    adminName: 'Ken Adams',
-    adminNumber: '+1 (555) 123-4567',
-    createdOn: '2024-01-15',
-    profile: 'https://example.com/profiles/ken-adams.jpg', // Image URL
-  },
-  {
-    id: '3u1reuv4',
-    account: 'Daystar',
-    adminName: 'Abe Turner',
-    adminNumber: '+1 (555) 987-6543',
-    createdOn: '2024-02-10',
-    profile: 'Abe Turner', // Name as profile
-  },
-  {
-    id: 'derv1ws0',
-    account: 'Salvation ministries',
-    adminName: 'Monserrat Lopez',
-    adminNumber: '+1 (555) 246-8109',
-    createdOn: '2024-03-05',
-    profile: 'https://example.com/profiles/monserrat-lopez.png', // Image URL
-  },
-  {
-    id: '5kma53ae',
-    account: 'RCCG',
-    adminName: 'Silas Smith',
-    adminNumber: '+1 (555) 333-2222',
-    createdOn: '2024-04-20',
-    profile: 'Silas Smith', // Name as profile
-  },
-  {
-    id: 'bhqecj4p',
-    account: "The Lord's chosen",
-    adminName: 'Carmella Ray',
-    adminNumber: '+1 (555) 789-0123',
-    createdOn: '2024-05-30',
-    profile: 'https://example.com/profiles/carmella-ray.jpg', // Image URL
-  },
-];
+import { useGetRecentAccounts } from '@/lib/client/useSystemAdmin';
+import Link from 'next/link';
 
 export type Users = {
   id: string;
@@ -180,7 +139,7 @@ export const columns: ColumnDef<Users>[] = [
     accessorKey: 'adminNumber',
     header: 'Admin Phone Number',
     cell: ({ row }) => (
-      <div className="lowercase">{row.getValue('adminNumber')}</div>
+      <div className="capitalize">{row.getValue('adminNumber')}</div>
     ),
   },
   {
@@ -206,9 +165,9 @@ export const columns: ColumnDef<Users>[] = [
       const payment = row.original;
 
       return (
-        <p className="text-main_secondaryDark cursor-pointer flex items-center gap-2">
+        <Link href={"/system/accounts"}  className="text-main_secondaryDark cursor-pointer flex items-center gap-2">
           View More <MoveRight />
-        </p>
+        </Link>
       );
     },
   },
@@ -222,6 +181,33 @@ export function RecentUserDataTable() {
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
+  const { data: recentAccounts, isLoading } = useGetRecentAccounts();
+
+  const data: Users[] = React.useMemo(() => {
+    return recentAccounts
+      ? recentAccounts
+          .map((church) => {
+            if (church) {
+              const { id, name, createdAt, creator } = church;
+              const adminName = `${creator?.firstName || ''} ${creator?.lastName || ''}`;
+              const adminNumber = creator?.phone || 'None'; 
+  
+              return {
+                id,
+                account: name,
+                adminName: adminName,
+                adminNumber: adminNumber,
+                createdOn: new Date(createdAt).toISOString().split('T')[0], 
+                profile: `${adminName}`,
+              };
+            }
+            return undefined;
+          })
+          .filter((church): church is Users => church !== undefined)
+      : [];
+  }, [recentAccounts]);
+  
+
 
   const table = useReactTable({
     data,
@@ -281,14 +267,23 @@ export function RecentUserDataTable() {
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
+            {isLoading ? (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
+                  Loading...
+                </TableCell>
+              </TableRow>
+            ) : table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="p-2">
+                    <TableCell key={cell.id} className="p-2 capitalize">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),
