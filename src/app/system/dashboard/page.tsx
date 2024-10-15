@@ -1,10 +1,17 @@
+'use client';
+
 import AccountCards from '@/components/common/system/cards/AccountCards';
 import { AnalyticsChart } from '@/components/common/system/charts/AnalyticsChart';
 import { PieCharts } from '@/components/common/system/charts/PieCharts';
 import { RecentUserDataTable } from '@/components/common/system/table/RecentUsersTable';
+import { useAdminDash } from '@/lib/client/useAdminDash';
 import { EllipsisVertical } from 'lucide-react';
 
 export default function Dashboard() {
+  const { data } = useAdminDash();
+
+  console.log(data);
+
   return (
     <div className="py-8 px-4 md:px-16 flex flex-col gap-8">
       <div className="flex flex-col gap-4 md:gap-6">
