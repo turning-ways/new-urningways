@@ -10,7 +10,7 @@ export default function Dashboard() {
       <div className="flex flex-col gap-4 md:gap-6">
         <div className="flex justify-between items-center w-full">
           <div>
-            <h3 className="text-lg font-semibold capitalize">Overview</h3>
+            <h2 className="text-lg font-semibold capitalize">Overview</h2>
             <p className="text-textDark text-sm">
               Account statistics, summary and insights.
             </p>

@@ -7,7 +7,6 @@ export const register = async (data: {
   password: string;
   firstName: string;
   lastName: string;
-  role: string;
 }) => {
   try {
     const res = await api.post('/auth/register', data);
@@ -16,7 +15,10 @@ export const register = async (data: {
       status: 201,
     };
   } catch (error: any) {
-    throw new Error(error.response.data.message);
+    return {
+      data: error.response.data.message,
+      status: 400,
+    };
   }
 };
 

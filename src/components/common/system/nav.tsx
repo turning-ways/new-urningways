@@ -7,6 +7,7 @@ import { BellIcon } from 'lucide-react';
 import ProfileDropdown from './header';
 import { MobileNav } from './mobile-nav';
 import useIsMobile from '@/hooks/use_Responsive';
+import Link from 'next/link';
 
 const navs = [
   {
@@ -23,7 +24,11 @@ const navs = [
   },
 ];
 
-export default function SystemNavBar({ nav }: { nav?: { name: string; to: string }[] }) {
+export default function SystemNavBar({
+  nav,
+}: {
+  nav?: { name: string; to: string }[];
+}) {
   const isMobile = useIsMobile();
   const navItems = nav || navs;
   const pathname = usePathname();
@@ -32,12 +37,12 @@ export default function SystemNavBar({ nav }: { nav?: { name: string; to: string
     return (
       <div className="text-white lg:sticky lg:top-0 px-3 md:px-10 lg:px-20 py-2 lg:py-5 bg-main_DarkBlue flex flex-row justify-between items-center">
         <Image
-        src="/assets/images/whiteLogo.png"
-        width={200}
-        height={40}
-        priority={true}
-        alt="logo"
-      />
+          src="/assets/images/whiteLogo.png"
+          width={200}
+          height={40}
+          priority={true}
+          alt="logo"
+        />
         <MobileNav />
       </div>
     );
@@ -52,7 +57,7 @@ export default function SystemNavBar({ nav }: { nav?: { name: string; to: string
         priority={true}
         alt="logo"
       />
-      <div className="hidden md:flex flex-row space-x-5">
+      <div className="hidden md:flex flex-row items-center space-x-5">
         {navItems.map((item) => (
           <NavItem
             key={item.name}
@@ -60,6 +65,14 @@ export default function SystemNavBar({ nav }: { nav?: { name: string; to: string
             isActive={pathname === item.to}
           />
         ))}
+        {pathname.includes(`app/home`) && (
+          <Link
+            href={'/register/setup'}
+            className="px-4 py-2 text-sm bg-main_secondaryDark text-white hover:bg-main_secondary rounded-lg hover:text-gray-800 transition-colors duration-500"
+          >
+            Create Church
+          </Link>
+        )}
       </div>
       <div className="hidden md:flex items-center md:gap-3 lg:gap-6">
         <div className="relative">

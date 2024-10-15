@@ -31,7 +31,6 @@ declare module 'next-auth' {
       email: string;
       isDev: boolean;
       devRole: string | null;
-      role: string;
       churchId: string;
       accessToken: string;
       refreshToken: string;
