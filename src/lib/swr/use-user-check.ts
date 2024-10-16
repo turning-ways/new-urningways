@@ -20,21 +20,10 @@ interface User {
 }
 
 interface AuthCheckData {
-  id: string;
-  firstame: string;
-  lastName: string;
-  email: string;
-  role: string;
-  churchid: string;
-  churchName: string;
-  churchCreator: boolean;
+  userType: string;
+  userId: string;
+  churchId: string;
 }
-
-interface NotFoundMes {
-  userRole: 'ADMIN' | 'USER';
-  message: string;
-}
-
 // Fetcher function
 export const getFetcher = async (url: string) => {
   try {
@@ -72,7 +61,7 @@ export const useUserCheck = () => {
 
   const result = useMemo(
     () => ({
-      user: data as AuthCheckData | NotFoundMes,
+      user: data as AuthCheckData,
       isLoading,
       isError: !!error,
     }),
