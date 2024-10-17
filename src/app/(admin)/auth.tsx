@@ -18,7 +18,7 @@ export default function AdminAuthWrapper({ children }: AdminAuthProps) {
   const router = useRouter();
 
   useEffect(() => {
-    const fallbackChurchId = searchParams.get('mainChurchId'); // Get churchId from query params
+    // const fallbackChurchId = searchParams.get('mainChurchId'); // Get churchId from query params
     if (isError) {
       toast.error('An error occurred. Please Log in again');
       signOut();
@@ -31,18 +31,9 @@ export default function AdminAuthWrapper({ children }: AdminAuthProps) {
       signOut();
     }
 
-    if (user && 'userRole' in user && user.userRole === 'ADMIN') {
-      if (
-        'message' in user &&
-        user.message === "'Has Church but not this one"
-      ) {
-        router.push('/app/home');
-      }
-
-      if ('message' in user && user.message === 'No Church') {
-        toast.error('You have not set up your church yet');
-        router.push('/register/setup');
-      }
+    if (user && user.userType === 'MEMBER') {
+      toast.error('You are not authorized to view this page. Please log in');
+      signOut();
     }
   }, [isLoading, isError, user, searchParams, router]);
 

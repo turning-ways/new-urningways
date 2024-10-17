@@ -24,16 +24,22 @@ import { register } from '@/app/api/auth/regsiter';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
-import { InfoTooltip } from '@/components/ui/info-tooltip';
 
 const schema = z
   .object({
-    firstName: z.string().min(3, { message: 'Invalid first name' }),
-    lastName: z.string().min(3, { message: 'Invalid last name' }),
+    firstName: z
+      .string()
+      .min(2, { message: 'Minimum length of firstname is 2 characters' }),
+    lastName: z
+      .string()
+      .min(3, { message: 'Minimum length of lastname is 2 characters' }),
     email: z.string().email({ message: 'Invalid email' }),
-    isChurchCreator: z.boolean().optional(),
-    password: z.string().min(6, { message: 'Invalid password' }),
-    confirmPassword: z.string().min(6, { message: 'Invalid password' }),
+    password: z
+      .string()
+      .min(6, { message: 'Password length has to be up to 6 characters' }),
+    confirmPassword: z
+      .string()
+      .min(6, { message: 'Password length has to be up to 6 characters' }),
     accessTerms: z.boolean(),
   })
   .refine((data) => data.accessTerms, {
@@ -58,7 +64,6 @@ export default function RegisterForm() {
       email: '',
       password: '',
       confirmPassword: '',
-      isChurchCreator: false,
     },
   });
 
@@ -71,13 +76,17 @@ export default function RegisterForm() {
         password: data.password,
         firstName: data.firstName,
         lastName: data.lastName,
-        role: data.isChurchCreator ? 'ADMIN' : 'USER',
       });
 
       if (res.status === 201) {
         setIsLoading(false);
         toast.success('Account created successfully');
         router.push('/register/otp');
+      }
+
+      if (res.status === 400) {
+        setIsLoading(false);
+        toast.error(res.data);
       }
     } catch (error: any) {
       setIsLoading(false);
@@ -120,7 +129,7 @@ export default function RegisterForm() {
                 First Name
               </FormLabel>
               <FormControl>
-                <InputComponent type="text" placeholder="John" {...field} />
+                <InputComponent type="text" placeholder="" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -142,7 +151,7 @@ export default function RegisterForm() {
                 Last Name
               </FormLabel>
               <FormControl>
-                <InputComponent type="text" placeholder="Doe" {...field} />
+                <InputComponent type="text" placeholder="" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -164,11 +173,7 @@ export default function RegisterForm() {
                 Email
               </FormLabel>
               <FormControl>
-                <InputComponent
-                  type="text"
-                  placeholder="johndoe@email.com"
-                  {...field}
-                />
+                <InputComponent type="text" placeholder="" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -225,28 +230,6 @@ export default function RegisterForm() {
         </div>
         <FormField
           control={form.control}
-          name="isChurchCreator"
-          render={({ field }) => (
-            <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-              <FormControl>
-                <Checkbox
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                  className={`${
-                    field.value && '!bg-mainLight border-mainLight'
-                  }`}
-                />
-              </FormControl>
-              <FormLabel className="text-md font-normal flex items-center gap-2">
-                I am a church creator{' '}
-                <InfoTooltip content="Church creators are able to create and manage churches on the platform" />
-              </FormLabel>
-              <FormMessage className="ml-8" />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
           name="accessTerms"
           render={({ field }) => (
             <FormItem className="flex flex-row items-start space-x-3 space-y-0">
@@ -272,7 +255,7 @@ export default function RegisterForm() {
           <h2 className="mx-5 text-[#718096] text-xs">OR</h2>
           <div className="w-full h-[1px] bg-[#A0AEC0]" />
         </div>
-        <GoogleButton authType="REGISTER" />
+        <GoogleButton />
         {/* <PhoneButton onClick={() => console.log("Phone button clicked")} /> */}
       </form>
     </Form>

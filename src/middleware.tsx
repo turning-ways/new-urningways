@@ -14,18 +14,11 @@ export default withAuth(
 
     if (!user) {
       return NextResponse.redirect(new URL('/login', origin));
-    } else if (user) {
-      // console.debug('User:', user);
-      if (
-        user &&
-        user.role === 'ADMIN' &&
-        user.churchId === null &&
-        referer?.includes('/login') &&
-        pathname !== '/register/otp' &&
-        pathname !== '/register/setup'
-      ) {
-        return NextResponse.redirect(new URL('/register/setup', origin));
-      }
+    }
+
+    // if the pathname starts with system and the user.isDev is false, redirect back to /app/home
+    if (pathname.includes('system') && !user.isDev) {
+      return NextResponse.redirect(new URL('/app/home', origin));
     }
 
     const token = await getToken({
@@ -52,7 +45,7 @@ export default withAuth(
       authorized: ({ token }) => !!token,
     },
     pages: {
-      signIn: '/login',
+      signIn: '/',
       error: '/login',
     },
   },

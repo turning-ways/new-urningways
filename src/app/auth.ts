@@ -89,7 +89,6 @@ const authOptions: NextAuthOptions = {
                 firstName: user.firstName,
                 lastName: user.lastName,
                 email: user.email,
-                role: user.role,
                 isDev: user.isDev,
                 devRole: user.devRole,
                 createdAt: user.createdAt,
@@ -122,7 +121,7 @@ const authOptions: NextAuthOptions = {
     }),
   ],
   pages: {
-    signIn: '/login',
+    signIn: '/',
   },
   session: {
     strategy: 'jwt',
@@ -166,7 +165,6 @@ const authOptions: NextAuthOptions = {
         try {
           const response = await api.post('/auth/google-verify', {
             token: account.id_token,
-            role: userType,
           });
           const user = response?.data?.data;
 
@@ -191,6 +189,9 @@ const authOptions: NextAuthOptions = {
                 firstName: user.firstName,
                 lastName: user.lastName,
                 email: user.email,
+                isDev: user.isDev,
+                devRole: user.devRole,
+                createdAt: user.createdAt,
                 churchId: user.churchId,
                 accessToken: user.accessToken,
                 refreshToken: user.refreshToken,
