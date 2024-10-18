@@ -37,7 +37,13 @@ export default function ViewProfile() {
           </li>
           <li className="text-base flex flex-col gap-2 text-textDark px-2 py-1 border-b">
             <h4>Website</h4>
-            <a href={data?.website} target='_blank' className="text-lg hover:text-main_DarkBlueHover hover:underline text-textGray font-medium">{data?.website}</a>
+            <a
+              href={data?.website}
+              target="_blank"
+              className="text-lg hover:text-main_DarkBlueHover hover:underline text-textGray font-medium"
+            >
+              {data?.website}
+            </a>
           </li>
           <li className="text-base flex flex-col gap-2 text-textDark px-2 py-1 border-b">
             <h4>Email</h4>
@@ -58,7 +64,9 @@ export default function ViewProfile() {
           <li className="text-base flex flex-col gap-2 text-textDark px-2 py-1 border-b">
             <h4>Founded</h4>
             <p className="text-lg text-textGray font-medium">
-              {formatDate(data?.foundedDate  || "") || 'None'}
+              {data?.foundedDate
+                ? formatDate(data?.foundedDate)
+                : 'Not Specified'}
             </p>
           </li>
           <li className="text-base flex flex-col gap-2 text-textDark px-2 py-1 border-b">
