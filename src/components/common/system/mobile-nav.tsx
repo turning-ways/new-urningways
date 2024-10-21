@@ -61,7 +61,7 @@ export const MobileNav = () => {
                   alt="membership"
                 />
               </div>
-              <p className="text-lg font-bold">System Admin</p>
+              <p className="text-lg font-bold">Admin Center</p>
             </Link>
             <ul className="flex flex-col gap-4 w-full items-center">
               {navLinks.map((link: any) => (

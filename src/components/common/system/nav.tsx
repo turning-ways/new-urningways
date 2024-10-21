@@ -8,6 +8,8 @@ import ProfileDropdown from './header';
 import { MobileNav } from './mobile-nav';
 import useIsMobile from '@/hooks/use_Responsive';
 import Link from 'next/link';
+import { useSession } from 'next-auth/react';
+import { Fragment } from 'react';
 
 const navs = [
   {
@@ -31,6 +33,7 @@ export default function SystemNavBar({
 }) {
   const isMobile = useIsMobile();
   const navItems = nav || navs;
+  const { data: session } = useSession();
   const pathname = usePathname();
 
   if (isMobile) {
@@ -75,13 +78,17 @@ export default function SystemNavBar({
         )}
       </div>
       <div className="hidden md:flex items-center md:gap-3 lg:gap-6">
-        <div className="relative">
-          <span className="absolute -top-2 -right-1 bg-main_primary rounded-full px-1.5 py-0.5 flex text-xs items-center justify-center text-white font-medium">
-            4
-          </span>
-          <BellIcon size={25} aria-disabled className="text-white" />
-        </div>
-        <ProfileDropdown />
+        {session?.user && (
+          <Fragment>
+            <div className="relative">
+              <span className="absolute -top-2 -right-1 bg-main_primary rounded-full px-1.5 py-0.5 flex text-xs items-center justify-center text-white font-medium">
+                4
+              </span>
+              <BellIcon size={25} aria-disabled className="text-white" />
+            </div>
+            <ProfileDropdown />
+          </Fragment>
+        )}
       </div>
     </div>
   );

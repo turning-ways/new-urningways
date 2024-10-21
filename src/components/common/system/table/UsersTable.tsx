@@ -118,7 +118,7 @@ export const columns: ColumnDef<Users>[] = [
       return (
         <Button
           variant="ghost"
-          className="text-left"
+          className="text-left px-0 mx-0"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
           Role
@@ -127,7 +127,7 @@ export const columns: ColumnDef<Users>[] = [
       );
     },
     cell: ({ row }) => (
-      <div className="capitalize">
+      <div className="capitalize text-left px-0 mx-0">
         {row.getValue('role')?.toString().toLowerCase() ?? ''}
       </div>
     ),
@@ -135,14 +135,14 @@ export const columns: ColumnDef<Users>[] = [
   {
     accessorKey: 'phone',
     header: 'Phone Number',
-    cell: ({ row }) => <div className="lowercase">{row.getValue('phone')}</div>,
+    cell: ({ row }) => <div className="lowercase text-left px-0 mx-0">{row.getValue('phone')}</div>,
   },
   {
     accessorKey: 'email',
-    header: () => <div className="text-left">Email</div>,
+    header: () => <div className="text-left px-0 mx-0">Email</div>,
     cell: ({ row }) => {
       return (
-        <div className="text-left font-medium">{row.getValue('email')}</div>
+        <div className="text-left font-medium px-0 mx-0">{row.getValue('email')}</div>
       );
     },
   },
@@ -261,7 +261,7 @@ export function UsersDataTable() {
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id}>
+                    <TableHead className='text-left px-2' key={header.id}>
                       {header.isPlaceholder
                         ? null
                         : flexRender(

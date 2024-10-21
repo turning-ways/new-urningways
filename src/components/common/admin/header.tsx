@@ -177,7 +177,7 @@ export function AccountDropdown({ contacts }: { contacts: any }) {
                 >
                   <div className="flex justify-start items-center gap-2 self-center">
                     <Lock size={18} />
-                    <p className="">System Admin</p>
+                    <p className="">Admin Center</p>
                   </div>
                 </Link>
               )}

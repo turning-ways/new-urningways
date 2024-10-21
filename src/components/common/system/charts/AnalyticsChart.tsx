@@ -17,26 +17,44 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart"
+import { useAdminDash } from "@/lib/client/useAdminDash"
 
 export const description = "A line chart"
 
-const chartData = [
-  { month: "January", desktop: 186 },
-  { month: "February", desktop: 305 },
-  { month: "March", desktop: 237 },
-  { month: "April", desktop: 180 },
-  { month: "May", desktop: 209 },
-  { month: "June", desktop: 214 },
-]
+
 
 const chartConfig = {
-  desktop: {
-    label: "Desktop",
+  count: {
+    label: "Churches",
     color: "#446DE3",
   },
 } satisfies ChartConfig
 
 export function AnalyticsChart() {
+  const {data} = useAdminDash();
+  const monthNames =  {
+    jan: "January",
+    feb: "February",
+    mar: "March",
+    apr: "April",
+    may: "May",
+    jun: "June",
+    jul: "July",
+    aug: "August",
+    sep: "September",
+    oct: "October",
+    nov: "November",
+    dec: "December",
+  };
+  
+  const currentMonthIndex = new Date().getMonth();
+
+  const chartData = data?.churches
+    ?.filter((data: {month: string}) => Object.keys(monthNames).indexOf(data.month) <= currentMonthIndex + 1)
+    .map((data: {month: keyof typeof monthNames, count: number}) => ({
+      month: monthNames[data.month],
+      count: data.count,
+    }));
   return (
     <Card>
       <CardHeader>
@@ -65,7 +83,7 @@ export function AnalyticsChart() {
               content={<ChartTooltipContent hideLabel />}
             />
             <Line
-              dataKey="desktop"
+              dataKey="count"
               type="natural"
               stroke="#17275B"
               strokeWidth={2}

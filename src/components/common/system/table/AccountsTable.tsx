@@ -45,54 +45,12 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useGetAccounts } from '@/lib/client/useSystemAdmin';
 
-const data: Users[] = [
-  {
-    id: 'm5gr84i9',
-    account: 'Living Faith Church',
-    adminName: 'Ken Adams',
-    adminNumber: '+1 (555) 123-4567',
-    createdOn: '2024-01-15',
-    profile: 'https://example.com/profiles/ken-adams.jpg', // Image URL
-  },
-  {
-    id: '3u1reuv4',
-    account: 'Daystar',
-    adminName: 'Abe Turner',
-    adminNumber: '+1 (555) 987-6543',
-    createdOn: '2024-02-10',
-    profile: 'Abe Turner', // Name as profile
-  },
-  {
-    id: 'derv1ws0',
-    account: 'Salvation ministries',
-    adminName: 'Monserrat Lopez',
-    adminNumber: '+1 (555) 246-8109',
-    createdOn: '2024-03-05',
-    profile: 'https://example.com/profiles/monserrat-lopez.png', // Image URL
-  },
-  {
-    id: '5kma53ae',
-    account: 'RCCG',
-    adminName: 'Silas Smith',
-    adminNumber: '+1 (555) 333-2222',
-    createdOn: '2024-04-20',
-    profile: 'Silas Smith', // Name as profile
-  },
-  {
-    id: 'bhqecj4p',
-    account: "The Lord's chosen",
-    adminName: 'Carmella Ray',
-    adminNumber: '+1 (555) 789-0123',
-    createdOn: '2024-05-30',
-    profile: 'https://example.com/profiles/carmella-ray.jpg', // Image URL
-  },
-];
-
 export type Users = {
   id: string;
   account: string;
   adminName: string;
   adminNumber: string;
+  adminEmail: string;
   createdOn: string;
   profile: string;
 };
@@ -129,7 +87,13 @@ export const columns: ColumnDef<Users>[] = [
             <AvatarFallback className="bg-main_primary uppercase text-white pt-1">
               {name
                 .split(' ')
-                .map((name) => name[0])
+                .filter((n) => n)
+                .map((part, index, arr) =>
+                  index === 0 || index === arr.length - 1
+                    ? part[0].toUpperCase()
+                    : null,
+                )
+                .filter(Boolean)
                 .join('')}
             </AvatarFallback>
           </Avatar>
@@ -144,6 +108,7 @@ export const columns: ColumnDef<Users>[] = [
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          className='text-left px-0 mx-0'
         >
           Account
           <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -159,6 +124,7 @@ export const columns: ColumnDef<Users>[] = [
     header: ({ column }) => {
       return (
         <Button
+        className='text-left px-0 mx-0'
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
@@ -175,7 +141,14 @@ export const columns: ColumnDef<Users>[] = [
     accessorKey: 'adminNumber',
     header: 'Admin Phone Number',
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue('adminNumber')}</div>
+      <div  className="capitalize text-left px-0 mx-0">{row.getValue('adminNumber')}</div>
+    ),
+  },
+  {
+    accessorKey: 'adminEmail',
+    header: 'Admin Email',
+    cell: ({ row }) => (
+      <div className="lowercase text-left px-0 mx-0">{row.getValue('adminEmail')}</div>
     ),
   },
   {
@@ -191,7 +164,7 @@ export const columns: ColumnDef<Users>[] = [
         year: 'numeric',
       }).format(createdOn);
 
-      return <div className="text-left font-medium">{formatted}</div>;
+      return <div className="text-left px-0 mx-0 font-medium">{formatted}</div>;
     },
   },
 ];
@@ -217,12 +190,14 @@ export function AccountsDataTable() {
                 creator?.lastName || ''
               }`;
               const adminNumber = creator?.phone || 'None';
+              const adminEmail = creator?.email || 'None';
 
               return {
                 id,
                 account: name,
                 adminName: adminName,
                 adminNumber: adminNumber,
+                adminEmail,
                 createdOn: new Date(createdAt).toISOString().split('T')[0],
                 profile: `${adminName}`,
               };
@@ -312,7 +287,7 @@ export function AccountsDataTable() {
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id}>
+                    <TableHead className='text-left px-2' key={header.id}>
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -326,7 +301,7 @@ export function AccountsDataTable() {
             ))}
           </TableHeader>
           <TableBody>
-            { isLoading ? (
+            {isLoading ? (
               <TableRow>
                 <TableCell
                   colSpan={columns.length}

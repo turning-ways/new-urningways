@@ -49,6 +49,7 @@ export type Users = {
   account: string;
   adminName: string;
   adminNumber: string;
+  adminEmail: string;
   createdOn: string;
   profile: string;
 };
@@ -107,6 +108,7 @@ export const columns: ColumnDef<Users>[] = [
       return (
         <Button
           variant="ghost"
+          className='text-left px-0 mx-0'
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
           Account
@@ -115,7 +117,7 @@ export const columns: ColumnDef<Users>[] = [
       );
     },
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue('account')}</div>
+      <div className="capitalize text-left px-0 mx-0">{row.getValue('account')}</div>
     ),
   },
   {
@@ -124,6 +126,7 @@ export const columns: ColumnDef<Users>[] = [
       return (
         <Button
           variant="ghost"
+          className='text-left px-0 mx-0'
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
           Admin Name
@@ -132,14 +135,21 @@ export const columns: ColumnDef<Users>[] = [
       );
     },
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue('adminName')}</div>
+      <div className="capitalize text-left px-0 mx-0">{row.getValue('adminName')}</div>
     ),
   },
   {
     accessorKey: 'adminNumber',
     header: 'Admin Phone Number',
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue('adminNumber')}</div>
+      <div className="capitalize text-left px-0 mx-0">{row.getValue('adminNumber')}</div>
+    ),
+  },
+  {
+    accessorKey: 'adminEmail',
+    header: 'Admin Email',
+    cell: ({ row }) => (
+      <div className="lowercase text-left px-0 mx-0">{row.getValue('adminEmail')}</div>
     ),
   },
   {
@@ -155,7 +165,7 @@ export const columns: ColumnDef<Users>[] = [
         year: 'numeric',
       }).format(createdOn);
 
-      return <div className="text-left font-medium">{formatted}</div>;
+      return <div className="text-left px-0 mx-0 font-medium">{formatted}</div>;
     },
   },
   {
@@ -165,7 +175,10 @@ export const columns: ColumnDef<Users>[] = [
       const payment = row.original;
 
       return (
-        <Link href={"/system/accounts"}  className="text-main_secondaryDark cursor-pointer flex items-center gap-2">
+        <Link
+          href={'/system/accounts'}
+          className="text-main_secondaryDark cursor-pointer flex items-center gap-2"
+        >
           View More <MoveRight />
         </Link>
       );
@@ -189,15 +202,19 @@ export function RecentUserDataTable() {
           .map((church) => {
             if (church) {
               const { id, name, createdAt, creator } = church;
-              const adminName = `${creator?.firstName || ''} ${creator?.lastName || ''}`;
-              const adminNumber = creator?.phone || 'None'; 
-  
+              const adminName = `${creator?.firstName || ''} ${
+                creator?.lastName || ''
+              }`;
+              const adminNumber = creator?.phone || 'None';
+              const adminEmail = creator?.email || 'None';
+
               return {
                 id,
                 account: name,
                 adminName: adminName,
                 adminNumber: adminNumber,
-                createdOn: new Date(createdAt).toISOString().split('T')[0], 
+                adminEmail,
+                createdOn: new Date(createdAt).toISOString().split('T')[0],
                 profile: `${adminName}`,
               };
             }
@@ -206,8 +223,6 @@ export function RecentUserDataTable() {
           .filter((church): church is Users => church !== undefined)
       : [];
   }, [recentAccounts]);
-  
-
 
   const table = useReactTable({
     data,
@@ -253,7 +268,7 @@ export function RecentUserDataTable() {
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id}>
+                    <TableHead className='text-left px-2' key={header.id}>
                       {header.isPlaceholder
                         ? null
                         : flexRender(
