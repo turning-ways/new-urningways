@@ -5,7 +5,7 @@ import Following from './profile/following';
 
 export default function Profile() {
   return (
-    <div className="flex flex-col gap-2">
+    <div className="hidden lg:flex flex-col gap-2">
       <Main />
       <Church />
       <Following />

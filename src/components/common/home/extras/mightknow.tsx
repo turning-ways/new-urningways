@@ -9,7 +9,7 @@ export default function MightKnow() {
         {Array.from({ length: 3 }).map((_, index) => (
           <div
             key={index}
-            className="w-full flex justify-between cursor-pointer  p-2 rounded-lg"
+            className="w-full flex justify-between cursor-pointer p-1 rounded-lg"
           >
             <div className="w-full flex gap-2 ">
               <Avatar>
@@ -32,8 +32,12 @@ export default function MightKnow() {
                 </AvatarFallback>
               </Avatar>
               <div>
-                <h5 className="text-base font-medium">Mayokun Areola</h5>
-                <p className="text-sm text-textDark">Saved By Grace</p>
+                <h5 className="text-base font-medium text-ellipsis overflow-hidden capitalize truncate max-w-24">
+                  Mayokun Areola
+                </h5>
+                <p className="text-sm text-textDark  text-ellipsis overflow-hidden capitalize truncate max-w-24">
+                  Saved By Grace
+                </p>
               </div>
             </div>
             <div>
@@ -42,9 +46,9 @@ export default function MightKnow() {
                   index === 0
                     ? 'border-main bg-transparent border-2 text-main hover:bg-transparent hover:text-main'
                     : 'bg-main_primaryDark hover:bg-main'
-                } `}
+                }`}
               >
-               {index === 0 ? "Following" :"Follow"}
+                {index === 0 ? 'Following' : 'Follow'}
               </Button>
             </div>
           </div>

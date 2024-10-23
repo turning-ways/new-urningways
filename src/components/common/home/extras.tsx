@@ -4,7 +4,7 @@ import Suggested from "./extras/suggested";
 
 export default function Extras() {
   return (
-    <div className="flex flex-col gap-2">
+    <div className="hidden lg:flex flex-col gap-2">
       <Notifications/>
       <MightKnow/>
       <Suggested/>

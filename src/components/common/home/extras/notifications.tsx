@@ -29,7 +29,7 @@ export default function  Notifications() {
                   .join('')}
               </AvatarFallback>
             </Avatar>
-            <div className='flex gap-2 items-center'>
+            <div className='space-x-2 items-center'>
               <span className="text-base font-medium">Mayokun Church HQ</span>
               <span className="text-sm text-textDark">Just Posted 0 min ago</span>
             </div>

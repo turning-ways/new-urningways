@@ -13,10 +13,10 @@ export default function Main() {
         <div className="relative w-full">
           <img
             className="w-full h-36 mb-8 rounded-tl-lg rounded-tr-lg"
-            src="/assets/images/Home/profile.jpeg"
+            src="/assets/images/Home/profile.png"
             alt="Profile"
           />
-          <Avatar className="absolute -bottom-5 left-48 border-4 border-white w-[72px] h-[72px]">
+          <Avatar className="absolute -bottom-5 left-[40%] border-4 border-white w-[72px] h-[72px]">
             <AvatarImage src={''} alt="User avatar" className="object-cover" />
             {session?.user ? (
               <AvatarFallback className="bg-main_primary text-white pt-1">

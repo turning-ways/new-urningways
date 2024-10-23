@@ -1,6 +1,6 @@
 
 export default function Comment() {
   return (
-    <div>comment</div>
+    <div className="bg-white ">comment</div>
   )
 }

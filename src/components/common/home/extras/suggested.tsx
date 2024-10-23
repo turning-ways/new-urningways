@@ -32,12 +32,18 @@ export default function Suggested() {
                 </AvatarFallback>
               </Avatar>
               <div>
-                <h5 className="text-base font-medium">Mayokun Areola</h5>
-                <p className="text-sm text-textDark">Saved By Grace</p>
+                <h5 className="text-base font-medium  text-ellipsis overflow-hidden capitalize truncate max-w-24">
+                  Mayokun Areola
+                </h5>
+                <p className="text-sm text-textDark  text-ellipsis overflow-hidden capitalize truncate max-w-24">
+                  Saved By Grace
+                </p>
               </div>
             </div>
             <div>
-              <Button className="bg-main_primaryDark hover:bg-main">Follow</Button>
+              <Button className="bg-main_primaryDark hover:bg-main">
+                Follow
+              </Button>
             </div>
           </div>
         ))}
