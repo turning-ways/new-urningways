@@ -1,5 +1,5 @@
 'use client';
-import { Suspense, useEffect } from 'react';
+import { Fragment, Suspense, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import MemberHeader from '@/components/common/admin/directory/member-header';
 import InfoTabs from '@/components/ui/member-tabs';
@@ -32,7 +32,6 @@ export default function Page({
   const currentViewIndex = views.indexOf(view);
 
   useEffect(() => {
-    // Set the default view to "personal" on mount
     router.replace(`/admin/${churchId}/directory/${memberId}?view=personal`);
   }, []);
 
@@ -52,7 +51,7 @@ export default function Page({
         {isLoading ? (
           <SkeletonLoader />
         ) : (
-          <>
+          <Fragment>
             <MemberHeader
               member={data}
               churchId={contacts?.churchId ?? ''}
@@ -85,7 +84,7 @@ export default function Page({
                 </button>
               )}
             </div>
-          </>
+          </Fragment>
         )}
       </div>
     </Suspense>

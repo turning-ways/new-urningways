@@ -135,7 +135,7 @@ export const columns: ColumnDef<Users>[] = [
   {
     accessorKey: 'phone',
     header: 'Phone Number',
-    cell: ({ row }) => <div className="lowercase text-left px-0 mx-0">{row.getValue('phone')}</div>,
+    cell: ({ row }) => <div className="capitalize text-left px-0 mx-0">{row.getValue('phone')}</div>,
   },
   {
     accessorKey: 'email',

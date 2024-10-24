@@ -1,12 +1,12 @@
 'use client';
 
-import {
-  Home,
-} from 'lucide-react';
+import { Home } from 'lucide-react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import Image from 'next/image';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useGetChurches } from '@/lib/client/useChurches';
 import {
   Sheet,
   SheetClose,
@@ -22,6 +22,8 @@ export const MobileNav = () => {
   const [active, setActive] = useState(false);
   const pathname = usePathname();
   const { data: session } = useSession();
+  const { data, isLoading } = useGetChurches({ userId: session?.user.id });
+  const router = useRouter();
 
   const navLinks = [
     {
@@ -34,8 +36,12 @@ export const MobileNav = () => {
   return (
     <div className="flex flex-col space-y-5 font-sans lg:hidden">
       <Sheet open={active} onOpenChange={setActive}>
-        <SheetTrigger className="text-start">
-          <AnimatedHamburgerButton className='bg-white' active={active} setActive={setActive} />
+        <SheetTrigger title='home-menu' className="text-start">
+          <AnimatedHamburgerButton
+            className="bg-white"
+            active={active}
+            setActive={setActive}
+          />
         </SheetTrigger>
         <SheetContent
           side={'left'}
@@ -80,6 +86,41 @@ export const MobileNav = () => {
               >
                 Create Church
               </Link>
+              <h4 className="font-medium">My Churches</h4>
+              {data &&
+                data?.map((church) => (
+                  <div
+                    key={church?.church?.id}
+                    className="w-full flex gap-2 cursor-pointer hover:bg-gray-800 p-2 rounded-lg"
+                    onClick={() => router.push(`/admin/${church?.church?.id}`)}
+                  >
+                    <Avatar>
+                      <AvatarImage
+                        src={''}
+                        alt="User avatar"
+                        className="object-cover"
+                      />
+                      <AvatarFallback className="bg-main_primary text-white pt-1">
+                        {church?.church?.name
+                          .split(' ')
+                          .filter((n) => n)
+                          .map((part, index, arr) =>
+                            index === 0 || index === arr.length - 1
+                              ? part[0].toUpperCase()
+                              : null,
+                          )
+                          .filter(Boolean)
+                          .join('')}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <h5 className="text-base font-medium">
+                        {church?.church?.name}
+                      </h5>
+                      <p className="text-sm text-textDark">Saved By Grace</p>
+                    </div>
+                  </div>
+                ))}
             </ul>
           </div>
           <LogoutDialog />

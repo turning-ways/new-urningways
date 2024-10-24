@@ -48,7 +48,7 @@ export default function SystemNavBar({
           alt="logo"
         />
         {pathname.includes(`app/home`) && <MobileNavHome />}
-        {!pathname.includes(`app/home`) && <MobileNav />}
+        {/* {pathname.includes(`app/home`) && <MobileNav />} */}
       </div>
     );
   }

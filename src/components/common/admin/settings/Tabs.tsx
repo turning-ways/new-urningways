@@ -10,7 +10,7 @@ export function SettingsTab() {
     { value: 'church-analytics', label: 'Church Analytics' },
   ];
   return (
-    <Tabs defaultValue="account" className="w-full h-full space-y-10">
+    <Tabs defaultValue="church" className="w-full h-full space-y-10">
       <TabsList className="bg-head h-14 justify-start gap-2.5 overflow-x-auto overflow-y-hidden py-2.5 px-3 w-full">
         {tabs.map((tab) => (
           <TabsTrigger
@@ -24,6 +24,26 @@ export function SettingsTab() {
       </TabsList>
       <TabsContent value="church">
         <ChurchList />
+      </TabsContent>
+      <TabsContent value="account">
+        <div className="flex items-center justify-center w-full">
+          <h2>Coming Soon</h2>
+        </div>
+      </TabsContent>
+      <TabsContent value="membership">
+        <div className="flex items-center justify-center w-full">
+          <h2>Coming Soon</h2>
+        </div>
+      </TabsContent>
+      <TabsContent value="integrations">
+        <div className="flex items-center justify-center w-full">
+          <h2>Coming Soon</h2>
+        </div>
+      </TabsContent>
+      <TabsContent value="church-analytics">
+        <div className="flex items-center justify-center w-full">
+          <h2>Coming Soon</h2>
+        </div>
       </TabsContent>
     </Tabs>
   );

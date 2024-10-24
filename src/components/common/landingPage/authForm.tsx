@@ -23,11 +23,13 @@ import Link from 'next/link';
 import { signIn } from 'next-auth/react';
 import { toast } from 'sonner';
 import { useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 
 export default function AuthForm() {
   const router = useRouter();
   const { churchId } = useParams();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get('callbackUrl');
   const [isloading, setIsLoading] = useState(false);
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
@@ -54,6 +56,10 @@ export default function AuthForm() {
           return router.push('/register/otp');
         }
         return toast.error(res?.error);
+      }
+      if (callbackUrl) {
+        console.log('callbackUrl', callbackUrl);
+        return router.push(`${callbackUrl}`);
       }
       if (res?.ok) {
         setIsLoading(false);

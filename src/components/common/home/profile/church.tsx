@@ -8,7 +8,6 @@ import { useRouter } from 'next/navigation';
 export default function Church() {
   const { data: session } = useSession();
   const { data, isLoading } = useGetChurches({ userId: session?.user.id });
-  console.log(data);
   const router = useRouter();
   return (
     <div className="bg-white flex flex-col gap-6 items-start w-full rounded-lg  py-6 px-4">

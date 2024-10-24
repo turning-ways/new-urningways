@@ -1,7 +1,7 @@
 'use client';
 
 import { toast } from 'sonner';
-import { Suspense, useEffect } from 'react';
+import { Fragment, Suspense, useEffect } from 'react';
 import { useUserCheck } from '@/lib/swr/use-user-check';
 import LayoutLoader from '@/components/ui/layout-loader';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -13,7 +13,7 @@ interface AdminAuthProps {
 
 export default function AdminAuthWrapper({ children }: AdminAuthProps) {
   const { user, isLoading, isError } = useUserCheck();
-  console.log(user);
+  const { data: session } = useSession();
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -26,16 +26,16 @@ export default function AdminAuthWrapper({ children }: AdminAuthProps) {
 
     if (isLoading) return;
 
-    if (!isLoading && !user) {
+    if (!isLoading && !session?.user) {
       toast.error('You are not authorized to view this page. Please log in');
       signOut();
     }
 
-    if (user && user.userType === 'MEMBER') {
+    if (session?.user && session?.user.userType === 'MEMBER') {
       toast.error('You are not authorized to view this page. Please log in');
       signOut();
     }
-  }, [isLoading, isError, user, searchParams, router]);
+  }, [isLoading, isError, session, searchParams, router]);
 
   if (isLoading) {
     return (
@@ -46,6 +46,6 @@ export default function AdminAuthWrapper({ children }: AdminAuthProps) {
   }
 
   if (user) {
-    return <>{children}</>;
+    return <Fragment>{children}</Fragment>;
   }
 }

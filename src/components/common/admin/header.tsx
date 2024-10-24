@@ -114,7 +114,6 @@ export default function Header() {
 
 export function AccountDropdown({ contacts }: { contacts: any }) {
   const { data: session } = useSession();
-  console.log(session);
 
   const logout = async () => {
     toast.promise(signOut(), {

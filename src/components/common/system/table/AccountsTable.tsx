@@ -74,7 +74,7 @@ export const columns: ColumnDef<Users>[] = [
     header: 'Profile',
     cell: ({ row }) => {
       const profile: string = row.getValue('profile');
-      const name: string = row.getValue('adminName');
+      const name: string = row.getValue('account');
 
       return (
         <div className="flex items-center">

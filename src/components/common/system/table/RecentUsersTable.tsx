@@ -82,6 +82,7 @@ export const columns: ColumnDef<Users>[] = [
     header: 'Profile',
     cell: ({ row }) => {
       const profile: string = row.getValue('profile');
+      const name: string = row.getValue('account');
 
       return (
         <div className="flex items-center">
@@ -92,9 +93,15 @@ export const columns: ColumnDef<Users>[] = [
               className="object-cover"
             />
             <AvatarFallback className="bg-main_primary uppercase text-white pt-1">
-              {profile
+              {name
                 .split(' ')
-                .map((name) => name[0])
+                .filter((n) => n)
+                .map((part, index, arr) =>
+                  index === 0 || index === arr.length - 1
+                    ? part[0].toUpperCase()
+                    : null,
+                )
+                .filter(Boolean)
                 .join('')}
             </AvatarFallback>
           </Avatar>
