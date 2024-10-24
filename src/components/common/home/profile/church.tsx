@@ -10,12 +10,14 @@ export default function Church() {
   const { data, isLoading } = useGetChurches({ userId: session?.user.id });
   const router = useRouter();
   return (
-    <div className="bg-white flex flex-col gap-6 items-start w-full rounded-lg  py-6 px-4">
-      <h4 className="font-medium">My Churches</h4>
-      {!isLoading ? (
-        <div className="w-full ">
-          {data &&
-            data?.map((church) => (
+    data &&
+    data?.length > 0 &&
+    !isLoading && (
+      <div className="bg-white flex flex-col gap-6 items-start w-full rounded-lg  py-6 px-4">
+        <h4 className="font-medium">My Churches</h4>
+        {!isLoading ? (
+          <div className="w-full ">
+            {data?.map((church) => (
               <div
                 key={church?.church?.id}
                 className="w-full flex gap-2 cursor-pointer hover:bg-slate-200 p-2 rounded-lg"
@@ -48,11 +50,12 @@ export default function Church() {
                 </div>
               </div>
             ))}
-        </div>
-      ) : (
-        <ChurchListSkeleton />
-      )}
-    </div>
+          </div>
+        ) : (
+          <ChurchListSkeleton />
+        )}
+      </div>
+    )
   );
 }
 

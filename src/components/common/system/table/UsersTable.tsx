@@ -135,14 +135,20 @@ export const columns: ColumnDef<Users>[] = [
   {
     accessorKey: 'phone',
     header: 'Phone Number',
-    cell: ({ row }) => <div className="capitalize text-left px-0 mx-0">{row.getValue('phone')}</div>,
+    cell: ({ row }) => (
+      <div className="capitalize text-left px-0 mx-0">
+        {row.getValue('phone')}
+      </div>
+    ),
   },
   {
     accessorKey: 'email',
     header: () => <div className="text-left px-0 mx-0">Email</div>,
     cell: ({ row }) => {
       return (
-        <div className="text-left font-medium px-0 mx-0">{row.getValue('email')}</div>
+        <div className="text-left font-medium px-0 mx-0">
+          {row.getValue('email')}
+        </div>
       );
     },
   },
@@ -159,7 +165,10 @@ export const columns: ColumnDef<Users>[] = [
 
       return (
         <div className="flex items-center gap-3">
-          <EditDialog existingEmail={row.getValue('email')?.toString() || ''} existingRole={existingRole} />
+          <EditDialog
+            existingEmail={row.getValue('email')?.toString() || ''}
+            existingRole={existingRole}
+          />
           {row.getValue('role')?.toString().toLowerCase() !== 'admin' && (
             <DeleteUserDialog email={row.getValue('email')?.toString() || ''} />
           )}
@@ -261,7 +270,7 @@ export function UsersDataTable() {
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead className='text-left px-2' key={header.id}>
+                    <TableHead className="text-left px-2" key={header.id}>
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -304,7 +313,7 @@ export function UsersDataTable() {
           </TableBody>
         </Table>
       </div>
-      {/* <div className="flex items-center justify-end space-x-2 py-4">
+      <div className="flex items-center justify-end space-x-2 py-4">
         <div className="flex-1 text-sm text-muted-foreground">
           {table.getFilteredSelectedRowModel().rows.length} of{' '}
           {table.getFilteredRowModel().rows.length} row(s) selected.
@@ -327,7 +336,7 @@ export function UsersDataTable() {
             Next
           </Button>
         </div>
-      </div> */}
+      </div>
     </div>
   );
 }

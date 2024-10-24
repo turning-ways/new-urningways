@@ -108,7 +108,7 @@ export const columns: ColumnDef<Users>[] = [
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className='text-left px-0 mx-0'
+          className="text-left px-0 mx-0"
         >
           Account
           <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -124,7 +124,7 @@ export const columns: ColumnDef<Users>[] = [
     header: ({ column }) => {
       return (
         <Button
-        className='text-left px-0 mx-0'
+          className="text-left px-0 mx-0"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
@@ -141,14 +141,18 @@ export const columns: ColumnDef<Users>[] = [
     accessorKey: 'adminNumber',
     header: 'Admin Phone Number',
     cell: ({ row }) => (
-      <div  className="capitalize text-left px-0 mx-0">{row.getValue('adminNumber')}</div>
+      <div className="capitalize text-left px-0 mx-0">
+        {row.getValue('adminNumber')}
+      </div>
     ),
   },
   {
     accessorKey: 'adminEmail',
     header: 'Admin Email',
     cell: ({ row }) => (
-      <div className="lowercase text-left px-0 mx-0">{row.getValue('adminEmail')}</div>
+      <div className="lowercase text-left px-0 mx-0">
+        {row.getValue('adminEmail')}
+      </div>
     ),
   },
   {
@@ -287,7 +291,7 @@ export function AccountsDataTable() {
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead className='text-left px-2' key={header.id}>
+                    <TableHead className="text-left px-2" key={header.id}>
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -339,7 +343,7 @@ export function AccountsDataTable() {
           </TableBody>
         </Table>
       </div>
-      {/* <div className="flex items-center justify-end space-x-2 py-4">
+      <div className="flex items-center justify-end space-x-2 py-4">
         <div className="flex-1 text-sm text-muted-foreground">
           {table.getFilteredSelectedRowModel().rows.length} of{' '}
           {table.getFilteredRowModel().rows.length} row(s) selected.
@@ -362,7 +366,7 @@ export function AccountsDataTable() {
             Next
           </Button>
         </div>
-      </div> */}
+      </div>
     </div>
   );
 }
