@@ -17,7 +17,7 @@ export default function Following() {
                 className="object-cover"
               />
               <AvatarFallback className="bg-main_primary text-white pt-1">
-                {'Mayokun Church HQ'
+                {'Living Faith Church'
                   .split(' ')
                   .filter((n) => n)
                   .map((part, index, arr) =>
@@ -30,7 +30,7 @@ export default function Following() {
               </AvatarFallback>
             </Avatar>
             <div>
-              <h5 className="text-base font-medium">Mayokun Church HQ</h5>
+              <h5 className="text-base font-medium">Living Faith Church</h5>
               <p className="text-sm text-textDark">Saved By Grace</p>
             </div>
           </div>

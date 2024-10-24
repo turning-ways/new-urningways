@@ -17,7 +17,7 @@ export default function  Notifications() {
                 className="object-cover"
               />
               <AvatarFallback className="bg-main_primary text-white pt-1">
-                {'Mayokun Church HQ'
+                {'Living Faith Church'
                   .split(' ')
                   .filter((n) => n)
                   .map((part, index, arr) =>
@@ -30,7 +30,7 @@ export default function  Notifications() {
               </AvatarFallback>
             </Avatar>
             <div className='space-x-2 items-center'>
-              <span className="text-base font-medium">Mayokun Church HQ</span>
+              <span className="text-base font-medium">Living Faith Church</span>
               <span className="text-sm text-textDark">Just Posted 0 min ago</span>
             </div>
           </div>

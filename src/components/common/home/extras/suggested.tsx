@@ -19,7 +19,7 @@ export default function Suggested() {
                   className="object-cover"
                 />
                 <AvatarFallback className="bg-main_primary text-white pt-1">
-                  {'Mayokun Areola'
+                  {'Jonathan David'
                     .split(' ')
                     .filter((n) => n)
                     .map((part, index, arr) =>
@@ -33,7 +33,7 @@ export default function Suggested() {
               </Avatar>
               <div>
                 <h5 className="text-base font-medium  text-ellipsis overflow-hidden capitalize truncate max-w-24">
-                  Mayokun Areola
+                  Jonathan David
                 </h5>
                 <p className="text-sm text-textDark  text-ellipsis overflow-hidden capitalize truncate max-w-24">
                   Saved By Grace
