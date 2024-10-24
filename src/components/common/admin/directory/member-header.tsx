@@ -258,8 +258,6 @@ function Note({
 
   const comments = data;
 
-  console.log(data);
-
   return (
     <Dialog>
       <DialogTrigger>

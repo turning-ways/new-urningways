@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import { MotionConfig, motion } from 'framer-motion';
+import { cn } from '@/lib/utils';
 
 export const AnimatedHamburgerButton = ({
   active,
   setActive,
+  className
 }: {
   active: boolean;
   setActive: (pv: boolean) => void;
+  className?: string
 }) => {
   return (
     <MotionConfig
@@ -23,17 +26,17 @@ export const AnimatedHamburgerButton = ({
       >
         <motion.span
           variants={VARIANTS.top}
-          className="absolute h-1 w-8 bg-black"
+          className={cn("absolute h-1 w-8 bg-black", className)}
           style={{ y: '-50%', left: '50%', x: '-50%', top: '35%' }}
         />
         <motion.span
           variants={VARIANTS.middle}
-          className="absolute h-1 w-8 bg-black"
+          className={cn("absolute h-1 w-8 bg-black", className)}
           style={{ left: '50%', x: '-50%', top: '50%', y: '-50%' }}
         />
         <motion.span
           variants={VARIANTS.bottom}
-          className="absolute h-1 w-4 bg-black"
+          className={cn("absolute h-1 w-8 bg-black", className)}
           style={{
             x: '-50%',
             y: '50%',

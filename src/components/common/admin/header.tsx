@@ -48,20 +48,20 @@ export default function Header() {
   const searchParams = useSearchParams();
 
   const getPageTitle = () => {
-    if (pathname.includes(`/admin/${churchId}/contacts/`)) {
+    if (pathname.includes(`/admin/${churchId}/contacts`)) {
       return 'Contacts';
     }
     if (
-      pathname.includes(`/admin/${churchId}/directory/`) &&
+      pathname.includes(`/admin/${churchId}/directory`) &&
       pathname.includes('/new')
     )
       return 'Create New Member';
     if (
-      pathname.includes(`/admin/${churchId}/directory/`) &&
+      pathname.includes(`/admin/${churchId}/directory`) &&
       pathname.includes('/edit')
     )
       return 'Edit Member';
-    if (pathname.startsWith(`/admin/${churchId}/directory/`)) {
+    if (pathname.startsWith(`/admin/${churchId}/directory`)) {
       const viewParam = searchParams.get('view');
       if (viewParam === 'personal') return 'Personal Information';
       if (viewParam === 'contact') return 'Contact Information';
@@ -71,6 +71,12 @@ export default function Header() {
       return 'Directory';
     }
 
+    if (pathname.includes(`/admin/${churchId}/settings`)) {
+      if(pathname.includes("/church")){
+        return "Church Settings"
+      }
+      return 'Settings';
+    }
     if (pathname === `/admin/${churchId}/`) return 'Dashboard';
     return 'Dashboard'; // Default title
   };
@@ -107,8 +113,7 @@ export default function Header() {
 }
 
 export function AccountDropdown({ contacts }: { contacts: any }) {
-  const {data: session} = useSession();
-  console.log(session);
+  const { data: session } = useSession();
 
   const logout = async () => {
     toast.promise(signOut(), {
@@ -177,7 +182,7 @@ export function AccountDropdown({ contacts }: { contacts: any }) {
                 >
                   <div className="flex justify-start items-center gap-2 self-center">
                     <Lock size={18} />
-                    <p className="">System Admin</p>
+                    <p className="">Admin Center</p>
                   </div>
                 </Link>
               )}

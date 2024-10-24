@@ -20,14 +20,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { ChevronDown, Lock, LogOutIcon, Settings, User } from 'lucide-react';
+import { ChevronDown, Home, Lock, LogOutIcon, Settings, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { signOut, useSession } from 'next-auth/react';
 import { toast } from 'sonner';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 export default function ProfileDropdown() {
   const { data: session } = useSession();
+  const pathname = usePathname();
   const logout = async () => {
     toast.promise(signOut(), {
       loading: 'Logging out...',
@@ -95,14 +97,27 @@ export default function ProfileDropdown() {
               <span>Settings</span>
             </DropdownMenuItem>
             <DropdownMenuItem className="flex items-center gap-2 text-lg">
-              {session?.user.isDev && (
+              {session?.user.isDev && !pathname.includes("system") && (
                 <Link
                   href="/system"
                   className=" rounded-lg gap-4 flex w-full text-center "
                 >
                   <div className="flex justify-start items-center gap-2 self-center">
                     <Lock size={18} />
-                    <p className="">System Admin</p>
+                    <p className="">Admin Center</p>
+                  </div>
+                </Link>
+              )}
+            </DropdownMenuItem>
+            <DropdownMenuItem className="flex items-center gap-2 text-lg">
+              {!pathname.includes("/app/home") && (
+                <Link
+                  href="/app/home"
+                  className=" rounded-lg gap-4 flex w-full text-center "
+                >
+                  <div className="flex justify-start items-center gap-2 self-center">
+                    <Home size={18} />
+                    <p className="">Home</p>
                   </div>
                 </Link>
               )}

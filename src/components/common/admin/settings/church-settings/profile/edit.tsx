@@ -363,7 +363,7 @@ export default function ProfileEdit() {
         </ul>
         <div className="w-full h-full text-2xl flex items-center justify-end">
           <Button role="button" type="submit" disabled={isPending}>
-            {isPending ? <LoadingSpinner /> : 'Edit'}
+            {isPending ? <LoadingSpinner /> : 'Update Profile'}
           </Button>
         </div>
         <div className="w-full h-12 text-white flex items-center justify-end">

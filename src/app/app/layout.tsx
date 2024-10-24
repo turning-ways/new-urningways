@@ -18,7 +18,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   ];
 
   return (
-    <section className="min-h-screen w-full flex-col flex">
+    <section className="min-h-screen h-screen w-full flex-col flex">
       <SystemNavBar nav={navs} />
       {children}
     </section>
