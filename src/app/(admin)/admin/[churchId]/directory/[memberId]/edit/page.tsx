@@ -193,6 +193,7 @@ export default function MemberEditPage({
               <ContactEdit
                 setFormData={setFormData}
                 formData={formData}
+                initialData={data}
                 currentViewIndex={currentViewIndex}
                 maxViewIndex={views.length}
                 previousView={() => navigateToView(currentViewIndex - 1)}

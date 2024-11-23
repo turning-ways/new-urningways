@@ -145,7 +145,6 @@ const Comment: React.FC<{
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (editMode && e.key === 'Enter') {
       e.preventDefault(); // Prevents the default behavior of adding a new line
-      console.log('New value:', noteValue);
       updateNote.mutate({
         churchId: churchId ?? '',
         data: {

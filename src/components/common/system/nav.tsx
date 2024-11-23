@@ -14,6 +14,10 @@ import { MobileNav as MobileNavHome } from '../home/mobile-nav';
 
 const navs = [
   {
+    name: 'Home',
+    to: '/app/home',
+  },
+  {
     name: 'Dashboard',
     to: '/system/dashboard',
   },

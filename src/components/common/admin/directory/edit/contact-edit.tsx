@@ -9,6 +9,9 @@ import { useForm } from 'react-hook-form';
 import FormFieldComponent from '@/components/common/form-field';
 import { useRouter } from 'next/navigation';
 import { LoadingCircle } from '@/components/ui/loading-circle';
+import { useSession } from 'next-auth/react';
+import { useMember } from '@/lib/client/useMember';
+import { IMember } from '@/types/member';
 
 export default function ContactEdit({
   setFormData,
@@ -19,6 +22,7 @@ export default function ContactEdit({
   nextView,
   saveMember,
   isLoading,
+  initialData,
 }: {
   setFormData: Function;
   formData: any;
@@ -28,6 +32,7 @@ export default function ContactEdit({
   nextView?: Function;
   saveMember?: Function;
   isLoading?: boolean;
+  initialData?: IMember;
 }) {
   const router = useRouter();
   const form = useForm<z.infer<typeof schema>>({
@@ -45,7 +50,10 @@ export default function ContactEdit({
     saveMember?.(fullData);
   }
 
-  const formFields = contactInfoFields(form);
+  const formFields = contactInfoFields(
+    form,
+  );
+  
 
   return (
     <Form {...form}>
@@ -57,6 +65,7 @@ export default function ContactEdit({
           <FormFieldComponent
             key={index}
             {...field}
+            isDisabled={initialData?.role[0]?.name === 'SuperAdmin' && field.name === "email"}
             isLastItem={
               index === formFields.length - 1 && formFields.length % 2 !== 0
             }

@@ -91,7 +91,6 @@ export default function RegisterForm() {
     } catch (error: any) {
       setIsLoading(false);
       toast.error(error.message);
-      console.log(error.message);
     }
   }
 

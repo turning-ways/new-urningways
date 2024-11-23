@@ -15,7 +15,6 @@ import { Fragment } from 'react';
 export default function AccountCards() {
   const { data, isLoading } = useAdminDash();
 
-  console.log(data);
   const cards = [
     {
       id: 1,

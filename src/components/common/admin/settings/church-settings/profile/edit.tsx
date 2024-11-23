@@ -106,7 +106,6 @@ export default function ProfileEdit() {
       email: formData?.email,
       foundedDate: formData?.foundedDate,
     });
-    console.log(formData);
   };
 
   return (

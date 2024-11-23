@@ -75,7 +75,6 @@ export default function ContactUpdateForm({
   });
 
   async function onSubmit(data: z.infer<typeof schema>) {
-    console.log(data);
     try {
       await updateContact.mutateAsync(
         {
@@ -106,6 +105,7 @@ export default function ContactUpdateForm({
       console.error('Error updating contact:', error);
     }
   }
+
 
   return (
     <Form {...form}>
@@ -173,7 +173,7 @@ export default function ContactUpdateForm({
                 Email
               </FormLabel>
               <FormControl>
-                <InputComponent {...field} placeholder="" />
+                <InputComponent disabled={initialData?.role === "SuperAdmin"} {...field} placeholder="" />
               </FormControl>
               <FormMessage />
             </FormItem>

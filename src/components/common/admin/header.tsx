@@ -51,6 +51,12 @@ export default function Header() {
     if (pathname.includes(`/admin/${churchId}/contacts`)) {
       return 'Contacts';
     }
+    if (pathname.includes(`/admin/${churchId}/forms`)) {
+      return 'Forms';
+    }
+    if (pathname.includes(`/admin/${churchId}/help`)) {
+      return 'Help';
+    }
     if (
       pathname.includes(`/admin/${churchId}/directory`) &&
       pathname.includes('/new')

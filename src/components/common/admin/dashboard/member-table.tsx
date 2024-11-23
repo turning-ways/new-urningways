@@ -24,7 +24,7 @@ export default function MemberTable({
     <>
       <div className="w-full h-full lg:flex justify-center items-center hidden font-sans">
         <Table className="border border-gray-200 w-full !rounded-md">
-          <TableCaption>A Quick Look at Members</TableCaption>
+          <TableCaption>&copy;{`TurningWays ${new Date().getFullYear()}. All Rights Reserved`}</TableCaption>
           <TableHeader className="bg-gray-100 rounded-md">
             <TableRow>
               <TableHead>Name</TableHead>

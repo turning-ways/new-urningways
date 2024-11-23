@@ -85,12 +85,11 @@ export const columns: ColumnDef<GContact>[] = [
     filterFn: (row, columnId, filterValue) => {
       // Get the array of labels from the row
       const labels = row.original.labels as { name: string; color: string }[];
-      console.log(labels);
-      console.log(filterValue);
+      // console.log(labels);
+      // console.log(filterValue);
 
       // Return true if any label's name includes the filterValue
       return labels.some((label) => {
-        console.log(label);
         return filterValue.includes(label.name);
       });
     },

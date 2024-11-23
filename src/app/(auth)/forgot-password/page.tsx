@@ -32,7 +32,6 @@ export default function Page() {
   });
   const onSubmit = async (data: z.infer<typeof schema>) => {
     const res = await sendResetPasswordEmail(data);
-    console.log(res);
     if (res.status === 200) {
       toast.success('Password reset email sent successfully', {
         description: 'Check your email for the reset link',

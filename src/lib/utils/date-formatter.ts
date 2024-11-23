@@ -39,13 +39,23 @@ export const dobFormatter = (dob: string | number) => {
  */
 export const formatDate = (
   date: string | number,
-  format: "short" | "long" = "long"
+  format: "short" | "long" = "long",
+  withTime?: boolean
 ) => {
   const dateObj = new Date(date);
+
   const options: Intl.DateTimeFormatOptions =
     format === "long"
       ? { year: "numeric", month: "long", day: "numeric" }
       : { year: "numeric", month: "short", day: "numeric" };
+
+  // Include time if `withTime` is true
+  if (withTime) {
+    options.hour = "numeric";
+    options.minute = "numeric";
+    options.hour12 = true; // 12-hour format
+  }
+
   return new Intl.DateTimeFormat("en-US", options).format(dateObj);
 };
 

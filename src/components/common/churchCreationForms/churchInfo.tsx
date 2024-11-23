@@ -113,6 +113,7 @@ export default function ChurchProfileForm({
       parentChurch: formData.parentChurch || '',
       parentChurchLevel: formData.parentChurchLevel || '',
       churchWebsite: formData.churchWebsite || '',
+      churchName: formData.churchName || '',
       churchEmail: '',
       churchPhone: formData.churchPhone || '',
       churchAddress: formData.churchAddress || '',
@@ -120,6 +121,7 @@ export default function ChurchProfileForm({
       churchState: formData.churchState || '',
       churchCountry: formData.churchCountry || 'Nigeria',
       churchZip: formData.churchZip || '',
+      verify: formData.verify || false,
     },
   });
 
@@ -174,8 +176,8 @@ export default function ChurchProfileForm({
     <Form {...form}>
       <HeaderInfo
         header="Church Information"
-        currentStep={3}
-        totalSteps={3}
+        currentStep={2}
+        totalSteps={2}
         helperText="Please fill in the form below to create a profile for your church"
       />
       <form
@@ -201,6 +203,7 @@ export default function ChurchProfileForm({
             )}
           </motion.div>
         )}
+        {renderFormField('churchName', 'Church Name', 'Church Name')}
         {renderFormField('churchWebsite', 'Church Website', 'Church Website')}
         {renderFormField(
           'churchEmail',
@@ -293,8 +296,20 @@ export default function ChurchProfileForm({
             )}
           />
           {renderFormField('churchCity', 'City *', 'Enter City')}
-          {renderFormField('churchZip', 'Zip Code *', 'Enter Zip Code')}
+          {renderFormField('churchZip', 'Zip Code *', 'Enter Zip Code')}\
         </div>
+        <div className="gap-2">
+          <input type="checkbox" id="verify" {...form.register('verify')} />
+          <label htmlFor="verify">
+            I verify that I am an authorized representative Of this organization
+            and have the right to act on its behalf in the creation and
+            management of this page. The organization and I agree to the
+            additional terms for Pages.
+          </label>
+        </div>
+        {form.formState?.errors?.verify && (
+          <p style={{ color: 'red' }}>{form?.formState?.errors.verify.message}</p>
+        )}
         <div className="grid grid-cols-2 gap-10">
           <NextButton overrideFn={prevStep} text="Back" />
           <NextButton text="Next" isPending={form.formState.isSubmitting} />
