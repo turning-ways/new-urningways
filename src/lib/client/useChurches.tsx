@@ -54,10 +54,8 @@ export interface UpdateChurchRequest {
   zip: string;
   phone: string;
   email: string;
-  foundedDate: Date; 
+  foundedDate: Date;
 }
-
-
 
 const getChurches = async ({ userId }: { userId: string }) => {
   const { data } = await api.get(`/churches?userId=${userId}`);
@@ -97,26 +95,38 @@ export const useGetChurch = () => {
   });
 };
 
-
 export const useUpdateChurch = () => {
-  let {churchId} = useParams() as {churchId : string | null};
+  let { churchId } = useParams() as { churchId: string | null };
   const searchParams = useSearchParams();
-  const router = useRouter()
+  const router = useRouter();
   const queryClient = useQueryClient();
   if (!churchId) {
     churchId = searchParams.get('id');
   }
 
-
   return useMutation({
-    mutationFn: (data: UpdateChurchRequest) => updateChurch(churchId as string, data),
+    mutationFn: (data: UpdateChurchRequest) =>
+      updateChurch(churchId as string, data),
     onSuccess: (data) => {
-      queryClient.invalidateQueries({queryKey: ["church", churchId]})
+      queryClient.invalidateQueries({ queryKey: ['church', churchId] });
       toast.success('Church Profile Updated');
       router.back();
     },
     onError: (error: AxiosError) => {
-      toast.error("Couldn't update church profile. Try again later")
+      toast.error("Couldn't update church profile. Try again later");
     },
-  })
-}
+  });
+};
+
+export const getChurchHqs = async () => {
+  const { data } = await api.get('/churches/hq');
+  return data.data as any[];
+};
+
+export const useGetChurchHqs = () => {
+  return useQuery({
+    queryKey: ['churchHqs'],
+    queryFn: getChurchHqs,
+    staleTime: 1 * 60 * 1000, // 1 minute
+  });
+};

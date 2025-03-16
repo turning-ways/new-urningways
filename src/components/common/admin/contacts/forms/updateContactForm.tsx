@@ -21,6 +21,13 @@ import { toast } from 'sonner';
 import { LoadingCircle } from '@/components/ui/loading-circle';
 import { Contact } from '@/lib/client/contactApiFunction';
 import { matchQuery } from '@tanstack/react-query';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+import { HelpCircle, HelpCircleIcon } from 'lucide-react';
 
 const schema = z.object({
   firstName: z.string({ message: 'First name is required' }),
@@ -59,7 +66,10 @@ export default function ContactUpdateForm({
       firstName: initialData?.firstName ? initialData?.firstName : '',
       lastName: initialData?.lastName ? initialData?.lastName : '',
       phone: initialData?.phone ? initialData?.phone : '',
-      email: initialData?.email && initialData?.email !== '' ? initialData?.email : undefined,
+      email:
+        initialData?.email && initialData?.email !== ''
+          ? initialData?.email
+          : undefined,
       maturity: initialData?.maturityLevel
         ? initialData?.maturityLevel
         : undefined,
@@ -169,11 +179,27 @@ export default function ContactUpdateForm({
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-lg font-normal text-gray-500">
+              <FormLabel className="text-lg font-normal text-gray-500 gap-2.5 flex items-center">
                 Email
+                {contacts?.roles[0].name === 'SuperAdmin' && (
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <HelpCircleIcon className="size-4 text-black" />
+                      </TooltipTrigger>
+                      <TooltipContent className="max-w-[200px]" align="start">
+                        A Super Admin can&apos;t edit his email
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                )}
               </FormLabel>
               <FormControl>
-                <InputComponent {...field} placeholder="" />
+                <InputComponent
+                  {...field}
+                  placeholder=""
+                  disabled={contacts?.roles[0].name === 'SuperAdmin'}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

@@ -1,7 +1,7 @@
 'use client';
 
 import { signIn } from 'next-auth/react';
-import { deleteCookie, setCookie } from 'cookies-next';
+// import { deleteCookie, setCookie } from 'cookies-next';
 import {
   Dialog,
   DialogContent,
@@ -21,7 +21,7 @@ export const GoogleButton = ({
     return (
       <div
         onClick={async () => {
-          deleteCookie('userType');
+          // deleteCookie('userType');
           signIn('google', {
             redirect: false,
             callbackUrl: '/app/home',

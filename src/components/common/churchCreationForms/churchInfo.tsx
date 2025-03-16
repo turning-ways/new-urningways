@@ -27,6 +27,7 @@ import { invalidateUserCheck, useUserCheck } from '@/lib/swr/use-user-check';
 import { useSession } from 'next-auth/react';
 import { OrgInfoSchema } from '@/app/(auth)/register/setup/step';
 import useCountryState from '@/hooks/useCountryState';
+import { useGetChurchHqs } from '@/lib/client/useChurches';
 
 function useHandleSubmit(
   formData: any,
@@ -100,6 +101,8 @@ export default function ChurchProfileForm({
   prevStep: () => void;
 }) {
   const { update } = useSession();
+  const { data } = useGetChurchHqs();
+  console.log(data);
   const router = useRouter();
   const [defaultCountry, setDefaultCountry] = useState('NG');
   const { countryArray, stateArray } = useCountryState(defaultCountry);
@@ -189,11 +192,33 @@ export default function ChurchProfileForm({
             transition={{ duration: 0.5 }}
             className="grid grid-cols-1 gap-6 md:grid-cols-2"
           >
-            {renderFormField(
-              'parentChurch',
-              'Parent Church *',
-              'Parent Church',
-            )}
+            <FormField
+              control={form.control}
+              name="parentChurch"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel
+                    className={
+                      form.formState.errors.churchCountry
+                        ? 'text-red-500'
+                        : 'text-lightText'
+                    }
+                  >
+                    HQ Church *
+                  </FormLabel>
+                  <SelectComponent
+                    FormControl={FormControl}
+                    placeholder="Select Hq Church"
+                    shouldVariedOptions
+                    options={[]}
+                    variedOptions={data}
+                    value={field.value}
+                    setValue={field.onChange}
+                  />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             {renderFormField(
               'parentChurchLevel',
               'Parent Church Level *',
