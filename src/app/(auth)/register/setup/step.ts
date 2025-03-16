@@ -18,6 +18,7 @@ export const AdminCreationSchema = z.object({
 });
 
 export const OrgLevelSchema = z.object({
+  churchName: z.string().nonempty('Church name is required'),
   isParent: z.enum(['true', 'false'], {
     message: 'Please select an option',
   }),
