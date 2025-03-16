@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import { ColumnDef } from "@tanstack/react-table";
-import { Member } from "./member";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { User } from "lucide-react";
-import { NameFormatter, ProfileNameFormatter } from "@/lib/utils/capitalize";
-import { dobFormatter } from "@/lib/utils/date-formatter";
-import ViewMore from "./viewMore";
+import { ColumnDef } from '@tanstack/react-table';
+import { Member } from './member';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { User } from 'lucide-react';
+import { NameFormatter, ProfileNameFormatter } from '@/lib/utils/capitalize';
+import { dobFormatter } from '@/lib/utils/date-formatter';
+import ViewMore from './viewMore';
 
 export const columns: ColumnDef<Member>[] = [
   {
-    header: "",
-    accessorKey: "photo",
+    header: '',
+    accessorKey: 'photo',
     enableSorting: false,
     enableHiding: false,
     cell: ({ row }) => {
@@ -27,7 +27,7 @@ export const columns: ColumnDef<Member>[] = [
                 row.original.lastName &&
                 ProfileNameFormatter(
                   row.original.firstName,
-                  row.original.lastName
+                  row.original.lastName,
                 )}
               {!row.original.firstName && !row.original.lastName && (
                 <User size={18} />
@@ -39,10 +39,10 @@ export const columns: ColumnDef<Member>[] = [
     },
   },
   {
-    header: "Name",
-    accessorKey: "fullName",
-    filterFn: "includesStringSensitive",
-    sortingFn: "alphanumericCaseSensitive",
+    header: 'Name',
+    accessorKey: 'fullName',
+    filterFn: 'includesStringSensitive',
+    sortingFn: 'alphanumericCaseSensitive',
     cell: ({ row }) => {
       return (
         <div className="capitalize flex items-center gap-x-2">
@@ -52,59 +52,50 @@ export const columns: ColumnDef<Member>[] = [
     },
   },
   {
-    header: "Email",
-    accessorKey: "email",
-    sortingFn: "alphanumericCaseSensitive",
+    header: 'Email',
+    accessorKey: 'email',
+    sortingFn: 'alphanumericCaseSensitive',
     cell: ({ row }) => {
       return (
         <div className="lowercase flex items-center gap-x-2">
-          <p>{row.getValue("email")}</p>
+          <p>{row.getValue('email')}</p>
         </div>
       );
     },
   },
   {
-    header: "Phone",
-    accessorKey: "phone",
+    header: 'Phone',
+    accessorKey: 'phone',
     enableSorting: false,
     cell: ({ row }) => {
       return (
         <div className="lowercase flex items-center gap-x-2">
-          <p>{row.getValue("phone")}</p>
+          <p>{row.getValue('phone')}</p>
         </div>
       );
     },
   },
   {
-    header: "Date of Birth",
-    accessorKey: "dateOfBirth",
-    sortingFn: "datetime",
+    header: 'Date of Birth',
+    accessorKey: 'dateOfBirth',
+    sortingFn: 'datetime',
     cell: ({ row }) => {
       return (
         <div className="flex items-center gap-x-2">
-          <p>{dobFormatter(row.getValue("dateOfBirth"))}</p>
+          <p>{dobFormatter(row.getValue('dateOfBirth'))}</p>
         </div>
       );
     },
   },
   {
-    header: "Gender",
-    accessorKey: "gender",
+    header: 'Gender',
+    accessorKey: 'gender',
     cell: ({ row }) => {
       return (
         <div className="capitalize flex items-center gap-x-2">
-          <p>{row.getValue("gender")}</p>
+          <p>{row.getValue('gender')}</p>
         </div>
       );
-    },
-  },
-  {
-    header: "",
-    accessorKey: "actions",
-    enableSorting: false,
-    enableHiding: false,
-    cell: ({ row }) => {
-      return <ViewMore id={row.original.id} />;
     },
   },
 ];

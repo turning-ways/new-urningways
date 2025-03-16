@@ -46,7 +46,6 @@ export default function AuthForm() {
       password: data.password,
       redirect: false,
     }).then((res) => {
-      console.log(res);
       if (res?.error?.length ?? 0 > 3) {
         setIsLoading(false);
         if (res?.error === 'Email not verified') {

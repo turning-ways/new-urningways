@@ -187,15 +187,15 @@ export function AccountsDataTable() {
   const data: Users[] = React.useMemo(() => {
     return accounts
       ? accounts
+          .slice()
+          .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
           .map((church) => {
             if (church) {
               const { id, name, createdAt, creator } = church;
-              const adminName = `${creator?.firstName || ''} ${
-                creator?.lastName || ''
-              }`;
+              const adminName = `${creator?.firstName || ''} ${creator?.lastName || ''}`;
               const adminNumber = creator?.phone || 'None';
               const adminEmail = creator?.email || 'None';
-
+  
               return {
                 id,
                 account: name,
@@ -211,6 +211,7 @@ export function AccountsDataTable() {
           .filter((church): church is Users => church !== undefined)
       : [];
   }, [accounts]);
+  
 
   const table = useReactTable({
     data,

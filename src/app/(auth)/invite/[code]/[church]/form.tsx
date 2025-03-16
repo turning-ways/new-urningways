@@ -30,7 +30,7 @@ export default function InvitationForm({ church }: { church: string }) {
   });
 
   function onSubmit(data: z.infer<typeof schema>) {
-    console.log(data);
+    // console.log(data);
   }
 
   return (

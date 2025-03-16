@@ -59,16 +59,6 @@ export default function Setup() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
-          className="w-full max-w-lg">
-          <OrgProfileForm prevStep={prevStep} nextStep={nextStep} />
-        </motion.div>
-      )}
-
-      {session && currentStep === 3 && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
           className="w-full max-w-xl pb-24">
           <ChurchProfileForm prevStep={prevStep} />
         </motion.div>

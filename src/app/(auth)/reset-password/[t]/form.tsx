@@ -42,7 +42,6 @@ export default function ResetPasswordForm() {
   const { data: session } = useSession();
 
   const onSubmit = async (data: z.infer<typeof schema>) => {
-    console.log(data);
     if (data.password !== data.confirmPassword) {
       toast.warning("Passwords do not match");
       return;

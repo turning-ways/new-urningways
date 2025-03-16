@@ -26,6 +26,7 @@ export default withAuth(
       secret: process.env.NEXTAUTH_SECRET,
     });
 
+    console.log(token);
     if (
       token &&
       Date.now() >= (token.data?.validity?.refresh_until || 0) * 1000
@@ -45,7 +46,7 @@ export default withAuth(
       authorized: ({ token }) => !!token,
     },
     pages: {
-      signIn: '/',
+      signIn: '/login',
       error: '/login',
     },
   },

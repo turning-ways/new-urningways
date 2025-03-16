@@ -85,7 +85,6 @@ export default function ContactUpdateForm({
   });
 
   async function onSubmit(data: z.infer<typeof schema>) {
-    console.log(data);
     try {
       await updateContact.mutateAsync(
         {

@@ -340,4 +340,6 @@ interface Contact {
   maturityLevel: 'INFANT' | 'CHILD' | 'TEEN' | 'ADULT' | 'ELDER' | undefined;
   createdAt: Date | string;
   updatedAt: Date | string;
+  role: string;
+  roleId: string;
 }

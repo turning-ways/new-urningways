@@ -14,6 +14,8 @@ import {
   ChartContainer,
   ChartLegend,
   ChartLegendContent,
+  ChartTooltip,
+  ChartTooltipContent,
 } from '@/components/ui/chart';
 import { EllipsisVertical } from 'lucide-react';
 import { useAdminDash } from '@/lib/client/useAdminDash';
@@ -32,7 +34,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function PieCharts() {
-  const {data} = useAdminDash();
+  const { data } = useAdminDash();
 
   const activeAccounts = data?.activeAccounts;
   const inactiveAccounts = data?.inactiveAccounts;
@@ -55,6 +57,16 @@ export function PieCharts() {
           className="mx-auto aspect-square max-h-[200px] lg:max-h-[250px]"
         >
           <PieChart className="h-32">
+            <ChartTooltip
+              cursor={false}
+              content={
+                <ChartTooltipContent
+                  className="bg-white"
+                  nameKey="status"
+                  hideLabel
+                />
+              }
+            />
             <Pie data={chartData} dataKey="visitors" />
             <ChartLegend
               content={<ChartLegendContent nameKey="status" />}

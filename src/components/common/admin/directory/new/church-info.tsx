@@ -107,11 +107,9 @@ export default function Church({
         router.replace(`/admin/${churchId}/directory/`);
       }
 
-      console.log(result);
     } catch (e: any) {
       setIsLoading(false);
       toast.error(e?.response?.data?.message ?? 'An Unexpected Error Occurred');
-      console.log(e?.response?.data?.message || e.message);
     }
   }
 

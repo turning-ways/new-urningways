@@ -51,7 +51,6 @@ export default function AdminCreationForm({
   });
 
   function onSubmit(data: z.infer<typeof AdminCreationSchema>) {
-    console.log(data);
     setFormData(data);
     nextStep();
   }
@@ -61,7 +60,7 @@ export default function AdminCreationForm({
       <HeaderInfo
         header="Admin Creation"
         currentStep={1}
-        totalSteps={3}
+        totalSteps={2}
         helperText="Please fill in the form below to create an admin account for your church"
       />
       <form

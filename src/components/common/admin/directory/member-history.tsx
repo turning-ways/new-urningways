@@ -10,7 +10,7 @@ export default function MemberHistoryInfo({ member }: MemberHistoryInfoProps) {
   const Info = [
     {
       label: "Date Joined",
-      value: member?.createdAt ? formatDate(member.createdAt) : "N/A",
+      value: member?.createdAt ? formatDate(member.createdAt, "long", true) : "N/A",
     },
     {
       label: "CreatedBy",
@@ -18,7 +18,7 @@ export default function MemberHistoryInfo({ member }: MemberHistoryInfoProps) {
     },
     {
       label: "Updated At",
-      value: member?.updatedAt ? formatDate(member.updatedAt) : "N/A",
+      value: member?.updatedAt ? formatDate(member.updatedAt, "long", true) : "N/A",
     },
   ];
 

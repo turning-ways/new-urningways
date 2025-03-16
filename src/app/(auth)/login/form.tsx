@@ -73,6 +73,7 @@ export default function LoginForm() {
           console.log('callbackUrl', callbackUrl);
           return router.push(`${callbackUrl}`);
         }
+        console.log("app");
         return router.push('/app/home');
       }
     });

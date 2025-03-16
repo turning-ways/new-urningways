@@ -33,6 +33,7 @@ import {
   EllipsisVertical,
   GripIcon,
   List,
+  Plus,
   PlusCircle,
 } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -50,6 +51,11 @@ import { LabelStack } from '@/components/ui/labels';
 import { AvatarStack } from '@/components/ui/avatarStack';
 import AddContactsModal from '../../contacts/addContactsModal';
 import { useParams, useRouter } from 'next/navigation';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -119,7 +125,7 @@ export function DataTable<TData, TValue>({
   return (
     <>
       <QuickAction table={table} entity={entity} />
-      {entity !== 'members' && <ViewsComponent setView={setView} view={view} />}
+      <ViewsComponent setView={setView} view={view} entity={entity} />
       {view === 'list' && (
         <motion.div
           initial={{ opacity: 0, x: 100 }}
@@ -155,7 +161,7 @@ export function DataTable<TData, TValue>({
                   table.getRowModel().rows.map((row) => (
                     <TableRow
                       key={row.id}
-                      className="font-sans text-base"
+                      className="font-sans text-base cursor-pointer"
                       onClick={() => {
                         if (entity !== 'members') {
                           router.push(
@@ -176,6 +182,26 @@ export function DataTable<TData, TValue>({
                           )}
                         </TableCell>
                       ))}
+                      <TableCell>
+                        {entity === 'members' && (
+                          <OptionsPopover
+                            options={[
+                              {
+                                title: 'View Member',
+                                url: `/admin/${churchId}/directory/${
+                                  (row.original as { id: string }).id
+                                }`,
+                              },
+                              {
+                                title: 'Edit Member',
+                                url: `/admin/${churchId}/directory/${
+                                  (row.original as { id: string }).id
+                                }/edit`,
+                              },
+                            ]}
+                          />
+                        )}
+                      </TableCell>
                     </TableRow>
                   ))
                 ) : (
@@ -232,7 +258,7 @@ export function DataTable<TData, TValue>({
             </div>
           )}
 
-          <div className="flex flex-col divide-y divide-gray-300 rounded-md lg:hidden">
+          <div className="flex flex-col cursor-pointer divide-y divide-gray-300 rounded-md lg:hidden">
             {table.getRowModel().rows.map((row) => (
               <Link
                 href={
@@ -245,7 +271,7 @@ export function DataTable<TData, TValue>({
                       }`
                 }
                 key={row.id}
-                className="flex items-center justify-between px-4 py-2 hover:bg-gray-100"
+                className="flex cursor-pointer items-center justify-between px-4 py-2 hover:bg-gray-100"
               >
                 {/* Profile */}
                 <div className="flex items-center gap-4">
@@ -326,29 +352,52 @@ export function DataTable<TData, TValue>({
           {table.getRowModel().rows.map((row) => (
             <Card
               key={row.id}
-              onClick={() =>
-                router.push(
-                  `/admin/${churchId}/contacts/${
-                    (row.original as { id: string }).id
-                  }`,
-                )
-              }
               className="py-2 border-slate-800 hover:bg-gray-50"
             >
               <CardHeader className="py-2">
                 <div className="flex items-center justify-between gap-4">
-                  <h1 className="text-lg font-semibold text-gray-800 ">
+                  <h1 className="text-lg capitalize font-semibold text-gray-800 ">
                     {NameFormatter(
                       (row.original as { firstName: string }).firstName,
                       (row.original as { lastName: string }).lastName,
                     )}
                   </h1>
-                  <button className="p-2 transition-colors duration-200 rounded-full hover:bg-gray-100">
-                    <EllipsisVertical size={18} />
-                  </button>
+                  {entity === 'members' ? (
+                    <OptionsPopover
+                      options={[
+                        {
+                          title: 'View Members',
+                          url: `/admin/${churchId}/directory/${
+                            (row.original as { id: string }).id
+                          }`,
+                        },
+                        {
+                          title: 'Edit Member',
+                          url: `/admin/${churchId}/directory/${
+                            (row.original as { id: string }).id
+                          }/edit`,
+                        },
+                      ]}
+                    />
+                  ) : (
+                    <OptionsPopover
+                      options={[
+                        {
+                          title: 'View Contact',
+                          url: `/admin/${churchId}/contacts/${
+                            (row.original as { id: string }).id
+                          }`,
+                        },
+                      ]}
+                    />
+                  )}
                 </div>
                 <div className="flex items-center justify-between gap-4">
-                  <p>{(row.original as { phone: string }).phone}</p>
+                  <p>
+                    {entity === 'members'
+                      ? (row.original as { email: string }).email
+                      : (row.original as { phone: string }).phone}
+                  </p>
                   <p>
                     {(row.original as { contactStatus: string }).contactStatus}
                   </p>
@@ -356,9 +405,20 @@ export function DataTable<TData, TValue>({
               </CardHeader>
               <CardContent>
                 {/* For the labels */}
-                {(
-                  row.original as { labels: { label: string; color: string }[] }
-                )?.labels?.length > 0 ? (
+                {entity === 'members' ? (
+                  <p className="text-gray-500 ">
+                    Date Of Birth:{' '}
+                    {(row.original as { dateOfBirth: string })?.dateOfBirth
+                      ? formatDate(
+                          (row.original as { dateOfBirth: string }).dateOfBirth,
+                        )
+                      : 'N/A'}
+                  </p>
+                ) : (
+                    row.original as {
+                      labels: { label: string; color: string }[];
+                    }
+                  )?.labels?.length > 0 ? (
                   <div className="flex items-center gap-2">
                     <LabelStack
                       labels={
@@ -381,19 +441,30 @@ export function DataTable<TData, TValue>({
               <CardFooter className="flex items-center py-0 align-middle border-t">
                 {/* For the last Modified Date */}
                 <div className="flex items-center justify-between w-full h-full gap-2 py-3">
-                  <p className="text-gray-500 ">
-                    Last Modified:{' '}
-                    {(row.original as { updatedAt: string })?.updatedAt
-                      ? formatDate(
-                          (row.original as { updatedAt: string }).updatedAt,
-                        )
-                      : 'N/A'}
-                  </p>
+                  {entity === 'members' ? (
+                    <p className="text-gray-500 ">
+                      Gender:{' '}
+                      {(row.original as { gender: string })?.gender
+                        ? (row.original as { gender: string }).gender
+                        : 'N/A'}
+                    </p>
+                  ) : (
+                    <p className="text-gray-500 ">
+                      Last Modified:{' '}
+                      {(row.original as { updatedAt: string })?.updatedAt
+                        ? formatDate(
+                            (row.original as { updatedAt: string }).updatedAt,
+                          )
+                        : 'N/A'}
+                    </p>
+                  )}
                   {/* Assigned to */}
                   <div className="flex items-center capitalize gap-x-2">
-                    {(row.original as { assignedTo: string }).assignedTo &&
-                    (row.original as { assignedTo: string }).assignedTo.length >
-                      0 ? (
+                    {entity === 'members' ? (
+                      (row.original as { phone: string }).phone
+                    ) : (row.original as { assignedTo: string }).assignedTo &&
+                      (row.original as { assignedTo: string }).assignedTo
+                        .length > 0 ? (
                       <AvatarStack
                         avatars={
                           (
@@ -423,13 +494,31 @@ export function DataTable<TData, TValue>({
 function ViewsComponent({
   setView,
   view,
+  entity = 'members',
 }: {
   setView: Function;
   view: 'list' | 'grid';
+  entity: string;
 }) {
+  const { churchId } = useParams();
+
   return (
     <div className="justify-between mb-10 md:flex">
-      <AddContactsModal />
+      {entity === 'members' ? (
+        <div className="">
+          <Link
+            href={`/admin/${churchId}/directory/new`}
+            className="flex items-center gap-2 bg-main_DarkBlue text-white text-lg px-4 py-3 rounded-lg"
+          >
+            <div className="bg-white size-6 rounded-full flex justify-center items-center">
+              <Plus className="size-5 text-main_DarkBlue" />
+            </div>
+            Add Member
+          </Link>
+        </div>
+      ) : (
+        <AddContactsModal />
+      )}
       <motion.div className="flex w-full space-x-4 md:w-fit">
         <motion.button
           initial={{ opacity: 0, x: -100 }}
@@ -477,5 +566,36 @@ function ViewsComponent({
         </motion.button>
       </motion.div>
     </div>
+  );
+}
+
+function OptionsPopover({
+  options,
+}: {
+  options: { title: string; url: string }[];
+}) {
+  const router = useRouter();
+
+  return (
+    <Popover>
+      <PopoverTrigger>
+        <button className="p-2 transition-colors duration-200 rounded-full hover:bg-gray-100">
+          <EllipsisVertical size={18} />
+        </button>
+      </PopoverTrigger>
+      <PopoverContent className="max-w-36 p-1">
+        <div className="flex flex-col">
+          {options.map((opt, i) => (
+            <div
+              onClick={() => router.push(opt?.url)}
+              className="capitalize cursor-pointer p-1 hover:bg-slate-200 flex flex-col  divide-y-2 divide-textDark"
+              key={i}
+            >
+              {opt.title}
+            </div>
+          ))}
+        </div>
+      </PopoverContent>
+    </Popover>
   );
 }

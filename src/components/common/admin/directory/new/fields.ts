@@ -137,7 +137,7 @@ export const personalInfoFields = (form: any) => {
   ];
 };
 
-export const contactInfoFields = (form: any) => {
+export const contactInfoFields = (form: any, ) => {
   return [
     {
       control: form.control,
@@ -160,6 +160,7 @@ export const contactInfoFields = (form: any) => {
     },
   ];
 };
+
 
 export const churchInfoFields = (form: any, churchId: string) => {
   let roles = [] as Array<{ id: string; name: string }>;
