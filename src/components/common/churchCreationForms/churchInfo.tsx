@@ -124,7 +124,7 @@ export default function ChurchProfileForm({
       churchState: formData.churchState || '',
       churchCountry: formData.churchCountry || 'Nigeria',
       churchZip: formData.churchZip || '',
-      verify: formData.verify || false,
+      // verify: formData.verify || false,
     },
   });
 
@@ -167,7 +167,14 @@ export default function ChurchProfileForm({
             {label}
           </FormLabel>
           <FormControl>
-            <InputComponent {...field} type={type} placeholder={placeholder} />
+            <InputComponent
+              {...field}
+              type={type}
+              placeholder={placeholder}
+              value={
+                field.value as string | number | readonly string[] | undefined
+              }
+            />
           </FormControl>
           <FormMessage />
         </FormItem>
@@ -333,7 +340,9 @@ export default function ChurchProfileForm({
           </label>
         </div>
         {form.formState?.errors?.verify && (
-          <p style={{ color: 'red' }}>{form?.formState?.errors.verify.message}</p>
+          <p style={{ color: 'red' }}>
+            {form?.formState?.errors.verify.message}
+          </p>
         )}
         <div className="grid grid-cols-2 gap-10">
           <NextButton overrideFn={prevStep} text="Back" />
