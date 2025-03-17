@@ -1,4 +1,4 @@
-import api from "@/lib/axios";
+import api from '@/lib/axios';
 
 interface churchOnboarding {
   churchEmail: string;
@@ -9,7 +9,7 @@ interface churchOnboarding {
   churchState: string;
   churchCountry: string;
   churchZip: string;
-  churchWebsite: string;
+  churchWebsite: string | undefined;
   denomination: string;
   parentChurchId?: string;
   parentChurchLevelId?: string;
@@ -25,7 +25,7 @@ interface churchOnboarding {
 
 export const createOnboarding = async (data: churchOnboarding) => {
   try {
-    const response = await api.post("/churches/create-church-onboarding", data);
+    const response = await api.post('/churches/create-church-onboarding', data);
     return {
       success: true,
       data: response.data,

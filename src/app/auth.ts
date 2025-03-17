@@ -7,15 +7,21 @@ import NextAuth, {
 } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import axios from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 import { JWT } from 'next-auth/jwt';
 import { jwtDecode } from 'jwt-decode';
-import { redirect } from 'next/navigation';
-import { signOut } from 'next-auth/react';
 import { getCookie, setCookie } from 'cookies-next';
 import { cookies } from 'next/headers';
 import api from '@/lib/axios';
-import { create } from 'domain';
+
+async function verifyAuth(token: string) {
+  try {
+    const response = await api.get(`/check-auth-token?token=${token}`);
+    return response?.data?.data;
+  } catch (error: any) {
+    return { error: 'TokenVerificationError' };
+  }
+}
 
 async function refreshAccessToken(nextAuthJWTCookie: JWT): Promise<JWT> {
   try {
@@ -104,6 +110,9 @@ const authOptions: NextAuthOptions = {
           }
         } catch (error: any) {
           // If the response is unsuccessful, return the error message
+          if ((error as unknown as AxiosError).code === 'ECONNREFUSED') {
+            throw new Error('Connection Refused');
+          }
           return { error: error.response.data.message } as unknown as User;
         }
       },
@@ -217,6 +226,12 @@ const authOptions: NextAuthOptions = {
       }
 
       if (Date.now() < token?.data?.validity?.valid_until * 1000) {
+        try {
+          await verifyAuth(token?.data?.tokens?.accessToken);
+        } catch (error: any) {
+          console.error('Token verification failed:', error);
+          return { ...token, error: 'TokenVerificationError' };
+        }
         console.debug('Access Token is still valid');
         return token;
       }

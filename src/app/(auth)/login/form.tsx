@@ -54,7 +54,6 @@ export default function LoginForm() {
       password: data.password,
       redirect: false,
     }).then((res) => {
-      console.log(res);
       if (res?.error?.length ?? 0 > 3) {
         setIsLoading(false);
         if (res?.error === 'Email not verified') {
@@ -70,17 +69,15 @@ export default function LoginForm() {
         toast.success('Login Succesfull');
         // if there is a callback url, redirect to it
         if (callbackUrl) {
-          console.log('callbackUrl', callbackUrl);
           return router.push(`${callbackUrl}`);
         }
-        console.log("app");
         return router.push('/app/home');
       }
     });
   }
   return (
     <Form {...form}>
-      <div className="mb-6 ">
+      <div className="mb-3 text-start w-full flex justify-start flex-col">
         <h1 className="text-4xl font-bold text-textGray mb-4">Sign in</h1>
         <p className="text-textDark text-base lg:text-lg">
           Don&apos;t have an account?{' '}
@@ -108,11 +105,7 @@ export default function LoginForm() {
                 Email or Phone Number
               </FormLabel>
               <FormControl>
-                <InputComponent
-                  placeholder="Enter your email or phone number"
-                  type="text"
-                  {...field}
-                />
+                <InputComponent type="text" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -130,22 +123,13 @@ export default function LoginForm() {
                 Password
               </FormLabel>
               <FormControl>
-                <PasswordInput placeholder="Enter your password" {...field} />
+                <PasswordInput {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
         <div className="flex justify-between items-center">
-          <div className="flex items-center">
-            <input
-              type="checkbox"
-              className="mr-2 accent-secondary size-4"
-              id="rememberMe"
-              name="rememberMe"
-            />
-            <label htmlFor="rememberMe">Remember me</label>
-          </div>
           <Link href="/forgot-password" className="text-secondary">
             Forgot Password?
           </Link>

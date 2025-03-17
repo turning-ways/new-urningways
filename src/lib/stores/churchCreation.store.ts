@@ -1,4 +1,4 @@
-import { create } from "zustand";
+import { create } from 'zustand';
 
 interface churchCreationStore {
   formData: {
@@ -29,26 +29,26 @@ interface churchCreationStore {
 
 export const useChurchCreationStore = create<churchCreationStore>((set) => ({
   formData: {
-    firstName: "",
-    lastName: "",
-    email: "",
-    gender: "MALE",
-    phoneNumber: "",
+    firstName: '',
+    lastName: '',
+    email: '',
+    gender: 'MALE',
+    phoneNumber: '',
     dob: new Date(),
-    denomination: "Branch",
-    hearAboutUs: "",
-    churchName: "",
-    isParent: "false",
-    parentChurch: "",
-    parentChurchLevel: "",
-    churchWebsite: "",
-    churchEmail: "",
-    churchPhone: "",
-    churchAddress: "",
-    churchCity: "",
-    churchState: "",
-    churchCountry: "",
-    churchZip: "",
+    denomination: 'Branch',
+    hearAboutUs: '',
+    churchName: '',
+    isParent: 'false',
+    parentChurch: '',
+    parentChurchLevel: '',
+    churchWebsite: '',
+    churchEmail: '',
+    churchPhone: '',
+    churchAddress: '',
+    churchCity: '',
+    churchState: '',
+    churchCountry: '',
+    churchZip: '',
   },
   setFormData: (data) => set((state) => ({ formData: data })),
   updateFormData: (data) =>

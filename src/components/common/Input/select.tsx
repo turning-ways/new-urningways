@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   Select,
@@ -7,13 +7,13 @@ import {
   SelectTrigger,
   SelectValue,
   SelectItem,
-} from "@/components/ui/select";
+} from '@/components/ui/select';
 import {
   Tooltip,
   TooltipProvider,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from '@/components/ui/tooltip';
 
 export interface SelectProps {
   label?: string;
@@ -54,15 +54,16 @@ const SelectComponent = ({
                 onValueChange={setValue}
                 value={value}
                 defaultValue={value}
-                disabled={disabled}>
+                disabled={disabled}
+              >
                 {FormControl ? (
                   <FormControl>
-                    <SelectTrigger className="outline-none w-full bg-inherit text-black text-lg h-10 rounded-lg px-4 py-6 focus-visible:ring-1 focus-visible:ring-mainLight bg-[#F7FAFC] border border-[#E2E8F0] focus:ring-0">
+                    <SelectTrigger className="outline-none w-full bg-inherit  text-lg h-10 rounded-lg px-4 py-6 focus-visible:ring-1 focus-visible:ring-mainLight bg-[#F7FAFC] border border-[#E2E8F0] focus:ring-0 data-[placeholder]:text-lightText">
                       <SelectValue placeholder={placeholder} />
                     </SelectTrigger>
                   </FormControl>
                 ) : (
-                  <SelectTrigger className="outline-none w-full bg-inherit text-black text-lg h-10 rounded-lg px-4 py-6 focus-visible:ring-1 focus-visible:ring-mainLight bg-[#F7FAFC] border border-[#E2E8F0] focus:ring-0">
+                  <SelectTrigger className="outline-none w-full bg-inherit text-lg h-10 rounded-lg px-4 py-6 focus-visible:ring-1 focus-visible:ring-mainLight bg-[#F7FAFC] border border-[#E2E8F0] focus:ring-0 data-[placeholder]:text-lightText">
                     <SelectValue placeholder={placeholder} />
                   </SelectTrigger>
                 )}
@@ -72,7 +73,8 @@ const SelectComponent = ({
                         <SelectItem
                           key={option.value}
                           value={option.value}
-                          className="text-lg">
+                          className="text-lg"
+                        >
                           {option.label}
                         </SelectItem>
                       ))
@@ -94,15 +96,16 @@ const SelectComponent = ({
           onValueChange={setValue}
           value={value}
           defaultValue={value}
-          disabled={disabled}>
+          disabled={disabled}
+        >
           {FormControl ? (
             <FormControl>
-              <SelectTrigger className="outline-none w-full bg-inherit text-black text-lg h-10 rounded-lg px-4 py-6 focus-visible:ring-1 focus-visible:ring-mainLight bg-[#F7FAFC] border border-[#E2E8F0] focus:ring-0">
+              <SelectTrigger className="outline-none w-full bg-inherit text-black text-lg h-10 rounded-lg px-4 py-6 focus-visible:ring-1 focus-visible:ring-mainLight bg-[#F7FAFC] border border-[#E2E8F0] focus:ring-0 data-[placeholder]:text-lightText">
                 <SelectValue placeholder={placeholder} />
               </SelectTrigger>
             </FormControl>
           ) : (
-            <SelectTrigger className="outline-none w-full bg-inherit text-black text-lg h-10 rounded-lg px-4 py-6 focus-visible:ring-1 focus-visible:ring-mainLight bg-[#F7FAFC] border border-[#E2E8F0] focus:ring-0">
+            <SelectTrigger className="outline-none w-full bg-inherit text-black text-lg h-10 rounded-lg px-4 py-6 focus-visible:ring-1 focus-visible:ring-mainLight bg-[#F7FAFC] border border-[#E2E8F0] focus:ring-0 data-[placeholder]:text-lightText">
               <SelectValue placeholder={placeholder} />
             </SelectTrigger>
           )}
@@ -112,7 +115,8 @@ const SelectComponent = ({
                   <SelectItem
                     key={option.value}
                     value={option.value}
-                    className="text-lg">
+                    className="text-lg"
+                  >
                     {option.label}
                   </SelectItem>
                 ))

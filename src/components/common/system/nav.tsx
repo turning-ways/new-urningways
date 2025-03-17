@@ -76,7 +76,7 @@ export default function SystemNavBar({
         ))}
         {pathname.includes(`app/home`) && (
           <Link
-            href={'/register/setup'}
+            href={'/register-church'}
             className="px-4 py-2 text-sm bg-main_secondaryDark text-white hover:bg-main_secondary rounded-lg hover:text-gray-800 transition-colors duration-500"
           >
             Create Church

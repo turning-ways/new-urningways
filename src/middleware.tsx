@@ -26,10 +26,27 @@ export default withAuth(
       secret: process.env.NEXTAUTH_SECRET,
     });
 
-    console.log(token);
+    // console.log(token);
+
     if (
       token &&
-      Date.now() >= (token.data?.validity?.refresh_until || 0) * 1000
+      (token.error === 'TokenExpiredError' ||
+        token.error === 'RefreshAccessTokenError' ||
+        token.error === 'RefreshTokenExpired')
+    ) {
+      // Redirect to login page and clear session cookies
+      const response = NextResponse.redirect(new URL('/login', origin));
+      response.cookies.set('next-auth.session-token', '', { maxAge: 0 });
+      response.cookies.set('next-auth.csrf-token', '', { maxAge: 0 });
+      return response;
+    }
+
+    if (
+      token &&
+      (Date.now() >= (token.data?.validity?.refresh_until || 0) * 1000 ||
+        token.error === 'TokenExpiredError' ||
+        token.error === 'RefreshAccessTokenError' ||
+        token.error === 'RefreshTokenExpired')
     ) {
       // Redirect to login page and clear session cookies
       const response = NextResponse.redirect(new URL('/login', origin));

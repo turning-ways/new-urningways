@@ -3,6 +3,7 @@
 import { useForm, useWatch } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { motion } from 'framer-motion';
 import {
   Form,
   FormField,
@@ -11,13 +12,12 @@ import {
   FormControl,
   FormMessage,
 } from '@/components/ui/form';
-import InputComponent from '../Input/input';
-import SelectComponent from '../Input/select';
-import { NextButton } from '../Input/buttons';
-import { PhoneInput } from '../Input/phone';
+import InputComponent from '@/components/common/Input/input';
+import SelectComponent from '@/components/common/Input/select';
+import { NextButton } from '@/components/common/Input/buttons';
+import { PhoneInput } from '@/components/common/Input/phone';
 import { useChurchCreationStore } from '@/lib/stores/churchCreation.store';
-import { HeaderInfo } from './form1';
-import { motion } from 'framer-motion';
+import { HeaderInfo } from '@/app/(auth)/register-church/steps/personal-admin-form';
 import { Country, State } from 'country-state-city';
 import { useEffect, useState } from 'react';
 import { createOnboarding } from '@/app/api/church/create-onboarding';
@@ -25,59 +25,137 @@ import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { invalidateUserCheck, useUserCheck } from '@/lib/swr/use-user-check';
 import { useSession } from 'next-auth/react';
-import { OrgInfoSchema } from '@/app/(auth)/register/setup/step';
+import {
+  AdminCreationSchema,
+  OrgInfoSchema,
+} from '@/app/(auth)/register/setup/step';
 import useCountryState from '@/hooks/useCountryState';
 import { useGetChurchHqs } from '@/lib/client/useChurches';
+import { useOnboardingContext } from '@/app/(auth)/register-church/steps/context';
 
-function useHandleSubmit(
-  formData: any,
-  updateFormData: any,
-  router: any,
-  update: any,
-) {
-  const onSubmit = async (data: z.infer<typeof OrgInfoSchema>) => {
+export function ChurchInfoForm() {
+  const { update } = useSession();
+  const [defaultCountry, setDefaultCountry] = useState('NG');
+  const { countryArray, stateArray } = useCountryState(defaultCountry);
+  const router = useRouter();
+
+  // TODO: MAke this dynamic after hierarchy system has been developed
+  // const isParent = "false";
+
+  const {
+    dob,
+    email,
+    firstName,
+    gender,
+    hearAboutUs,
+    lastName,
+    phoneNumber,
+    step,
+    churchName,
+    churchAddress,
+    churchEmail,
+    churchPhone,
+    churchWebsite,
+    churchCity,
+    churchState,
+    churchCountry,
+    churchZip,
+    isParent,
+    setChurchAddress,
+    setChurchCity,
+    setChurchCountry,
+    setChurchEmail,
+    setChurchName,
+    setChurchPhone,
+    setChurchState,
+    setChurchWebsite,
+    setChurchZip,
+    setIsParent,
+    setStep,
+  } = useOnboardingContext();
+
+  const form = useForm<z.infer<typeof OrgInfoSchema>>({
+    resolver: zodResolver(OrgInfoSchema),
+    defaultValues: {
+      churchName,
+      churchAddress,
+      churchEmail,
+      churchPhone,
+      churchWebsite,
+      churchCity,
+      churchState,
+      churchCountry,
+      churchZip,
+      verify: false,
+    },
+  });
+
+  const selectedCountry = useWatch({
+    control: form.control,
+    name: 'churchCountry',
+  });
+
+  async function onSubmit(data: z.infer<typeof OrgInfoSchema>) {
+    setChurchName(data.churchName);
+    setChurchAddress(data.churchAddress);
+    setChurchEmail(data.churchEmail);
+    setChurchPhone(data.churchPhone);
+    setChurchWebsite(data.churchWebsite);
+    setChurchCity(data.churchCity);
+    setChurchState(data.churchState);
+    setChurchCountry(data.churchCountry);
+    setChurchZip(data.churchZip);
+    setIsParent(data.parentChurch === '');
+    setStep('church');
+
     try {
-      updateFormData(data);
       const loadingToast = toast.loading('Creating your church profile...');
 
-      console.log(data);
-
       const response = await createOnboarding({
-        churchEmail: data.churchEmail,
-        churchPhone: data.churchPhone,
-        churchName: data.churchName,
-        churchAddress: data.churchAddress,
-        churchCity: data.churchCity,
-        churchState: data.churchState,
-        churchCountry: data.churchCountry,
-        churchZip: data.churchZip,
-        churchWebsite: data.churchWebsite || '',
-        denomination: formData?.denomination || 'Branch',
-        parentChurchId: formData.parentChurch || undefined,
-        parentChurchLevelId: formData.parentChurchLevel || undefined,
-        isParent: formData.isParent === 'true',
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        email: formData.email,
-        phoneNumber: formData.phoneNumber,
-        hearAboutUs: formData.hearAboutUs,
-        dob: formData.dob,
-        gender: formData.gender,
+        churchEmail: churchEmail !== '' ? churchEmail : data.churchEmail,
+        churchName: churchName !== '' ? churchName : data.churchName,
+        denomination: '',
+        churchAddress:
+          churchAddress !== '' ? churchAddress : data.churchAddress,
+        churchCity: churchCity !== '' ? churchCity : data.churchCity,
+        churchCountry:
+          churchCountry !== '' ? churchCountry : data.churchCountry,
+        churchPhone: churchPhone !== '' ? churchPhone : data.churchPhone,
+        churchState: churchState !== '' ? churchState : data.churchState,
+        churchWebsite:
+          churchWebsite !== undefined
+            ? churchWebsite !== ''
+              ? churchWebsite
+              : data.churchWebsite
+            : undefined,
+        churchZip: churchZip !== '' ? churchZip : data.churchZip,
+        parentChurchId: data.parentChurch || undefined,
+        parentChurchLevelId: data.parentChurchLevel || undefined,
+        isParent: false,
+        firstName,
+        lastName,
+        email,
+        phoneNumber,
+        hearAboutUs,
+        dob: dob as unknown as Date,
+        gender,
       });
-
+      console.log(response);
       if (response.success) {
         invalidateUserCheck();
         toast.dismiss(loadingToast);
         toast.success('Church profile created successfully');
         update({ churchId: response.data?.churchId });
         setTimeout(() => {
-          // router.push(
-          //   `/admin/${response.data?.churchId}?mainChurchId=${response.data?.churchId}`,
-          // );
+          router.push(
+            `/admin/${response.data?.id}?mainChurchId=${response.data?.id}`,
+          );
         }, 1500);
       } else {
         if (response.error.message === 'Church already exists') {
           throw new Error('Church already exists');
+        } else if (response.error.message === 'User already has a HQ church') {
+          throw new Error('User already has a HQ church');
         }
         throw new Error('Failed to create church profile');
       }
@@ -89,51 +167,16 @@ function useHandleSubmit(
             'The church information you provided matches an existing record. Please double-check your details or contact support if you need assistance.',
         });
         return;
+      } else if (error.message === 'User already has a HQ church') {
+        toast.error('User already has a HQ church', {
+          description:
+            'You have already created a church profile. Please contact support if you need assistance.',
+        });
+        return;
       }
       toast.error('An error occurred while creating your church profile');
     }
-  };
-
-  return onSubmit;
-}
-
-export default function ChurchProfileForm({
-  prevStep,
-}: {
-  prevStep: () => void;
-}) {
-  const { update } = useSession();
-  const { data } = useGetChurchHqs();
-  console.log(data);
-  const router = useRouter();
-  const [defaultCountry, setDefaultCountry] = useState('NG');
-  const { countryArray, stateArray } = useCountryState(defaultCountry);
-  const updateFormData = useChurchCreationStore(
-    (state) => state.updateFormData,
-  );
-  const formData = useChurchCreationStore((state) => state.formData);
-  const form = useForm<z.infer<typeof OrgInfoSchema>>({
-    resolver: zodResolver(OrgInfoSchema),
-    defaultValues: {
-      parentChurch: formData.parentChurch || '',
-      parentChurchLevel: formData.parentChurchLevel || '',
-      churchWebsite: formData.churchWebsite || '',
-      churchName: formData.churchName || '',
-      churchEmail: '',
-      churchPhone: formData.churchPhone || '',
-      churchAddress: formData.churchAddress || '',
-      churchCity: formData.churchCity || '',
-      churchState: formData.churchState || '',
-      churchCountry: formData.churchCountry || 'Nigeria',
-      churchZip: formData.churchZip || '',
-      // verify: formData.verify || false,
-    },
-  });
-
-  const selectedCountry = useWatch({
-    control: form.control,
-    name: 'churchCountry',
-  });
+  }
 
   useEffect(() => {
     const countryCode = Country.getAllCountries().find(
@@ -142,13 +185,6 @@ export default function ChurchProfileForm({
 
     if (countryCode) setDefaultCountry(countryCode);
   }, [selectedCountry]);
-
-  const handleSubmit = useHandleSubmit(
-    formData,
-    updateFormData,
-    router,
-    update,
-  );
 
   const renderFormField = (
     name: keyof z.infer<typeof OrgInfoSchema>,
@@ -193,10 +229,10 @@ export default function ChurchProfileForm({
         helperText="Please fill in the form below to create a profile for your church"
       />
       <form
-        onSubmit={form.handleSubmit(handleSubmit)}
-        className="space-y-6 mt-4 w-full"
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-6 mt-4 max-w-xl px-1"
       >
-        {formData.isParent === 'false' && (
+        {/* {isParent && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -236,7 +272,7 @@ export default function ChurchProfileForm({
               'Parent Church Level',
             )}
           </motion.div>
-        )}
+        )} */}
         {renderFormField('churchName', 'Church Name', 'Church Name')}
         {renderFormField('churchWebsite', 'Church Website', 'Church Website')}
         {renderFormField(
@@ -332,13 +368,12 @@ export default function ChurchProfileForm({
           {renderFormField('churchCity', 'City *', 'Enter City')}
           {renderFormField('churchZip', 'Zip Code *', 'Enter Zip Code')}
         </div>
-        <div className="gap-2">
+        <div className="gap-2 flex items-start">
           <input type="checkbox" id="verify" {...form.register('verify')} />
-          <label htmlFor="verify">
-            I verify that I am an authorized representative Of this organization
-            and have the right to act on its behalf in the creation and
-            management of this page. The organization and I agree to the
-            additional terms for Pages.
+          <label htmlFor="verify" className="text-sm text-gray-400">
+            I confirm that I am authorized to create and manage this page on
+            behalf of the organization and agree to the additional terms for
+            Pages.
           </label>
         </div>
         {form.formState?.errors?.verify && (
@@ -347,7 +382,12 @@ export default function ChurchProfileForm({
           </p>
         )}
         <div className="grid grid-cols-2 gap-10">
-          <NextButton overrideFn={prevStep} text="Back" />
+          <NextButton
+            overrideFn={() => {
+              setStep('personal');
+            }}
+            text="Back"
+          />
           <NextButton text="Next" isPending={form.formState.isSubmitting} />
         </div>
       </form>

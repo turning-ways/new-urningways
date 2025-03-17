@@ -1,5 +1,4 @@
 'use client';
-
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -24,51 +23,56 @@ import { register } from '@/app/api/auth/regsiter';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
+import { SignUpSchema } from '@/lib/zod/schemas/auth';
+import { useRegisterContext } from '@/components/ui/auth/register/context';
 
-const schema = z
-  .object({
-    firstName: z
-      .string()
-      .min(2, { message: 'Minimum length of firstname is 2 characters' }),
-    lastName: z
-      .string()
-      .min(3, { message: 'Minimum length of lastname is 2 characters' }),
-    email: z.string().email({ message: 'Invalid email' }),
-    password: z
-      .string()
-      .min(6, { message: 'Password length has to be up to 6 characters' }),
-    confirmPassword: z
-      .string()
-      .min(6, { message: 'Password length has to be up to 6 characters' }),
-    accessTerms: z.boolean(),
-  })
-  .refine((data) => data.accessTerms, {
-    message: 'Please accept the terms',
-    path: ['accessTerms'],
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: 'Passwords do not match',
-    path: ['confirmPassword'],
-  });
+const schema = SignUpSchema.refine((data) => data.accessTerms, {
+  message: 'Please accept the terms',
+  path: ['accessTerms'],
+}).refine((data) => data.password === data.confirmPassword, {
+  message: 'Passwords do not match',
+  path: ['confirmPassword'],
+});
+
+type SignUpForm = z.infer<typeof schema>;
 
 export default function RegisterForm() {
+  const {
+    email,
+    firstName,
+    lastName,
+    password,
+    passwordConfirm,
+    setEmail,
+    setFirstName,
+    setLastName,
+    setPassword,
+    setPasswordConfirm,
+    step,
+    setStep,
+  } = useRegisterContext();
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const setEmail = useAuthEmailStore((state) => state.setEmail);
-  const email = useAuthEmailStore((state) => state.email);
-  const form = useForm<z.infer<typeof schema>>({
+
+  const form = useForm<SignUpForm>({
     resolver: zodResolver(schema),
     defaultValues: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
+      email,
+      firstName,
+      lastName,
+      password,
+      confirmPassword: passwordConfirm,
+      accessTerms: false,
     },
   });
 
-  async function onSubmit(data: z.infer<typeof schema>) {
+  async function onSubmit(data: SignUpForm) {
     setEmail(data.email);
+    setFirstName(data.firstName);
+    setLastName(data.lastName);
+    setPassword(data.password);
+    setPasswordConfirm(data.confirmPassword);
+
     try {
       setIsLoading(true);
       const res = await register({
@@ -77,20 +81,25 @@ export default function RegisterForm() {
         firstName: data.firstName,
         lastName: data.lastName,
       });
-
       if (res.status === 201) {
         setIsLoading(false);
         toast.success('Account created successfully');
-        router.push('/register/otp');
+        setStep('verify');
       }
 
       if (res.status === 400) {
         setIsLoading(false);
         toast.error(res.data);
+        return;
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error('An unknown error occurred');
+      }
+    } finally {
       setIsLoading(false);
-      toast.error(error.message);
     }
   }
 
